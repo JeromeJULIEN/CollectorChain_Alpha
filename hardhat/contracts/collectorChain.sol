@@ -6,15 +6,14 @@ import "../node_modules/@openzeppelin/contracts/token/ERC1155/extensions/ERC1155
 import "../node_modules/@openzeppelin/contracts/token/common/ERC2981.sol";
 import "../node_modules/@openzeppelin/contracts/access/Ownable.sol";
 
-contract CollectorChain is ERC1155URIStorage, Ownable {
+contract CollectorChain is ERC1155URIStorage, ERC2981, Ownable {
     /// @dev init of URI param
     string constant collectionURI_ = "";
     /// @dev init of _id param to use for nft id counter during mint and stocker id counter during stoker creation
     uint256 public _nftIdCounter;
     uint256 public _stockerIdCounter;
-
-    /// @dev init of royaltee param at 5%
-    uint8 public royaltee = 5;
+    /// @dev init royalty fees to 5%
+    uint96 public _baseFeeNumerator = 500;
 
     /// @dev possible status for each nft
     enum Status {
@@ -36,6 +35,7 @@ contract CollectorChain is ERC1155URIStorage, Ownable {
         uint256 sharesQty;
     }
 
+    /// @notice main information of the NFT
     struct Stocker {
         address stockerAddr;
         string stockerName;
@@ -99,15 +99,23 @@ contract CollectorChain is ERC1155URIStorage, Ownable {
     /// @notice mint the NFT once the proposal accepted
     /// @notice update the nbr of fraction of the nft
     /// @notice only for the nft proposer
+    /// @dev set msg.sender as royalty receiver though ERC2981 methos '_setToKenRoyalty'
     /// @param _nftId id of the NFT to update
     /// @param _sharesQty quantity of fraction wanted for the NFT
-    function mintNft(uint256 _nftId, uint256 _sharesQty) external {
+    /// @param _nftURI URI of the NFT minted
+    function mintNft(
+        uint256 _nftId,
+        uint256 _sharesQty,
+        string calldata _nftURI
+    ) external {
         require(
             nftList[_nftId].status == Status.accepted,
             "nft status isn't accepted"
         );
         require(msg.sender == nftList[_nftId].minter, "not the nft proposer");
         _mint(msg.sender, _nftId, _sharesQty, "");
+        _setURI(_nftId, _nftURI);
+        _setTokenRoyalty(_nftId, msg.sender, _baseFeeNumerator);
         nftList[_nftId].status = Status.minted;
         nftList[_nftId].sharesQty = _sharesQty;
     }
@@ -124,5 +132,14 @@ contract CollectorChain is ERC1155URIStorage, Ownable {
         Stocker memory newStocker = Stocker(_stockerAddr, _stockerName);
         stockerList[currentStockerId] = newStocker;
         _stockerIdCounter++;
+    }
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC1155, ERC2981)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
     }
 }
