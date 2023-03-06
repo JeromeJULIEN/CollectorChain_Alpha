@@ -44,11 +44,11 @@ contract CollectorChain is ERC1155URIStorage, ERC2981, Ownable {
     }
 
     /// @notice mapping of all the NFT related to their ID
-    mapping(uint256 => Nft) nftList;
+    mapping(uint256 => Nft) public nftList;
     /// @dev mapping to be able to create require on nftId
-    mapping(uint256 => bool) isNftExist;
+    mapping(uint256 => bool) public isNftExist;
 
-    mapping(uint256 => Stocker) stockerList;
+    mapping(uint256 => Stocker) public stockerList;
 
     constructor() ERC1155(collectionURI_) {}
 
