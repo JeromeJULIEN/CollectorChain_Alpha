@@ -1,0 +1,19 @@
+{
+    "name": "rolex daytona",
+    "decription": "First wristwatch to display the day of the week and the month on the dial. Driven by presidents, leaders and visionaries around the world",
+    "image": "https://images.watchfinder.co.uk/imgv2/stock/232000/Rolex-Sea-Dweller-16600-232000-2-221123-111827.jpg;quality=90;h=425",
+    "attributes": [
+        {
+            "trait_type": "Type",
+            "value": "Watch"
+        },
+        {
+            "trait_type": "Rarity",
+            "value": "999 copy "
+        },
+        {
+            "trait_type": "Stocker",
+            "value": "Brinks "
+        }
+    ]
+}

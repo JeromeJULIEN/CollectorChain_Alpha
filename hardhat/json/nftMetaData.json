@@ -1,0 +1,15 @@
+{
+    "name": "rolex day date",
+    "decription": "First wristwatch to display the day of the week and the month on the dial. Driven by presidents, leaders and visionaries around the world",
+    "image": "https://watchbox-cdn.imgix.net/posted-product-images/638055070024618458_228239-0033.jpeg?h=1540&w=1540&auto=compress,format",
+    "attributes": [
+        {
+            "trait_type": "Type",
+            "value": "Watch"
+        },
+        {
+            "trait_type": "Rarity",
+            "value": "999 copy "
+        }
+    ]
+}

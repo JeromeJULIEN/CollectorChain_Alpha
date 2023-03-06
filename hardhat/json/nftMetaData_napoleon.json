@@ -1,0 +1,19 @@
+{
+    "name": "Napoleon 20Fr",
+    "decription": "The Napoleon 20 Francs (Louis d'Or) is a French gold coin of 20 francs containing 5.80644 grams of pure gold, created on March 28, 1803",
+    "image": "ipfs://QmWHwHf883PNqkVvMs6CaXh3GdMWDzzJpteNu3qxymNNsX",
+    "attributes": [
+        {
+            "trait_type": "Type",
+            "value": "Gold Coin"
+        },
+        {
+            "trait_type": "Rarity",
+            "value": "5550 copy "
+        },
+        {
+            "trait_type": "Stocker",
+            "value": "Malka Amit"
+        }
+    ]
+}

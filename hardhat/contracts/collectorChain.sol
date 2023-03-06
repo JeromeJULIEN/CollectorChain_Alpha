@@ -15,6 +15,8 @@ contract CollectorChain is ERC1155URIStorage, ERC2981, Ownable {
     /// @dev init royalty fees to 5%
     uint96 public _baseFeeNumerator = 500;
 
+    string public contractMetaDataURI;
+
     /// @dev possible status for each nft
     enum Status {
         proposed,
@@ -49,6 +51,15 @@ contract CollectorChain is ERC1155URIStorage, ERC2981, Ownable {
     mapping(uint256 => Stocker) stockerList;
 
     constructor() ERC1155(collectionURI_) {}
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC1155, ERC2981)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
+    }
 
     /// @notice ask for a mint
     /// @dev set the initial shares quantity to 1
@@ -134,12 +145,18 @@ contract CollectorChain is ERC1155URIStorage, ERC2981, Ownable {
         _stockerIdCounter++;
     }
 
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        override(ERC1155, ERC2981)
-        returns (bool)
-    {
-        return super.supportsInterface(interfaceId);
+    /// @notice function to modify the collection base fee (applied to all nft)
+    /// @param _fee value in bips (ie : 500 = 5% of fee)
+    function setBaseFee(uint96 _fee) public onlyOwner {
+        require(_fee <= 10000, "fee too high");
+        _baseFeeNumerator = _fee;
+    }
+
+    function setContractURI(string calldata _contractURI) public onlyOwner {
+        contractMetaDataURI = _contractURI;
+    }
+
+    function contractURI() public view returns (string memory) {
+        return contractMetaDataURI;
     }
 }
