@@ -6,7 +6,7 @@ describe("CollectorChain Beta", function () {
     let collectorChain: CollectorChain;
 
     beforeEach(async function () {
-        [this.owner, this.addr1, ...this.addrs] = await ethers.getSigners(); // on recupère les addresses de la blockchain local hardhat (à lancer d'abord)
+        [this.owner, this.addr1, this.addr2, ...this.addrs] = await ethers.getSigners(); // on recupère les addresses de la blockchain local hardhat (à lancer d'abord)
         const CollectorChain = await ethers.getContractFactory("CollectorChain");
         collectorChain = await CollectorChain.deploy();
     })
@@ -86,6 +86,82 @@ describe("CollectorChain Beta", function () {
             const mintProposalId1 = await collectorChain.nftList(1)
             assert.equal(mintProposalId0.status.toString(), "2")
             assert.equal(mintProposalId1.status.toString(), "0")
+        })
+    })
+    describe("mintNft() testing", function () {
+        it("should revert if the mint status is different of 'accepted'", async function () {
+            await collectorChain.createMintProposal("name", 1, "url"); // id 0
+            await collectorChain.createMintProposal("name", 1, "url"); // id 1
+            await collectorChain.setMintProposalStatus(false, 0)
+            await collectorChain.setMintProposalStatus(true, 1)
+            await collectorChain.mintNft(1, 1, "nftURI") // should work
+            await expect(collectorChain.mintNft(0, 1, "nftURI")).to.be.revertedWith("nft status isn't accepted")
+        })
+        it("should revert if the caller isn't the mint proposer", async function () {
+            await collectorChain.createMintProposal("name", 1, "url"); // id 0
+            await collectorChain.connect(this.addr1).createMintProposal("name", 1, "url"); // id 1
+            await collectorChain.setMintProposalStatus(true, 0)
+            await collectorChain.setMintProposalStatus(true, 1)
+            await collectorChain.mintNft(0, 1, "nftURI") // should work
+            await expect(collectorChain.mintNft(1, 1, "nftURI")).to.be.revertedWith("not the nft proposer")
+        })
+        it("should set the mint status to 'minted'", async function () {
+            await collectorChain.createMintProposal("name", 1, "url"); // id 0
+            await collectorChain.connect(this.addr1).createMintProposal("name", 1, "url"); // id 1
+            await collectorChain.setMintProposalStatus(true, 0)
+            await collectorChain.setMintProposalStatus(true, 1)
+            await collectorChain.mintNft(0, 1, "nftURI")
+            const mintProposalId0 = await collectorChain.nftList(0)
+            const mintProposalId1 = await collectorChain.nftList(1)
+            assert.equal(mintProposalId0.status.toString(), "3")
+            assert.equal(mintProposalId1.status.toString(), "1")
+        })
+        it("should set the shares quantity to the desired value", async function () {
+            await collectorChain.createMintProposal("name", 1, "url"); // id 0
+            const mintProposalId0Before = await collectorChain.nftList(0)
+            assert.equal(mintProposalId0Before.sharesQty.toString(), "1")
+            await collectorChain.setMintProposalStatus(true, 0)
+            await collectorChain.mintNft(0, 100, "nftURI")
+            const mintProposalId0After = await collectorChain.nftList(0)
+            assert.equal(mintProposalId0After.sharesQty.toString(), "100")
+        })
+        it("should set the token URI", async function () {
+            await collectorChain.createMintProposal("name", 1, "url"); // id 0
+            await collectorChain.setMintProposalStatus(true, 0)
+            await collectorChain.mintNft(0, 100, "nftURI")
+            const tokenURI: string = await collectorChain.uri(0)
+            assert.equal(tokenURI, "nftURI")
+        })
+        it("should mint x nft to the minter's wallet", async function () {
+            await collectorChain.createMintProposal("name", 1, "url"); // id 0
+            await collectorChain.setMintProposalStatus(true, 0)
+            await collectorChain.mintNft(0, 100, "nftURI")
+            const balance = await collectorChain.balanceOf(this.owner.address, 0)
+            assert.equal(balance.toString(), "100")
+        })
+        it("should set the minter as the royalty receiver", async function () {
+            await collectorChain.connect(this.addr1).createMintProposal("name", 1, "url"); // id 0
+            await collectorChain.setMintProposalStatus(true, 0)
+            await collectorChain.connect(this.addr1).mintNft(0, 100, "nftURI")
+            const receiver = await collectorChain.royaltyInfo(0, 10 ** 10)
+            const royaltyAmount = (10 ** 10) * 0.05
+            assert.equal(receiver[0], this.addr1.address.toString())
+            assert.equal(receiver[1].toString(), royaltyAmount.toString())
+
+        })
+    })
+    describe("stockerCreation() test", function () {
+        it("should revert if not the owner", async function () {
+            await expect(collectorChain.connect(this.addr1).stockerCreation(this.addr2.address, "name")).to.be.revertedWith("Ownable: caller is not the owner")
+        })
+        it("should create a new stocker", async function () {
+            await collectorChain.stockerCreation(this.addr2.address, "name")
+            const stocker = await collectorChain.stockerList(0)
+            assert.equal(stocker.stockerAddr, this.addr2.address)
+            assert.equal(stocker.stockerName, "name")
+        })
+        it("should increment stocker id counter", async function () {
+
         })
     })
 })
