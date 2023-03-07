@@ -52,6 +52,10 @@ describe("CollectorChain Beta", function () {
             assert.equal(boolId1, true)
             assert.equal(boolId2, false)
         })
+        it("should emit an event", async function () {
+            await expect(collectorChain.createMintProposal("name", 1, "url", 100)).to.emit(collectorChain, "mintProposalCreationEvent").withArgs(0)
+            await expect(collectorChain.createMintProposal("name", 1, "url", 100)).to.emit(collectorChain, "mintProposalCreationEvent").withArgs(1)
+        })
     })
 
     describe("setMintProposalStatus() testing", function () {
@@ -87,6 +91,13 @@ describe("CollectorChain Beta", function () {
             const mintProposalId1 = await collectorChain.nftList(1)
             assert.equal(mintProposalId0.status.toString(), "2")
             assert.equal(mintProposalId1.status.toString(), "0")
+        })
+        it("should emit an event", async function () {
+            await collectorChain.createMintProposal("name", 1, "url", 100); // id 0
+            await collectorChain.createMintProposal("name", 1, "url", 100); // id 1
+            await expect(collectorChain.setMintProposalStatus(true, 0)).to.emit(collectorChain, "mintProposalStatusUpdateEvent").withArgs(0, 1) // emit mint id0 accepted
+            await expect(collectorChain.setMintProposalStatus(false, 1)).to.emit(collectorChain, "mintProposalStatusUpdateEvent").withArgs(1, 2) // emit mint id1 refused
+
         })
     })
     describe("mintNft() testing", function () {
@@ -139,7 +150,11 @@ describe("CollectorChain Beta", function () {
             const royaltyAmount = (10 ** 10) * 0.05
             assert.equal(receiver[0], this.addr1.address.toString())
             assert.equal(receiver[1].toString(), royaltyAmount.toString())
-
+        })
+        it("should emit an event", async function () {
+            await collectorChain.createMintProposal("name", 1, "url", 100); // id 0
+            await collectorChain.setMintProposalStatus(true, 0)
+            await expect(collectorChain.mintNft(0, "nftURI")).to.emit(collectorChain, "mintProposalStatusUpdateEvent").withArgs(0, 3)
         })
     })
     describe("stockerCreation() test", function () {
@@ -158,6 +173,10 @@ describe("CollectorChain Beta", function () {
             await collectorChain.stockerCreation(this.addr2.address, "name")
             const counterAfter = await collectorChain._stockerIdCounter()
             assert.equal(counterAfter.toString(), "1")
+        })
+        it("should emit an event", async function () {
+            await expect(collectorChain.stockerCreation(this.addr2.address, "name")).to.emit(collectorChain, "stockerCreationEvent").withArgs(0)
+            await expect(collectorChain.stockerCreation(this.addr2.address, "name")).to.emit(collectorChain, "stockerCreationEvent").withArgs(1)
         })
     })
     describe("setBaseFee() testing", function () {
