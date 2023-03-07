@@ -47,8 +47,13 @@ contract CollectorChain is ERC1155URIStorage, ERC2981, Ownable {
     mapping(uint256 => Nft) public nftList;
     /// @dev mapping to be able to create require on nftId
     mapping(uint256 => bool) public isNftExist;
-
+    /// @notice mapping of all the stocker related to their ID
     mapping(uint256 => Stocker) public stockerList;
+
+    /// @dev events for front end purpose
+    event mintProposalCreationEvent(uint256 mintProposalId);
+    event mintProposalStatusUpdateEvent(uint256 mintProposalId, uint8 status);
+    event stockerCreationEvent(uint256 stockerId);
 
     constructor() ERC1155(collectionURI_) {}
 
@@ -85,6 +90,7 @@ contract CollectorChain is ERC1155URIStorage, ERC2981, Ownable {
         );
         nftList[currentNftId] = newNft;
         isNftExist[currentNftId] = true;
+        emit mintProposalCreationEvent(_nftIdCounter);
         _nftIdCounter++;
     }
 
@@ -104,8 +110,10 @@ contract CollectorChain is ERC1155URIStorage, ERC2981, Ownable {
 
         if (_vote) {
             nftList[_nftId].status = Status.accepted;
+            emit mintProposalStatusUpdateEvent(_nftId, 1);
         } else {
             nftList[_nftId].status = Status.rejected;
+            emit mintProposalStatusUpdateEvent(_nftId, 2);
         }
     }
 
@@ -126,6 +134,7 @@ contract CollectorChain is ERC1155URIStorage, ERC2981, Ownable {
         _setURI(_nftId, _nftURI);
         _setTokenRoyalty(_nftId, msg.sender, _baseFeeNumerator);
         nftList[_nftId].status = Status.minted;
+        emit mintProposalStatusUpdateEvent(_nftId, 3);
     }
 
     /// @notice creation of a new stocker
@@ -139,6 +148,7 @@ contract CollectorChain is ERC1155URIStorage, ERC2981, Ownable {
         uint256 currentStockerId = _stockerIdCounter;
         Stocker memory newStocker = Stocker(_stockerAddr, _stockerName);
         stockerList[currentStockerId] = newStocker;
+        emit stockerCreationEvent(_stockerIdCounter);
         _stockerIdCounter++;
     }
 
