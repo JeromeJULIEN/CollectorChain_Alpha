@@ -66,10 +66,12 @@ contract CollectorChain is ERC1155URIStorage, ERC2981, Ownable {
     /// @param _nftName name of the nft
     /// @param _stockerId id of the stocker of the object
     /// @param _imageURL URL of the main picture of the NFT
+    /// @param _sharesQty quantity of fraction wanted for the NFT
     function createMintProposal(
         string calldata _nftName,
         uint256 _stockerId,
-        string calldata _imageURL
+        string calldata _imageURL,
+        uint256 _sharesQty
     ) external {
         uint256 currentNftId = _nftIdCounter;
         Nft memory newNft = Nft(
@@ -79,7 +81,7 @@ contract CollectorChain is ERC1155URIStorage, ERC2981, Ownable {
             _stockerId,
             Status.proposed,
             _imageURL,
-            1
+            _sharesQty
         );
         nftList[currentNftId] = newNft;
         isNftExist[currentNftId] = true;
@@ -112,30 +114,25 @@ contract CollectorChain is ERC1155URIStorage, ERC2981, Ownable {
     /// @notice only for the nft proposer
     /// @dev set msg.sender as royalty receiver though ERC2981 methos '_setToKenRoyalty'
     /// @param _nftId id of the NFT to update
-    /// @param _sharesQty quantity of fraction wanted for the NFT
     /// @param _nftURI URI of the NFT minted
-    function mintNft(
-        uint256 _nftId,
-        uint256 _sharesQty,
-        string calldata _nftURI
-    ) external {
+    function mintNft(uint256 _nftId, string calldata _nftURI) external {
         require(
             nftList[_nftId].status == Status.accepted,
             "nft status isn't accepted"
         );
         require(msg.sender == nftList[_nftId].minter, "not the nft proposer");
-        _mint(msg.sender, _nftId, _sharesQty, "");
+        uint256 sharesQty = nftList[_nftId].sharesQty;
+        _mint(msg.sender, _nftId, sharesQty, "");
         _setURI(_nftId, _nftURI);
         _setTokenRoyalty(_nftId, msg.sender, _baseFeeNumerator);
         nftList[_nftId].status = Status.minted;
-        nftList[_nftId].sharesQty = _sharesQty;
     }
 
     /// @notice creation of a new stocker
     /// @notice only for contract owner
     /// @param _stockerAddr wallet address of the stocker (to manage potential royaltee)
     /// @param _stockerName Name of the stocker
-    function stockerCreation(address _stockerAddr, string memory _stockerName)
+    function stockerCreation(address _stockerAddr, string calldata _stockerName)
         external
         onlyOwner
     {
