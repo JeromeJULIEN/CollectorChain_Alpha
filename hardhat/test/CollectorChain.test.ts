@@ -1,5 +1,6 @@
 import { expect, assert } from "chai";
 import { ethers } from "hardhat";
+import { MinEthersFactory } from "../typechain-types/common";
 import { CollectorChain } from "../typechain-types/contracts/CollectorChain"
 
 describe("CollectorChain Beta", function () {
@@ -161,7 +162,48 @@ describe("CollectorChain Beta", function () {
             assert.equal(stocker.stockerName, "name")
         })
         it("should increment stocker id counter", async function () {
+            const counterBefore = await collectorChain._stockerIdCounter()
+            assert.equal(counterBefore.toString(), "0")
+            await collectorChain.stockerCreation(this.addr2.address, "name")
+            const counterAfter = await collectorChain._stockerIdCounter()
+            assert.equal(counterAfter.toString(), "1")
+        })
+    })
+    describe("setBaseFee() testing", function () {
+        it("should revert if not the owner", async function () {
+            await expect(collectorChain.connect(this.addr1).setBaseFee(1000)).to.be.revertedWith("Ownable: caller is not the owner")
+        })
+        it("should revert if fee param > 10000", async function () {
+            await collectorChain.setBaseFee(9999) // should work
+            await collectorChain.setBaseFee(10000) // should work
+            await expect(collectorChain.setBaseFee(10001)).to.be.revertedWith("fee too high")
+        })
+        it("should change base fee to the selected value", async function () {
+            const baseFeeBefore = await collectorChain._baseFeeNumerator()
+            assert.equal(baseFeeBefore.toString(), "500")
+            await collectorChain.setBaseFee(1000)
+            const baseFeeAfter = await collectorChain._baseFeeNumerator()
+            assert.equal(baseFeeAfter.toString(), "1000")
 
+        })
+    })
+    describe("setContractURI() testing", function () {
+        it("should revert if not the owner", async function () {
+            await expect(collectorChain.connect(this.addr1).setContractURI("URI")).to.be.revertedWith("Ownable: caller is not the owner")
+        })
+        it("should change the contractURI", async function () {
+            const URIBefore = await collectorChain.contractURI()
+            assert.equal(URIBefore, "")
+            await collectorChain.setContractURI("newContractURI")
+            const URIAfter = await collectorChain.contractURI()
+            assert.equal(URIAfter, "newContractURI")
+        })
+    })
+    describe("contractURI() testing", function () {
+        it("should return the contract URI", async function () {
+            await collectorChain.setContractURI("newContractURI")
+            const URI = await collectorChain.contractURI()
+            assert.equal(URI, "newContractURI")
         })
     })
 })
