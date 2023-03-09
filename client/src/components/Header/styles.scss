@@ -1,0 +1,40 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+    padding: 0 16px;
+    background-color: #000000;
+    font-size: 24px;
+
+    &__menu,
+    &__login {
+
+        &-button {
+            color: white;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            background-color: transparent;
+            border: none;
+
+            &:hover {
+                background-color: #393939;
+            }
+        }
+
+    }
+
+    &__logo {
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+
+        &-image {
+            height: 40px;
+        }
+    }
+
+
+
+}
