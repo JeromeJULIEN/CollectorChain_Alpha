@@ -2,16 +2,16 @@ import React, { useState,MouseEvent } from 'react'
 import "./styles.scss"
 import logo from "../../image/logo.png"
 import { Menu,Login } from '@mui/icons-material'
-
+import MenuApp from '../MenuApp'
 
 
 
 const Header = () => {
-
+  //! :::: LOCAL STATE ::::
   const [menuVisibility, setMenuVisibility] = useState(false)
   const [loginVisibility, setLoginVisibility] = useState(false)
 
-
+  //! :::: FUNCTIONS ::::
   const onMenuButtonClick = (e: MouseEvent)=>{
     setMenuVisibility(!menuVisibility)
     console.log("click");
@@ -25,6 +25,7 @@ const Header = () => {
   }
 
   return (
+    <>
     <div className='header'>
        <div className="header__menu" onClick={onMenuButtonClick}>
         <Menu className="header__menu-button"/>
@@ -36,6 +37,8 @@ const Header = () => {
         <Login className="header__login-button"/>
       </div>
     </div>
+    {menuVisibility && <MenuApp/>}
+    </>
   )
 }
 
