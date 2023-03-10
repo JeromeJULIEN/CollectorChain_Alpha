@@ -4,7 +4,10 @@
     font-size: 1.8rem;
     z-index: 1;
     position: fixed;
+    top: 100px;
     width: 100%;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
 
     &__item {
         padding: 1.5rem 0;
@@ -21,4 +24,5 @@
     div:last-child {
         padding-bottom: 3rem;
     }
+
 }
