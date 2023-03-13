@@ -1,17 +1,34 @@
 import React from 'react'
 import './styles.scss'
+import { useAccount, useConnect, useDisconnect } from 'wagmi'
+import { InjectedConnector } from 'wagmi/connectors/injected'
 
 type Props = {}
 
 const Home = (props: Props) => {
+    // const { address, isConnected } = useAccount()
+    // const { connect } = useConnect({
+    //   connector: new InjectedConnector(),
+    // })
+
+    // const{disconnect} = useDisconnect()
+
+    // console.log(isConnected);
+    
+  
+    
+
   return (
     <div className='home'>
         <div className="home__title">
             MAKE YOUR REAL ASSETS LIQUIDS
         </div>
         <div className="home__text">
-            With Collector Chain, create buy and sell digitalized and fractionized physical collectibles
+            With Collector Chain, create buy and sell digitalized and fractionized physical collectibles 
+            {/* {address} */}
         </div>
+        {/* <button onClick={()=>connect()}>connect</button>
+        <button onClick={()=>disconnect()}>disconnect</button> */}
         <div className="home__image">
             <div className="home__image-item"></div>
             <div className="home__image-item"></div>
