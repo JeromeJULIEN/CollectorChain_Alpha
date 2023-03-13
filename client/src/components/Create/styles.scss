@@ -1,4 +1,4 @@
-.home {
+.create {
     margin-top: 120px;
 
     &__title {
@@ -34,7 +34,7 @@
         grid-template-rows: repeat(20, 1fr);
         grid-template-columns: repeat(20, 1fr);
         gap: 2px;
-        background-image: url(../../image/home_coin.png);
+        background-image: url(../../image/howItWorks_illustration.png);
         background-size: cover;
         background-position: center;
         aspect-ratio: 1;
@@ -70,4 +70,16 @@
 .blueBackground {
     background-color: #2b385A;
     color: white;
+}
+
+.logo {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 20px;
+    padding-bottom: 20px;
+
+    img {
+        height: 30px;
+    }
+
 }

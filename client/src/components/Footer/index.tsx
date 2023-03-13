@@ -6,6 +6,10 @@ import logo from "../../image/logo.png"
 type Props = {}
 
 const Footer = (props: Props) => {
+  const openLink = () =>{
+    window.open("https://opensea.io/")
+  }
+
   return (
     <div className='footer'>
         <div className="footer__logo">
@@ -16,7 +20,7 @@ const Footer = (props: Props) => {
             <div className="footer__text--link">
                 <div>Contact us</div>
                 <div>Create</div>
-                <div>Our collection</div>
+                <div onClick={openLink}>Our collection</div>
             </div>
         </div>
 

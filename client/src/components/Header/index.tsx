@@ -1,15 +1,25 @@
-import React, { useState,MouseEvent } from 'react'
+import React, { useState,MouseEvent, useEffect } from 'react'
 import "./styles.scss"
 import logo from "../../image/logo.png"
 import { Menu,Login } from '@mui/icons-material'
 import MenuApp from '../MenuApp'
+import { useLocation } from 'react-router-dom'
 
 
 
 const Header = () => {
+
+  const location = useLocation()
+
+  useEffect(()=>{
+    setMenuVisibility(false)
+    window.scrollTo(0,0)
+  },[location])
+
   //! :::: LOCAL STATE ::::
   const [menuVisibility, setMenuVisibility] = useState(false)
   const [loginVisibility, setLoginVisibility] = useState(false)
+
 
   //! :::: FUNCTIONS ::::
   const onMenuButtonClick = (e: MouseEvent)=>{

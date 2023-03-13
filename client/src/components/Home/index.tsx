@@ -437,7 +437,7 @@ const Home = (props: Props) => {
         </div>
         <div className="home__text">
         <strong>3- FOR INVESTORS</strong>  <br/>
-        Gain flexibility in your portfolio management
+        Get flexibility in your portfolio management
         </div>
         <div className="blueBackground">
              <div className="home__title--rightAlign">
