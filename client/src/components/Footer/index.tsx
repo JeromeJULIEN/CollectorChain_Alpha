@@ -1,6 +1,7 @@
 import React from 'react'
 import './styles.scss'
 import logo from "../../image/logo.png"
+import { Link } from 'react-router-dom'
 
 
 type Props = {}
@@ -8,6 +9,10 @@ type Props = {}
 const Footer = (props: Props) => {
   const openLink = () =>{
     window.open("https://opensea.io/")
+  }
+
+  const openMail =() =>{
+    window.open("mailto:contact@collectorchain.com", "_blank")
   }
 
   return (
@@ -18,8 +23,8 @@ const Footer = (props: Props) => {
         <div className="footer__text">
             <div>collector chain @2023</div>
             <div className="footer__text--link">
-                <div>Contact us</div>
-                <div>Create</div>
+                <div onClick={openMail}>Contact us</div>
+                <Link className='link' to="/create">Create</Link>
                 <div onClick={openLink}>Our collection</div>
             </div>
         </div>

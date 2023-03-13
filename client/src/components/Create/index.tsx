@@ -10,13 +10,18 @@ const Create = (props: Props) => {
             SUBMIT YOUR OBJECT
         </div>
         <div className="create__text">
-        Please provide the requested information
+        Please provide the requested informations
         </div>
         <div className="blueBackground">
-            <div className="create__title--center">
-                Picture of the object
-            </div>
-            onalized asset directly in your wallet
+            <div className="create__title--center">Picture of the object</div>
+            <button className='create__button'>Select a file</button>
+            <div className="create__title--center">Proof of ownership</div>
+            <button className='create__button'>Select a file</button>
+            <div className="create__title--center">Storage</div>
+            <button className='create__button'>Select a storage</button>
+            <div className="create__title--center">Number of Fractions</div>
+            <button className='create__button'>Select a value</button>
+            <button className='create__button create__button--big'>SUBMIT</button>
         </div>
     </div>
   )

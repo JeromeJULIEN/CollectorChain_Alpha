@@ -14,6 +14,13 @@
             margin-top: 0px;
             text-align: right;
         }
+
+        &--center {
+            font-size: 2rem;
+            margin: 10px 20px 0 20px;
+            margin-top: 0px;
+            text-align: center;
+        }
     }
 
     &__text {
@@ -45,23 +52,29 @@
 
     }
 
-    button {
+    &__button {
         border: none;
-        // background-color: #4AADFF;
+
 
         background-image:
-            linear-gradient(to right, #2b385a 3px, #4AADFF 1px),
+            linear-gradient(to left, #2b385a 3px, #4AADFF 1px),
             linear-gradient(to bottom, #2b385a 3px, #4AADFF 1px);
         background-size: 20px 20px;
-        background-position: 0 0, 0 0;
+        background-position: 0 0;
 
         color: white;
         font-family: 'Quantico', sans-serif;
-        font-size: 1.5rem;
+        font-size: 2rem;
         font-weight: bold;
-        width: calc(100vw - 40px);
-        margin: 20px;
+        width: calc(100vw - 80px);
+        margin: 40px;
+        margin-top: 10px;
         height: 80px;
+
+        &--big {
+            width: calc(100vw - 40px);
+            margin: 40px 20px;
+        }
     }
 
 
