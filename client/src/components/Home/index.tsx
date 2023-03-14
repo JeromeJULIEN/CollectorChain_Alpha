@@ -7,7 +7,9 @@ import { Link } from 'react-router-dom'
 type Props = {}
 
 const Home = (props: Props) => {
-    
+    const openLink = () =>{
+        window.open("https://testnets.opensea.io/collection/collector-chain-beta")
+      }
 
   return (
     <div className='home'>
@@ -454,7 +456,7 @@ const Home = (props: Props) => {
             <div className="home__text--rightAlign">
             Visit our opensea collection to buy your first shares
             </div>
-            <button>VISIT OUR COLLECTION</button>
+            <button onClick={openLink}>VISIT OUR COLLECTION</button>
         </div>
 
 
