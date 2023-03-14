@@ -3,7 +3,7 @@ import "./styles.scss"
 import logo from "../../image/logo.png"
 import { Menu,Login, Logout } from '@mui/icons-material'
 import MenuApp from '../MenuApp'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import MenuLogin from '../MenuLogin'
 import MenuLogged from '../MenuLogged'
 import { useAccount,  useConnect,  useDisconnect} from 'wagmi'
@@ -34,15 +34,19 @@ const Header = () => {
 
   //! :::: FUNCTIONS ::::
   const onMenuButtonClick = (e: MouseEvent)=>{
-    setMenuVisibility(!menuVisibility)    
+    setMenuVisibility(!menuVisibility)
+    setLoginVisibility(false)
+    setLoggedVisibility(false)    
   }
 
   const onLoginButtonClick = (e: MouseEvent)=>{
     setLoginVisibility(!loginVisibility)
+    setMenuVisibility(false)
   }
 
   const onLoggedButtonClick = (e: MouseEvent)=>{
     setLoggedVisibility(!loggedVisibility)
+    setMenuVisibility(false)
   }
 
 
@@ -53,7 +57,8 @@ const Header = () => {
         <Menu className="header__menu-button"/>
       </div>
       <div className="header__logo">
-        <img className='header__logo-image' src={logo} alt="Logo" />
+        <Link to='/'><img className='header__logo-image' src={logo} alt="Logo" /></Link>
+        
       </div>
       <div className="header__login" onClick={onLoginButtonClick}>
        {!isConnected && <Login className="header__login-button"/> }

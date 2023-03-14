@@ -2,6 +2,7 @@ import React from 'react'
 import './styles.scss'
 import { useAccount, useConnect, useDisconnect } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
+import { Link } from 'react-router-dom'
 
 type Props = {}
 
@@ -439,7 +440,7 @@ const Home = (props: Props) => {
             <div className="home__text--rightAlign">
                 Get access to uncommon collectibles all over the world, and finely manage your investment. Buy and put on sell at any time,part or all of a collectible shares
             </div>
-            <button>MINT YOUR ASSET</button>
+            <button><Link className='link' to='/create'>MINT YOUR ASSET</Link> </button>
         </div>
         <div className="home__title">
             WHY USE COLLECTOR CHAIN

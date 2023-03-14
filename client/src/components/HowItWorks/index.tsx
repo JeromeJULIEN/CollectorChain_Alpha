@@ -422,12 +422,12 @@ const HowItWorks = (props: Props) => {
                 <br/>TRUSTED PARTNERS
             </div>
             <div className="howItWorks__text--rightAlign">
-            Collector Chain collectibles are stored and insured by our trusted partners  
+            Collector Chain collectibles are stored and insured by professional partners  
             </div>
-            <div className="logo">
+            {/* <div className="logo">
                 <img src={logoBrinks} alt="logo_brinks" />
                 <img src={logoAry} alt="logo_ary" />
-            </div>
+            </div> */}
         </div>
         <div className="howItWorks__title">
             OUR PROCESS
