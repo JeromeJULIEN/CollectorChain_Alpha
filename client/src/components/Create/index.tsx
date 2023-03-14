@@ -7,7 +7,7 @@ const Create = (props: Props) => {
   return (
     <div className='create'>
         <div className="create__title">
-            SUBMIT YOUR OBJECT
+            SUBMIT YOUR OBJECT (...SOON)
         </div>
         <div className="create__text">
         Please provide the requested informations

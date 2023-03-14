@@ -22,19 +22,19 @@ const { chains, provider, webSocketProvider } = configureChains(
  
 // Set up client
 const client = createClient({
-  autoConnect: true,
+  autoConnect: false,
   connectors: [
     new MetaMaskConnector({ chains }),
     // new CoinbaseWalletConnector({
     //   chains,
     //   options: {
-    //     appName: 'wagmi',
+    //     appName: 'Collector Chain',
     //   },
     // }),
     // new WalletConnectConnector({
     //   chains,
     //   options: {
-    //     projectId: '...',
+    //     projectId: 'df0aaab88585898beea80df991ef4153',
     //   },
     // }),
     // new InjectedConnector({

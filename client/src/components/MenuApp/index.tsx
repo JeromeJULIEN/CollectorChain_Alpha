@@ -14,7 +14,7 @@ const MenuApp = (props: Props) => {
     <div className='menuApp'>
         <Link className="menuApp__item" to="/">HOME</Link>
         <Link  className="menuApp__item" to="/howitworks">HOW IT WORKS</Link>
-        <Link className="menuApp__item" to="/create">CREATE YOUR OBJECT</Link>
+        <Link className="menuApp__item" to="/create">CREATE YOUR OBJECT (...SOON)</Link>
         <div className="menuApp__item" onClick={openLink}>COLLECTION</div>
     </div>
   )
