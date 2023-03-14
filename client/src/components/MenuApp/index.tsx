@@ -7,7 +7,7 @@ type Props = {}
 const MenuApp = (props: Props) => {
 
   const openLink = () =>{
-    window.open("https://opensea.io/")
+    window.open("https://testnets.opensea.io/collection/collector-chain-beta")
   }
 
   return (

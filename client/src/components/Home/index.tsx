@@ -7,16 +7,6 @@ import { Link } from 'react-router-dom'
 type Props = {}
 
 const Home = (props: Props) => {
-    // const { address, isConnected } = useAccount()
-    // const { connect } = useConnect({
-    //   connector: new InjectedConnector(),
-    // })
-
-    // const{disconnect} = useDisconnect()
-
-    // console.log(isConnected);
-    
-  
     
 
   return (

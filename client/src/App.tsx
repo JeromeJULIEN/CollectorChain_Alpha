@@ -7,11 +7,15 @@ import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import HowItWorks from './components/HowItWorks';
 import Create from './components/Create';
 import { WagmiProvider } from './contexts/wagmiContext';  
+import CollectorChain from "./contracts/CollectorChain/CollectorChain.json"
+import { useContract, useProvider } from 'wagmi';
+import contractAddress from "./contracts/CollectorChain/CollectorChain-address.json"
 
 
 
 function App() {
-  return (
+
+   return (
     <Router>
     <div className="App">
         <WagmiProvider>
@@ -25,9 +29,6 @@ function App() {
         <Footer/>
 
         </WagmiProvider>
-
-        {/* </WagmiConfig> */}
-
     </div>
 
     </Router>
