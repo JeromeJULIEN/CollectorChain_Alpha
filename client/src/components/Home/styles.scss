@@ -70,3 +70,25 @@
     background-color: #2b385A;
     color: white;
 }
+
+@media (min-width: 721px) {
+    .home {
+        button {
+            width: 50%
+        }
+
+        &__text,
+        &__title {
+            text-align: center;
+
+            &--rightAlign {
+                text-align: center;
+            }
+        }
+
+        &__image {
+            width: 30%;
+            margin: 0 auto;
+        }
+    }
+}
