@@ -54,13 +54,13 @@
 
     &__button {
         border: none;
-
+        background-color: #4AADFF;
 
         background-image:
-            linear-gradient(to left, #2b385a 3px, #4AADFF 1px),
-            linear-gradient(to bottom, #2b385a 3px, #4AADFF 1px);
+            linear-gradient(to right, #2b385a 3px, transparent 1px),
+            linear-gradient(to bottom, #2b385a 3px, transparent 1px);
         background-size: 20px 20px;
-        background-position: 0 0;
+        background-position: 0 0, 0 0;
 
         color: white;
         font-family: 'Quantico', sans-serif;
@@ -100,7 +100,7 @@
 @media (min-width: 721px) {
     .create {
         button {
-            width: 50%
+            width: 50%;
         }
 
         &__text,

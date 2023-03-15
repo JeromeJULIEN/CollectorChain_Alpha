@@ -47,11 +47,11 @@
 
     button {
         border: none;
-        // background-color: #4AADFF;
+        background-color: #4AADFF;
 
         background-image:
-            linear-gradient(to right, #2b385a 3px, #4AADFF 1px),
-            linear-gradient(to bottom, #2b385a 3px, #4AADFF 1px);
+            linear-gradient(to right, #2b385a 3px, transparent 1px),
+            linear-gradient(to bottom, #2b385a 3px, transparent 1px);
         background-size: 20px 20px;
         background-position: 0 0, 0 0;
 
