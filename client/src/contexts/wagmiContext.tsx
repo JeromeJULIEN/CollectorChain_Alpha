@@ -8,6 +8,7 @@ import { InjectedConnector } from 'wagmi/connectors/injected'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { ReactNode } from 'react'
+import { getNetwork, JsonRpcProvider } from '@ethersproject/providers'
 
 
 // const infuraApiKey :string = process.env.INFURA_API_KEY
@@ -16,13 +17,13 @@ import { ReactNode } from 'react'
 const infuraApiKey = process.env.REACT_APP_INFURA_API_KEY as string
 
 const { chains, provider, webSocketProvider } = configureChains(
-  [mainnet, goerli, goerli],
-  [infuraProvider({ apiKey: infuraApiKey }), publicProvider()],
+  [mainnet, goerli],
+  [/*infuraProvider({ apiKey: infuraApiKey }), */ publicProvider()],
 )
  
 // Set up client
 const client = createClient({
-  autoConnect: false,
+  autoConnect: true,
   connectors: [
     new MetaMaskConnector({ chains }),
     // new CoinbaseWalletConnector({
@@ -45,7 +46,7 @@ const client = createClient({
     //   },
     // }),
   ],
-  provider,
+  provider: new JsonRpcProvider('http://127.0.0.1:8545/', getNetwork(31337)),
   webSocketProvider,
 })
 
