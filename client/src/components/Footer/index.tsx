@@ -1,6 +1,6 @@
 import React from 'react'
 import './styles.scss'
-import logo from "../../image/logo.png"
+import logo from "../../image/logo_CC.png"
 import { Link } from 'react-router-dom'
 
 
