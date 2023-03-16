@@ -17,7 +17,7 @@ const Home = (props: Props) => {
             MAKE YOUR REAL ASSETS LIQUIDS
         </div>
         <div className="home__text">
-            With Collector Chain, create buy and sell digitalized and fractionized physical collectibles 
+            With Collector Chain, create buy and sell digitalized and fractionated physical collectibles 
             {/* {address} */}
         </div>
         {/* <button onClick={()=>connect()}>connect</button>
