@@ -12,7 +12,7 @@ const Footer = (props: Props) => {
   }
 
   const openMail =() =>{
-    window.open("mailto:contact@collectorchain.com", "_blank")
+    window.open("mailto:jejulien@gmail.com", "_blank")
   }
 
   return (
