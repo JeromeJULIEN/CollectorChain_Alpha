@@ -1,4 +1,6 @@
-import { WagmiConfig, createClient, configureChains, mainnet, goerli } from 'wagmi'
+import { WagmiConfig, createClient, configureChains } from 'wagmi'
+import { hardhat } from '@wagmi/core/chains'
+
 
 import { infuraProvider } from 'wagmi/providers/infura'
 import { publicProvider } from 'wagmi/providers/public'
@@ -16,14 +18,19 @@ import { getNetwork, JsonRpcProvider } from '@ethersproject/providers'
 // Two popular providers are Alchemy (alchemy.com) and Infura (infura.io)
 const infuraApiKey = process.env.REACT_APP_INFURA_API_KEY as string
 
-const { chains, provider, webSocketProvider } = configureChains(
-  [mainnet, goerli],
+const { chains, provider } = configureChains(
+  [hardhat],
   [/*infuraProvider({ apiKey: infuraApiKey }), */ publicProvider()],
 )
+
+const ethProvider = new JsonRpcProvider("http://127.0.0.1:8545/", getNetwork(31337))
+// const connector = new MetaMaskConnector({chains: [hardhat]});
+
+
  
 // Set up client
 const client = createClient({
-  autoConnect: true,
+  autoConnect: false,
   connectors: [
     new MetaMaskConnector({ chains }),
     // new CoinbaseWalletConnector({
@@ -46,8 +53,8 @@ const client = createClient({
     //   },
     // }),
   ],
-  provider: new JsonRpcProvider('http://127.0.0.1:8545/', getNetwork(31337)),
-  webSocketProvider,
+  provider//: new JsonRpcProvider('http://127.0.0.1:8545/', getNetwork(31337)),
+  // webSocketProvider,
 })
 
 

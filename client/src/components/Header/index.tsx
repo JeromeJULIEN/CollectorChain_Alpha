@@ -60,8 +60,8 @@ const Header = () => {
         <Link to='/'><img className='header__logo-image' src={logo} alt="Logo" /></Link>
         
       </div>
-      <div className="header__login" onClick={onLoginButtonClick}>
-       {!isConnected && <Login className="header__login-button"/> }
+      <div className="header__login" onClick={onLoginButtonClick}>........
+       {/* {!isConnected && <Login className="header__login-button"/> }
        {isConnected &&
        <div className='header__logged' onClick={onLoggedButtonClick}>
         <button className='header__logged-button'>
@@ -69,7 +69,7 @@ const Header = () => {
 
         </button>
        </div>
-       }
+       } */}
       </div>
     </div>
     {menuVisibility && <MenuApp/>}
