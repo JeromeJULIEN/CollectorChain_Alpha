@@ -23,38 +23,13 @@ const { chains, provider } = configureChains(
   [/*infuraProvider({ apiKey: infuraApiKey }), */ publicProvider()],
 )
 
-const ethProvider = new JsonRpcProvider("http://127.0.0.1:8545/", getNetwork(31337))
-// const connector = new MetaMaskConnector({chains: [hardhat]});
-
-
- 
 // Set up client
 const client = createClient({
-  autoConnect: false,
+  autoConnect: true,
   connectors: [
     new MetaMaskConnector({ chains }),
-    // new CoinbaseWalletConnector({
-    //   chains,
-    //   options: {
-    //     appName: 'Collector Chain',
-    //   },
-    // }),
-    // new WalletConnectConnector({
-    //   chains,
-    //   options: {
-    //     projectId: 'df0aaab88585898beea80df991ef4153',
-    //   },
-    // }),
-    // new InjectedConnector({
-    //   chains,
-    //   options: {
-    //     name: 'Injected',
-    //     shimDisconnect: true,
-    //   },
-    // }),
   ],
-  provider//: new JsonRpcProvider('http://127.0.0.1:8545/', getNetwork(31337)),
-  // webSocketProvider,
+  provider
 })
 
 
