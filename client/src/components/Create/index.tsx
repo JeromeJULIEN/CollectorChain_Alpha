@@ -9,7 +9,9 @@ import { UseContractConfig, useContractRead, useContractWrite, usePrepareContrac
 
 const Create = () => {
 
-  const { data : metadata, isError, isLoading } = useContractRead({
+  const [setContractURILoading,setSetContractURILoading]= useState<boolean>()
+
+  const { data : metadata, isError } = useContractRead({
     address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
     abi: contractABI.abi,
     functionName: 'contractURI',
@@ -25,7 +27,19 @@ const Create = () => {
     functionName: 'setContractURI',
     args:["changement URI"]
   })
-  const { data, isSuccess, write: setContractURIWrite } = useContractWrite(setContractURIConfig)
+  const { data, isSuccess, isLoading, writeAsync: setContractURIWrite } = useContractWrite(setContractURIConfig)
+
+  const setContractURICall = async()=>{
+    setSetContractURILoading(true)
+    try {
+      const tx = await setContractURIWrite?.();
+      const res = await tx?.wait();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setSetContractURILoading(false);
+    }
+  }
 
   return (
     <div className='create'>
@@ -44,7 +58,9 @@ const Create = () => {
             <button className='create__button'>Select a storage</button>
             <div className="create__title--center">Number of Fractions</div>
             <button className='create__button'>Select a value</button>
-            <button className='create__button create__button--big' onClick={() => setContractURIWrite?.()}>SUBMIT (...SOON)</button>
+            <button disabled={setContractURILoading} className='create__button create__button--big' onClick={setContractURICall}>
+              {setContractURILoading ? <>IN PROGRESS...</> : <>SUBMIT (...SOON)</>}
+              </button>
         </div>
     </div>
   )
