@@ -15,7 +15,7 @@ contract CollectorChain is ERC1155URIStorage, ERC2981, Ownable {
     /// @dev init royalty fees to 5%
     uint96 public _baseFeeNumerator = 500;
 
-    string public contractMetaDataURI;
+    string public contractMetaDataURI = "coucou";
 
     /// @dev possible status for each nft
     enum Status {
@@ -57,12 +57,9 @@ contract CollectorChain is ERC1155URIStorage, ERC2981, Ownable {
 
     constructor() ERC1155(collectionURI_) {}
 
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        override(ERC1155, ERC2981)
-        returns (bool)
-    {
+    function supportsInterface(
+        bytes4 interfaceId
+    ) public view override(ERC1155, ERC2981) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
 
@@ -98,10 +95,10 @@ contract CollectorChain is ERC1155URIStorage, ERC2981, Ownable {
     /// @notice only for contract owner
     /// @param _vote 1 = accepted,  0 = rejected
     /// @param _nftId id of the NFT to update
-    function setMintProposalStatus(bool _vote, uint256 _nftId)
-        external
-        onlyOwner
-    {
+    function setMintProposalStatus(
+        bool _vote,
+        uint256 _nftId
+    ) external onlyOwner {
         require(isNftExist[_nftId], "nft doesn't exist");
         require(
             nftList[_nftId].status == Status.proposed,
@@ -141,10 +138,10 @@ contract CollectorChain is ERC1155URIStorage, ERC2981, Ownable {
     /// @notice only for contract owner
     /// @param _stockerAddr wallet address of the stocker (to manage potential royaltee)
     /// @param _stockerName Name of the stocker
-    function stockerCreation(address _stockerAddr, string calldata _stockerName)
-        external
-        onlyOwner
-    {
+    function stockerCreation(
+        address _stockerAddr,
+        string calldata _stockerName
+    ) external onlyOwner {
         uint256 currentStockerId = _stockerIdCounter;
         Stocker memory newStocker = Stocker(_stockerAddr, _stockerName);
         stockerList[currentStockerId] = newStocker;

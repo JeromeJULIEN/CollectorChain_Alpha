@@ -10,6 +10,8 @@ const MenuLogged = (props: Props) => {
 
   return (
     <div className='menuLogged'>
+        <button className='menuLogged__item' onClick={()=>disconnect()}>MY COLLECTION</button>
+        <button className='menuLogged__item' onClick={()=>disconnect()}>MY CREATION</button>
         <button className='menuLogged__item' onClick={()=>disconnect()}>DISCONNECT</button>
     </div>
   )
