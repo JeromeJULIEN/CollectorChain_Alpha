@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import "./styles.scss"
 import contractAddress from "../../contracts/CollectorChain/CollectorChain-address.json"
 import contractABI from "../../contracts/CollectorChain/CollectorChain.json"
-import arbiABI from"../../contracts/CollectorChain/arbitrum.json"
 import { UseContractConfig, useContractRead, useContractWrite, usePrepareContractWrite } from 'wagmi'
 
 
@@ -24,8 +23,8 @@ const Create = () => {
             <button className='create__button'>Select a file</button>
             <div className="create__title--center">Proof of ownership</div>
             <button className='create__button'>Select a file</button>
-            <div className="create__title--center">Storage</div>
-            <button className='create__button'>Select a storage</button>
+            <div className="create__title--center">Proof of Storage</div>
+            <button className='create__button'>Select a file</button>
             <div className="create__title--center">Number of Fractions</div>
             <button className='create__button'>Set a value</button>
             <button className='create__button create__button--big'>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import "./styles.scss"
 import contractAddress from "../../contracts/CollectorChain/CollectorChain-address.json"
 import contractABI from "../../contracts/CollectorChain/CollectorChain.json"
-import arbiABI from"../../contracts/CollectorChain/arbitrum.json"
 import { UseContractConfig, useContractRead, useContractWrite, usePrepareContractWrite } from 'wagmi'
 
 
