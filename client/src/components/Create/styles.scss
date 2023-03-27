@@ -1,6 +1,22 @@
 .create {
     margin-top: 120px;
 
+    input[type='file'] {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+    }
+
+    input[type='text']::placeholder,
+    input[type='text'] {
+        color: white;
+        text-align: center;
+    }
+
+
     &__title {
         margin: 20px;
         font-size: 2rem;
@@ -60,6 +76,9 @@
     }
 
     &__button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         border: none;
         background-color: #4AADFF;
 
@@ -78,6 +97,11 @@
         // margin-top: 10px;
         // margin-bottom: 40px;
         height: 80px;
+        cursor: pointer;
+
+
+
+
 
         &--big {
             width: 100%;
@@ -92,6 +116,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
+
+            &--done {
+                background-color: #7cc372;
+                cursor: auto;
+            }
         }
     }
 
@@ -104,6 +134,7 @@
     justify-content: center;
     margin: auto;
     margin-bottom: 30px;
+
 }
 
 .blueBackground {
