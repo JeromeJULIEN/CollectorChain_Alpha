@@ -31,6 +31,7 @@ const Header = () => {
   const [menuVisibility, setMenuVisibility] = useState(false)
   const [loginVisibility, setLoginVisibility] = useState(false)
   const [loggedVisibility, setLoggedVisibility] = useState(false)
+  const [formatedAddress,setFormatedAddress] = useState("")
 
 
   //! :::: FUNCTIONS ::::
@@ -50,6 +51,18 @@ const Header = () => {
     setMenuVisibility(false)
   }
 
+  const formatETHAddress = (s:any, size:number) =>{;
+    var first = s.slice(0, size + 1);
+    var last = s.slice(-size);
+    return first + "..." + last;
+  }
+
+  useEffect(()=>{
+    if( isConnected){
+      setFormatedAddress(formatETHAddress(address,3)) 
+    }
+  },[isConnected,address])
+
 
   return (
     <>
@@ -66,6 +79,7 @@ const Header = () => {
        {isConnected &&
        <div className='header__logged' onClick={onLoggedButtonClick}>
         <button className='header__logged-button'>
+        {formatedAddress}
         <Jazzicon diameter={25} seed={jsNumberForAddress({address}.toString())} /> 
 
         </button>

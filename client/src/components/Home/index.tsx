@@ -3,6 +3,7 @@ import './styles.scss'
 import { useAccount, useConnect, useDisconnect } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { Link } from 'react-router-dom'
+import Loader from '../Loader'
 
 type Props = {}
 
