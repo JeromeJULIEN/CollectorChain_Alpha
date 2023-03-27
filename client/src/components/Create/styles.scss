@@ -20,7 +20,14 @@
             margin: 10px 20px 0 20px;
             margin-top: 0px;
             text-align: center;
+
+            &--last {
+                border-top: solid white 2px;
+                margin-top: 40px;
+                padding-top: 20px;
+            }
         }
+
     }
 
     &__text {
@@ -66,23 +73,43 @@
         font-family: 'Quantico', sans-serif;
         font-size: 2rem;
         font-weight: bold;
-        width: calc(100vw - 80px);
-        margin: 40px;
-        margin-top: 10px;
+        width: calc(100% - 80px);
+        // margin-left: 40px;
+        // margin-top: 10px;
+        // margin-bottom: 40px;
         height: 80px;
 
         &--big {
-            width: calc(100vw - 40px);
-            margin: 40px 20px;
+            width: 100%;
+        }
+
+        &__icon {
+            background-color: #4AADFF;
+            height: 77px;
+            width: 76px;
+            margin-top: 3px;
+            margin-left: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
     }
 
 
 }
 
+.horizontalBox {
+    width: calc(100vw - 80px);
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    margin-bottom: 30px;
+}
+
 .blueBackground {
     background-color: #2b385A;
     color: white;
+    padding-bottom: 20px;
 }
 
 .logo {
@@ -99,8 +126,12 @@
 
 @media (min-width: 721px) {
     .create {
-        button {
-            width: 50%;
+        &__button {
+            width: calc(100% - 80px);
+
+            &--big {
+                width: 100%
+            }
         }
 
         &__text,
@@ -117,4 +148,5 @@
             margin: 0 auto;
         }
     }
+
 }
