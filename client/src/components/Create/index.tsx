@@ -3,6 +3,7 @@ import "./styles.scss"
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CheckIcon from '@mui/icons-material/Check';
 import { handleSubmission } from '../Utils/FileUpload';
+import { Blocks } from 'react-loader-spinner';
 
 import contractAddress from "../../contracts/CollectorChain/CollectorChain-address.json"
 import contractABI from "../../contracts/CollectorChain/CollectorChain.json"
@@ -15,16 +16,23 @@ const Create = () => {
   
   
   //! :::: LOCAL STATE ::::
+  // path to file
   const [objectPicture,setObjectPicture] = useState<string>("")
   const [authPicture,setAuthPicture] = useState<string>("")
   const [storagePicture,setStoragePicture] = useState<string>("")
+  // ipfs hash
   const [objectPictureHash,setObjectPictureHash] = useState<string>("")
   const [authPictureHash,setAuthPictureHash] = useState<string>("")
   const [storagePictureHash,setStoragePictureHash] = useState<string>("")
+  // name to display
   const [objectPictureName,setObjectPictureName] = useState<string>("")
   const [authPictureName,setAuthPictureName] = useState<string>("")
   const [storagePictureName,setStoragePictureName] = useState<string>("")
-  
+  //loader
+  const [objectPictureLoader,setObjectPictureLoader] = useState<boolean>(false)
+  const [authPictureLoader,setAuthPictureLoader] = useState<boolean>(false)
+  const [storagePictureLoader,setStoragePictureLoader] = useState<boolean>(false)
+
   const handleObjectPicture = (event:any) =>{
     setObjectPicture(event.target.files[0])
     setObjectPictureName(event.target.files[0].name)
@@ -44,16 +52,22 @@ const Create = () => {
   
   //! :::: FUNCTIONS ::::
   const handleObjectPictureSubmission = async() =>{
+    setObjectPictureLoader(true)
     const hash = await handleSubmission(objectPicture)
     setObjectPictureHash(hash)
+    setObjectPictureLoader(false)
   }
   const handleAuthPictureSubmission = async() =>{
+    setAuthPictureLoader(true)
     const hash = await handleSubmission(authPicture)
     setAuthPictureHash(hash)
+    setAuthPictureLoader(false)
   }
   const handleStoragePictureSubmission = async() =>{
+    setStoragePictureLoader(true)
     const hash = await handleSubmission(storagePicture)
     setStoragePictureHash(hash)
+    setStoragePictureLoader(false)
   }
   
   //! :::: TEST ::::
@@ -81,6 +95,14 @@ const Create = () => {
                 <input type="file" onChange={handleObjectPicture} disabled={objectPictureHash!==""}/>
               </label>
               {objectPictureHash==="" ? 
+              objectPictureLoader ? <Blocks
+                visible={true}
+                height="80"
+                width="80"
+                ariaLabel="blocks-loading"
+                wrapperStyle={{}}
+                wrapperClass="blocks-wrapper"
+              /> :
               <div className='create__button__icon' onClick={()=>handleObjectPictureSubmission()}><ArrowForwardIcon fontSize='large'/></div>
               :
               <div className='create__button__icon create__button__icon--done' ><CheckIcon fontSize='large'/></div>
@@ -93,6 +115,14 @@ const Create = () => {
                 <input type="file" onChange={handleAuthPicture} disabled={authPictureHash!==""}/>
               </label>
               {authPictureHash==="" ? 
+              authPictureLoader ? <Blocks
+                visible={true}
+                height="80"
+                width="80"
+                ariaLabel="blocks-loading"
+                wrapperStyle={{}}
+                wrapperClass="blocks-wrapper"
+              /> :
               <div className='create__button__icon' onClick={()=>handleAuthPictureSubmission()}><ArrowForwardIcon fontSize='large'/></div>
               :
               <div className='create__button__icon create__button__icon--done' ><CheckIcon fontSize='large'/></div>
@@ -105,6 +135,14 @@ const Create = () => {
                 <input type="file" onChange={handleStoragePicture}/>
               </label>
               {storagePictureHash==="" ?
+              storagePictureLoader ?<Blocks
+                visible={true}
+                height="80"
+                width="80"
+                ariaLabel="blocks-loading"
+                wrapperStyle={{}}
+                wrapperClass="blocks-wrapper"
+              /> :
               <div className='create__button__icon' onClick={()=>handleStoragePictureSubmission()}><ArrowForwardIcon fontSize='large'/></div>
               :
               <div className='create__button__icon create__button__icon--done' ><CheckIcon fontSize='large'/></div>
