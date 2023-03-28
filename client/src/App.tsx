@@ -6,8 +6,6 @@ import Footer from './components/Footer';
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import HowItWorks from './components/HowItWorks';
 import Create from './components/Create';
-
-import CollectorChain from "./contracts/CollectorChain/CollectorChain.json"
 import { useAccount, useContract, useContractRead, useProvider } from 'wagmi';
 import Request from './components/Request';
 import Admin from './components/Admin';
@@ -22,7 +20,7 @@ function App() {
   const [isAdmin,setIsAdmin] = useState(false)
 
   //! :::: WAGMI ::::
-  const { address, connector, isConnected } = useAccount()
+  const { address, isConnected } = useAccount()
 
   const addressTyped : `0x${string}`= `0x${contractAddress.CollectorChain.substring(2)}`
 
@@ -38,15 +36,15 @@ function App() {
     } else {
       setIsAdmin(false)
     }
-    console.log("contract address =>", addressTyped);
-    console.log("connected address =>", address);
-    console.log("contract owner address =>",owner);    
+    // console.log("contract address =>", addressTyped);
+    // console.log("connected address =>", address);
+    // console.log("contract owner address =>",owner);    
   },[address, addressTyped,owner])
 
-  useEffect(()=>{
-    console.log("isAdmin =>",isAdmin);
+  // useEffect(()=>{
+  //   console.log("isAdmin =>",isAdmin);
     
-  },[isAdmin])
+  // },[isAdmin])
 
    return (
     <Router>
