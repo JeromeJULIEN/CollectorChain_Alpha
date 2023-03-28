@@ -6,9 +6,11 @@ import MenuApp from '../MenuApp'
 import { Link, useLocation } from 'react-router-dom'
 import MenuLogin from '../MenuLogin'
 import MenuLogged from '../MenuLogged'
-import { useAccount,  useConnect,  useDisconnect} from 'wagmi'
+import { useAccount,  useConnect,  useContractRead,  useDisconnect} from 'wagmi'
 import Jazzicon, {jsNumberForAddress} from 'react-jazzicon'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import contractAddress from "../../contracts/CollectorChain/CollectorChain-address.json"
+import contractABI from "../../contracts/CollectorChain/CollectorChain.json"
 
 
 
@@ -32,6 +34,24 @@ const Header = () => {
   const [loginVisibility, setLoginVisibility] = useState(false)
   const [loggedVisibility, setLoggedVisibility] = useState(false)
   const [formatedAddress,setFormatedAddress] = useState("")
+
+   //! :::: WAGMI ::::
+  const addressTyped : `0x${string}`= `0x${contractAddress.CollectorChain.substring(2)}`
+
+   const {data : owner} : {data? : string} = useContractRead({
+    address : addressTyped,
+    abi:contractABI.abi,
+    functionName:'owner'
+  })
+
+  useEffect(()=>{
+    console.log("contract address =>", addressTyped);
+    console.log("connected address =>", address);
+    console.log("contract owner address =>",owner);
+    
+    
+    
+  })
 
 
   //! :::: FUNCTIONS ::::
@@ -68,7 +88,7 @@ const Header = () => {
     <>
     <div className='header'>
        <div className="header__menu" onClick={onMenuButtonClick}>
-        <Menu className="header__menu-button"/>
+        <Menu className="header__menu-button" />
       </div>
       <div className="header__logo">
         <Link to='/'><img className='header__logo-image' src={logo} alt="Logo" /></Link>
@@ -87,7 +107,7 @@ const Header = () => {
        }
       </div>
     </div>
-    {menuVisibility && <MenuApp/>}
+    {menuVisibility && <MenuApp owner={owner} address={address}/>}
     {loginVisibility && <MenuLogin/>}
     {loggedVisibility && <MenuLogged/>}
     </>

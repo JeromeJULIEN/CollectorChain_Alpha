@@ -7,7 +7,7 @@ import { Blocks } from 'react-loader-spinner';
 
 import contractAddress from "../../contracts/CollectorChain/CollectorChain-address.json"
 import contractABI from "../../contracts/CollectorChain/CollectorChain.json"
-import { UseContractConfig, useContractRead, useContractWrite, usePrepareContractWrite } from 'wagmi'
+import { UseContractConfig, useContractRead, useContractWrite, usePrepareContractWrite, useAccount } from 'wagmi'
 
 
 
@@ -32,7 +32,12 @@ const Create = () => {
   const [objectPictureLoader,setObjectPictureLoader] = useState<boolean>(false)
   const [authPictureLoader,setAuthPictureLoader] = useState<boolean>(false)
   const [storagePictureLoader,setStoragePictureLoader] = useState<boolean>(false)
-
+  // WAGMI hook
+  const {isConnected } = useAccount()
+  
+  
+  //! :::: FUNCTIONS ::::
+  // Function to handle local state for display purpose
   const handleObjectPicture = (event:any) =>{
     setObjectPicture(event.target.files[0])
     setObjectPictureName(event.target.files[0].name)
@@ -48,9 +53,8 @@ const Create = () => {
     setStoragePictureName(event.target.files[0].name)
     console.log(event.target.files[0]);
   }
-  
-  
-  //! :::: FUNCTIONS ::::
+
+  // function to handle ipfs uploas through "FileUpload" component
   const handleObjectPictureSubmission = async() =>{
     setObjectPictureLoader(true)
     const hash = await handleSubmission(objectPicture)
@@ -71,12 +75,12 @@ const Create = () => {
   }
   
   //! :::: TEST ::::
-  useEffect(()=>{
-    console.log("hashObject =>",objectPictureHash);
-    console.log("hashAuth =>",authPictureHash);
-    console.log("hashStorage =>",storagePictureHash);
+  // useEffect(()=>{
+  //   console.log("hashObject =>",objectPictureHash);
+  //   console.log("hashAuth =>",authPictureHash);
+  //   console.log("hashStorage =>",storagePictureHash);
     
-  },[objectPictureHash,authPictureHash,storagePictureHash])
+  // },[objectPictureHash,authPictureHash,storagePictureHash])
   
   return (
     <div className='create'>
@@ -154,9 +158,11 @@ const Create = () => {
             </div>
             <div className="create__title--center create__title--center--last">Submit your request</div>
             <div className="horizontalBox">
-              <button className='create__button create__button--big'>
-                SUBMIT (...SOON)
-              </button>
+              {isConnected ? 
+              <button className='create__button create__button--big'>SUBMIT (...SOON)</button>
+              :
+              <button className='create__button create__button--big' disabled={true}>CONNECT YOUR ACCOUNT</button>
+              }
             </div>
         </div>
     </div>

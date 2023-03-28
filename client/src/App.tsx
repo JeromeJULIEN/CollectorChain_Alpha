@@ -11,6 +11,7 @@ import CollectorChain from "./contracts/CollectorChain/CollectorChain.json"
 import { useContract, useProvider } from 'wagmi';
 import contractAddress from "./contracts/CollectorChain/CollectorChain-address.json"
 import Request from './components/Request';
+import Admin from './components/Admin';
 
 
 
@@ -26,6 +27,7 @@ function App() {
           <Route path="/howitworks" element={<HowItWorks/>}/>
           <Route path="/create" element={<Create/>}/>
           <Route path="/request" element={<Request/>}/>
+          <Route path="/admin" element={<Admin/>}/>
 
         </Routes>
         <Footer/>
