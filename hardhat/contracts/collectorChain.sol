@@ -25,7 +25,7 @@ contract CollectorChain is ERC1155URIStorage, ERC2981, Ownable {
         minted,
         burned
     }
-    // modif
+
     /// @notice main information of the NFT
     struct Nft {
         uint256 nftId;
