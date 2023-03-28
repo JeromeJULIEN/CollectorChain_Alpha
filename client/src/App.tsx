@@ -6,33 +6,61 @@ import Footer from './components/Footer';
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import HowItWorks from './components/HowItWorks';
 import Create from './components/Create';
-import { WagmiProvider } from './contexts/wagmiContext';  
+
 import CollectorChain from "./contracts/CollectorChain/CollectorChain.json"
-import { useContract, useProvider } from 'wagmi';
-import contractAddress from "./contracts/CollectorChain/CollectorChain-address.json"
+import { useAccount, useContract, useContractRead, useProvider } from 'wagmi';
 import Request from './components/Request';
 import Admin from './components/Admin';
+import contractAddress from "./contracts/CollectorChain/CollectorChain-address.json"
+import contractABI from "./contracts/CollectorChain/CollectorChain.json"
+import { useEffect, useState } from 'react';
 
 
 
 function App() {
+  //! :::: LOCAL STATE ::::
+  const [isAdmin,setIsAdmin] = useState(false)
+
+  //! :::: WAGMI ::::
+  const { address, connector, isConnected } = useAccount()
+
+  const addressTyped : `0x${string}`= `0x${contractAddress.CollectorChain.substring(2)}`
+
+   const {data : owner} : {data? : string} = useContractRead({
+    address : addressTyped,
+    abi:contractABI.abi,
+    functionName:'owner'
+  })
+
+  useEffect(()=>{
+    if(address == owner) {
+      setIsAdmin(true)
+    } else {
+      setIsAdmin(false)
+    }
+    console.log("contract address =>", addressTyped);
+    console.log("connected address =>", address);
+    console.log("contract owner address =>",owner);    
+  },[address, addressTyped,owner])
+
+  useEffect(()=>{
+    console.log("isAdmin =>",isAdmin);
+    
+  },[isAdmin])
 
    return (
     <Router>
     <div className="App">
-        <WagmiProvider>
-        <Header/>
+        <Header isConnected={isConnected} address={address} owner={owner}/>
         <Routes>
           <Route path="/" element={<Home/>}/>
           <Route path="/howitworks" element={<HowItWorks/>}/>
           <Route path="/create" element={<Create/>}/>
           <Route path="/request" element={<Request/>}/>
-          <Route path="/admin" element={<Admin/>}/>
+          <Route path="/admin" element={<Admin isAdmin={isAdmin}/>}/>
 
         </Routes>
         <Footer/>
-
-        </WagmiProvider>
     </div>
 
     </Router>

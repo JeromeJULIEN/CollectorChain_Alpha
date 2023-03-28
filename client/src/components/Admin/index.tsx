@@ -1,11 +1,16 @@
 import React from 'react'
 import "./styles.scss"
 
-type Props = {}
+interface AdminProps {
+    isAdmin : boolean
+}
 
-const Admin = (props: Props) => {
+const Admin = (props: AdminProps) => {
   return (
-    <div className='admin'>Admin</div>
+    <>
+    {props.isAdmin === true ? <div className='admin'>Admin</div> : <div className='admin'>You're not the admin</div> }
+    </>
+    
   )
 }
 

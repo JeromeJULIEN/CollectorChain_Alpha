@@ -9,14 +9,17 @@ import MenuLogged from '../MenuLogged'
 import { useAccount,  useConnect,  useContractRead,  useDisconnect} from 'wagmi'
 import Jazzicon, {jsNumberForAddress} from 'react-jazzicon'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import contractAddress from "../../contracts/CollectorChain/CollectorChain-address.json"
-import contractABI from "../../contracts/CollectorChain/CollectorChain.json"
 
 
+interface HeaderProps {
+  isConnected : boolean,
+  address? : `0x${string}` | undefined,
+  owner? : string
+}
 
-const Header = () => { 
+const Header = (props : HeaderProps) => { 
 
-  const { address, connector, isConnected } = useAccount()
+  
   const {disconnect} = useDisconnect()
 
 
@@ -27,7 +30,7 @@ const Header = () => {
     setLoginVisibility(false)
     setLoggedVisibility(false)
     window.scrollTo(0,0)
-  },[location,isConnected])
+  },[location,props.isConnected])
 
   //! :::: LOCAL STATE ::::
   const [menuVisibility, setMenuVisibility] = useState(false)
@@ -35,23 +38,7 @@ const Header = () => {
   const [loggedVisibility, setLoggedVisibility] = useState(false)
   const [formatedAddress,setFormatedAddress] = useState("")
 
-   //! :::: WAGMI ::::
-  const addressTyped : `0x${string}`= `0x${contractAddress.CollectorChain.substring(2)}`
-
-   const {data : owner} : {data? : string} = useContractRead({
-    address : addressTyped,
-    abi:contractABI.abi,
-    functionName:'owner'
-  })
-
-  useEffect(()=>{
-    console.log("contract address =>", addressTyped);
-    console.log("connected address =>", address);
-    console.log("contract owner address =>",owner);
-    
-    
-    
-  })
+   
 
 
   //! :::: FUNCTIONS ::::
@@ -78,10 +65,10 @@ const Header = () => {
   }
 
   useEffect(()=>{
-    if( isConnected){
-      setFormatedAddress(formatETHAddress(address,3)) 
+    if( props.isConnected){
+      setFormatedAddress(formatETHAddress(props.address,3)) 
     }
-  },[isConnected,address])
+  },[props.isConnected,props.address])
 
 
   return (
@@ -95,19 +82,21 @@ const Header = () => {
         
       </div>
       <div className="header__login" onClick={onLoginButtonClick}>
-       {!isConnected && <Login className="header__login-button"/> }
-       {isConnected &&
+       {!props.isConnected && <Login className="header__login-button"/> }
+       {props.isConnected &&
        <div className='header__logged' onClick={onLoggedButtonClick}>
         <button className='header__logged-button'>
-        {formatedAddress}
-        <Jazzicon diameter={25} seed={jsNumberForAddress({address}.toString())} /> 
+        {props.address != undefined && <>
+          {formatedAddress}
+          <Jazzicon diameter={25} seed={jsNumberForAddress(props.address.toString())} /> 
+        </>}
 
         </button>
        </div>
        }
       </div>
     </div>
-    {menuVisibility && <MenuApp owner={owner} address={address}/>}
+    {menuVisibility && <MenuApp owner={props.owner} address={props.address}/>}
     {loginVisibility && <MenuLogin/>}
     {loggedVisibility && <MenuLogged/>}
     </>

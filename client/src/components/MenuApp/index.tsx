@@ -4,7 +4,10 @@ import './styles.scss'
 
 import { useContractRead } from 'wagmi'
 
-interface MenuAppProps {owner? : string, address? : `0x${string}` | undefined}
+interface MenuAppProps {
+  owner? : string, 
+  address? : `0x${string}` | undefined
+}
 
 const MenuApp = (props : MenuAppProps) => {
  
