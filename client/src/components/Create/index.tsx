@@ -4,18 +4,23 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CheckIcon from '@mui/icons-material/Check';
 import { handleSubmission } from '../Utils/FileUpload';
 import { Blocks } from 'react-loader-spinner';
-
-import contractAddress from "../../contracts/CollectorChain/CollectorChain-address.json"
 import contractABI from "../../contracts/CollectorChain/CollectorChain.json"
 import { UseContractConfig, useContractRead, useContractWrite, usePrepareContractWrite, useAccount } from 'wagmi'
+import { ethers } from 'ethers';
 
 
+interface CreateProps {
+  contractAddress? : `0x${string}`,
+  address? : `0x${string}`
+}
 
-
-const Create = () => {
+const Create = (props : CreateProps) => {
   
   
   //! :::: LOCAL STATE ::::
+  // Object name and shares qty
+  const [objectName,setObjectName] = useState("")
+  const [sharesQty,setSharesQty] = useState(0)
   // path to file
   const [objectPicture,setObjectPicture] = useState<string>("")
   const [authPicture,setAuthPicture] = useState<string>("")
@@ -32,11 +37,19 @@ const Create = () => {
   const [objectPictureLoader,setObjectPictureLoader] = useState<boolean>(false)
   const [authPictureLoader,setAuthPictureLoader] = useState<boolean>(false)
   const [storagePictureLoader,setStoragePictureLoader] = useState<boolean>(false)
+  const [mintPorposalCallLoader, setMintProposalCallLoader] = useState<boolean>(false)
   // WAGMI hook
   const {isConnected } = useAccount()
   
   
   //! :::: FUNCTIONS ::::
+  // Functions to handle object data
+  const handleNameChange = (event : any) => {
+    setObjectName(event.target.value)
+  }
+  const handleSharesQtyChange = (event : any) => {
+    setSharesQty(event.target.value)
+  }
   // Function to handle local state for display purpose
   const handleObjectPicture = (event:any) =>{
     setObjectPicture(event.target.files[0])
@@ -73,6 +86,37 @@ const Create = () => {
     setStoragePictureHash(hash)
     setStoragePictureLoader(false)
   }
+
+  //! :::: WAGMI ::::
+  // mint proposal call configuration
+  const {config : mintProposalCallConfig} = usePrepareContractWrite({
+    address : props.contractAddress,
+    abi : contractABI.abi,
+    functionName: "createMintProposal",
+    args:[
+      objectName,
+      objectPictureHash,
+      authPictureHash,
+      storagePictureHash,
+      sharesQty
+    ]
+  })
+  // mint proposal call
+  const {data, isSuccess, isLoading, writeAsync : mintProposalCallWrite} = useContractWrite(mintProposalCallConfig)
+  const mintProposalCall = async()=>{
+    setMintProposalCallLoader(true)
+    try{
+      const tx = await mintProposalCallWrite?.();
+      const res = await tx?.wait()
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setMintProposalCallLoader(false)
+      console.log("mint done with args =>", {objectName,objectPictureHash,authPictureHash,storagePictureHash,sharesQty});
+      
+    }
+    
+  }
   
   //! :::: TEST ::::
   // useEffect(()=>{
@@ -88,9 +132,13 @@ const Create = () => {
             SUBMIT YOUR OBJECT (...SOON)
         </div>
         <div className="create__text">
-        Please provide the requested informations 
+        Please provide all the requested informations 
         </div>
         <div className="blueBackground">
+            <div className="create__title--center">Name of your object</div>
+            <div className="horizontalBox">
+              <input type="text" className='create__button create__button--big' placeholder='Set a name' onChange={handleNameChange} />
+            </div>
             <div className="create__title--center">Picture of the object </div>
             <div className='horizontalBox'>
               {/* use label to hide input element and keep the functionality */}
@@ -154,12 +202,21 @@ const Create = () => {
             </div>
             <div className="create__title--center">Number of Fractions</div>
             <div className="horizontalBox">
-              <input type="text" className='create__button create__button--big' placeholder='set a value'/>
+              <input type="text" className='create__button create__button--big' placeholder='set a value' onChange={handleSharesQtyChange}/>
             </div>
             <div className="create__title--center create__title--center--last">Submit your request</div>
             <div className="horizontalBox">
-              {isConnected ? 
-              <button className='create__button create__button--big'>SUBMIT (...SOON)</button>
+              {isConnected ? mintPorposalCallLoader ?
+              <button className='create__button create__button--big' onClick={mintProposalCall}><Blocks
+              visible={true}
+              height="80"
+              width="80"
+              ariaLabel="blocks-loading"
+              wrapperStyle={{}}
+              wrapperClass="blocks-wrapper"
+            /> </button>
+              :
+              <button className='create__button create__button--big' onClick={mintProposalCall}>SUBMIT (...SOON)</button>
               :
               <button className='create__button create__button--big' disabled={true}>CONNECT YOUR ACCOUNT</button>
               }

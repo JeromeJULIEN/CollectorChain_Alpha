@@ -12,6 +12,7 @@ import Admin from './components/Admin';
 import contractAddress from "./contracts/CollectorChain/CollectorChain-address.json"
 import contractABI from "./contracts/CollectorChain/CollectorChain.json"
 import { useEffect, useState } from 'react';
+import RequestDetail from './components/RequestDetail';
 
 
 
@@ -22,10 +23,10 @@ function App() {
   //! :::: WAGMI ::::
   const { address, isConnected } = useAccount()
 
-  const addressTyped : `0x${string}`= `0x${contractAddress.CollectorChain.substring(2)}`
+  const contractAddressTyped : `0x${string}`= `0x${contractAddress.CollectorChain.substring(2)}`
 
    const {data : owner} : {data? : string} = useContractRead({
-    address : addressTyped,
+    address : contractAddressTyped,
     abi:contractABI.abi,
     functionName:'owner'
   })
@@ -39,7 +40,7 @@ function App() {
     // console.log("contract address =>", addressTyped);
     // console.log("connected address =>", address);
     // console.log("contract owner address =>",owner);    
-  },[address, addressTyped,owner])
+  },[address,owner])
 
   // useEffect(()=>{
   //   console.log("isAdmin =>",isAdmin);
@@ -53,9 +54,11 @@ function App() {
         <Routes>
           <Route path="/" element={<Home/>}/>
           <Route path="/howitworks" element={<HowItWorks/>}/>
-          <Route path="/create" element={<Create/>}/>
+          <Route path="/create" element={<Create contractAddress={contractAddressTyped} address={address}/>}/>
           <Route path="/request" element={<Request/>}/>
-          <Route path="/admin" element={<Admin isAdmin={isAdmin}/>}/>
+          <Route path="/admin" element={<Admin contractAddress={contractAddressTyped} isAdmin={isAdmin}/>}/>
+          <Route path="/requestdetail/:id" element={<RequestDetail/>}/>
+
 
         </Routes>
         <Footer/>
