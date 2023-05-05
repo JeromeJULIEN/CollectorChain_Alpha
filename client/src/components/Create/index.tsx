@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import "./styles.scss"
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CheckIcon from '@mui/icons-material/Check';
@@ -7,6 +7,7 @@ import { Blocks } from 'react-loader-spinner';
 import contractABI from "../../contracts/CollectorChain/CollectorChain.json"
 import { UseContractConfig, useContractRead, useContractWrite, usePrepareContractWrite, useAccount } from 'wagmi'
 import { ethers } from 'ethers';
+import { toast } from 'react-toastify';
 
 
 interface CreateProps {
@@ -40,6 +41,14 @@ const Create = (props : CreateProps) => {
   const [mintPorposalCallLoader, setMintProposalCallLoader] = useState<boolean>(false)
   // WAGMI hook
   const {isConnected } = useAccount()
+
+  const isFilled = useMemo(()=> {
+    if (objectName && sharesQty && objectPictureHash && authPictureHash && storagePictureHash){
+      return true
+    } else {
+      return false
+    }
+  },[objectName,sharesQty,objectPictureHash,authPictureHash,storagePictureHash])
   
   
   //! :::: FUNCTIONS ::::
@@ -103,7 +112,18 @@ const Create = (props : CreateProps) => {
   })
   // mint proposal call
   const {data, isSuccess, isLoading, writeAsync : mintProposalCallWrite} = useContractWrite(mintProposalCallConfig)
+
   const mintProposalCall = async()=>{
+    // handle lack of information
+    if (!isFilled) {
+      toast.error("please fill all the information")
+      return
+    }
+    // handle bad shares qty
+    if(sharesQty < 1 || sharesQty > 100) {
+      toast.error("Fraction has to be set between 1 and 100")
+      return
+    }
     setMintProposalCallLoader(true)
     try{
       const tx = await mintProposalCallWrite?.();
@@ -113,6 +133,7 @@ const Create = (props : CreateProps) => {
     } finally {
       setMintProposalCallLoader(false)
       console.log("mint done with args =>", {objectName,objectPictureHash,authPictureHash,storagePictureHash,sharesQty});
+      toast.success("🎉 your request has been sent to our team. Follow up in your Request status page !!!")
       
     }
     
@@ -125,6 +146,8 @@ const Create = (props : CreateProps) => {
   //   console.log("hashStorage =>",storagePictureHash);
     
   // },[objectPictureHash,authPictureHash,storagePictureHash])
+  console.log("isFilled=>",isFilled);
+  
   
   return (
     <div className='create'>
@@ -137,12 +160,12 @@ const Create = (props : CreateProps) => {
         <div className="blueBackground">
             <div className="create__title--center">Name of your object</div>
             <div className="horizontalBox">
-              <input type="text" className='create__button create__button--big' placeholder='Set a name' onChange={handleNameChange} />
+              <input type="text" className='create__button create__button--big create__button--darkBlue' placeholder='Set a name' onChange={handleNameChange} />
             </div>
             <div className="create__title--center">Picture of the object </div>
             <div className='horizontalBox'>
               {/* use label to hide input element and keep the functionality */}
-              <label className="create__button" > 
+              <label className="create__button create__button--darkBlue" > 
                 {objectPictureName==="" ? <>Select a file</> : <>{objectPictureName}</>}
                 <input type="file" onChange={handleObjectPicture} disabled={objectPictureHash!==""}/>
               </label>
@@ -162,7 +185,7 @@ const Create = (props : CreateProps) => {
             </div>
             <div className="create__title--center">Proof of ownership</div>
             <div className='horizontalBox'>
-              <label className="create__button">
+              <label className="create__button create__button--darkBlue">
               {authPictureName==="" ? <>Select a file</> : <>{authPictureName}</>}
                 <input type="file" onChange={handleAuthPicture} disabled={authPictureHash!==""}/>
               </label>
@@ -182,7 +205,7 @@ const Create = (props : CreateProps) => {
             </div>
             <div className="create__title--center">Proof of Storage</div>
             <div className='horizontalBox'>
-              <label className="create__button">
+              <label className="create__button create__button--darkBlue">
                 {storagePictureName==="" ? <>Select a file</> : <>{storagePictureName}</>}
                 <input type="file" onChange={handleStoragePicture}/>
               </label>
@@ -202,12 +225,12 @@ const Create = (props : CreateProps) => {
             </div>
             <div className="create__title--center">Number of Fractions</div>
             <div className="horizontalBox">
-              <input type="text" className='create__button create__button--big' placeholder='set a value' onChange={handleSharesQtyChange}/>
+              <input type="text" className='create__button create__button--big create__button--darkBlue' placeholder='set a value' onChange={handleSharesQtyChange}/>
             </div>
             <div className="create__title--center create__title--center--last">Submit your request</div>
             <div className="horizontalBox">
               {isConnected ? mintPorposalCallLoader ?
-              <button className='create__button create__button--big' onClick={mintProposalCall}><Blocks
+              <button className="create__button create__button--big"  onClick={mintProposalCall}><Blocks
               visible={true}
               height="80"
               width="80"
@@ -216,7 +239,7 @@ const Create = (props : CreateProps) => {
               wrapperClass="blocks-wrapper"
             /> </button>
               :
-              <button className='create__button create__button--big' onClick={mintProposalCall}>SUBMIT (...SOON)</button>
+              <button className={`create__button create__button--big ${isFilled? "":"create__button--darkBlue"}`} onClick={mintProposalCall}>SUBMIT</button>
               :
               <button className='create__button create__button--big' disabled={true}>CONNECT YOUR ACCOUNT</button>
               }

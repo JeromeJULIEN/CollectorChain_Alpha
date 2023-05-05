@@ -114,7 +114,7 @@ const Admin = (props: AdminProps) => {
     <>
     <h1 className='admin'>Mint request</h1> 
     <div className="admin__nftList">
-      <div className="admin__nftList__item">
+      {nftItem0Typed && <div className="admin__nftList__item">
         <p>{nftItem0Typed.nftId.toString()}</p>
         <p>{nftItem0Typed.nftName}</p>
         <p>{
@@ -122,8 +122,8 @@ const Admin = (props: AdminProps) => {
           }</p>
         <p><img className="admin__nftList__item--img" src={`https://ipfs.io/ipfs/${nftItem0Typed.objectImageURL}`} alt="object main" /></p>
         <Link to="/requestdetail/0"><button><SettingsIcon/></button></Link>
-      </div>
-      <div className="admin__nftList__item">
+      </div>}
+      {nftItem1Typed && <div className="admin__nftList__item">
         <p>{nftItem1Typed.nftId.toString()}</p>
         <p>{nftItem1Typed.nftName}</p>
         <p>{
@@ -132,7 +132,7 @@ const Admin = (props: AdminProps) => {
         <p><img className="admin__nftList__item--img" src={`https://ipfs.io/ipfs/${nftItem1Typed.objectImageURL}`} alt="object main" /></p>
         <button><SettingsIcon/></button>
 
-      </div>
+      </div>}
     </div>
     </>
     : <div className='admin'>You're not the admin</div> }

@@ -4,13 +4,15 @@ import { useAccount, useConnect, useDisconnect } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { Link } from 'react-router-dom'
 import Loader from '../Loader'
+import { toast } from 'react-toastify'
 
 type Props = {}
 
 const Home = (props: Props) => {
     const openLink = () =>{
         window.open("https://testnets.opensea.io/collection/collector-chain-beta")
-      }
+        }
+        
 
   return (
     <div className='home'>
