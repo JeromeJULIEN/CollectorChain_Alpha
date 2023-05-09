@@ -1,17 +1,22 @@
 import { artifacts, ethers } from "hardhat";
+import hre from "hardhat";
 
 
 async function main() {
+
   const CollectorChain = await ethers.getContractFactory("CollectorChain");
   const collectorChain = await CollectorChain.deploy();
   await collectorChain.deployed();
-  console.log(`deployed at address ${collectorChain.address}`);
-
   saveFrontendFiles(collectorChain, "CollectorChain");
+  console.log(`deployed at address ${collectorChain.address}`);
 }
 
 // fonction gérant l'écriture des fichiers artifact et address
 function saveFrontendFiles(contract: any, contractName: string) {
+  // get the information on the network used for deployment
+  const networkName = hre.network.name
+  const chainId: number | undefined = hre.network.config.chainId
+
   const fs = require("fs");
   const path = require("path")
   // on génère un dossier au nom du contrat
@@ -23,10 +28,23 @@ function saveFrontendFiles(contract: any, contractName: string) {
   }
 
   // on écrit le fichier contenant l'adresse de déploiement
-  fs.writeFileSync(
-    path.join(contractsDir, `${contractName}-address.json`),
-    JSON.stringify({ [contractName]: contract.address }, undefined, 2)
-  );
+  //! remarque dans le cas d'un déploiement sur hardhat, on force le nom à 'hardhat'. 
+  //! Sinon c'est 'localhost qui s'écrit => pose pb pour récupérer l'adresse du contract dans app.js
+  console.log("network name", networkName);
+
+  if (networkName == "localhost") {
+    console.log("entrée dans network == localhost");
+
+    fs.writeFileSync(
+      path.join(contractsDir, `${contractName}-address.json`),
+      JSON.stringify({ hardhat: contract.address }, undefined, 2)
+    );
+  } else if (networkName) {
+    fs.writeFileSync(
+      path.join(contractsDir, `${contractName}-address.json`),
+      JSON.stringify({ [networkName]: contract.address }, undefined, 2)
+    );
+  }
 
   // idem avec l'artifacts
   const artifact = artifacts.readArtifactSync(contractName)

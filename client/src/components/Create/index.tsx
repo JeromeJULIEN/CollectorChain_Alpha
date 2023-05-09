@@ -5,14 +5,15 @@ import CheckIcon from '@mui/icons-material/Check';
 import { handleSubmission } from '../Utils/FileUpload';
 import { Blocks } from 'react-loader-spinner';
 import contractABI from "../../contracts/CollectorChain/CollectorChain.json"
-import { UseContractConfig, useContractRead, useContractWrite, usePrepareContractWrite, useAccount } from 'wagmi'
+import { UseContractConfig, useContractRead, useContractWrite, usePrepareContractWrite, useAccount, useConnect } from 'wagmi'
 import { ethers } from 'ethers';
 import { toast } from 'react-toastify';
 
 
 interface CreateProps {
   contractAddress? : `0x${string}`,
-  address? : `0x${string}`
+  address? : `0x${string}`,
+  isGoodNetwork? : boolean
 }
 
 const Create = (props : CreateProps) => {
@@ -97,6 +98,11 @@ const Create = (props : CreateProps) => {
   }
 
   //! :::: WAGMI ::::
+  const { connect, connectors, error, pendingConnector } =
+    useConnect()
+
+  console.log("connectors=>",connectors);
+  
   // mint proposal call configuration
   const {config : mintProposalCallConfig} = usePrepareContractWrite({
     address : props.contractAddress,
@@ -111,12 +117,25 @@ const Create = (props : CreateProps) => {
     ]
   })
   // mint proposal call
-  const {data, isSuccess, isLoading, writeAsync : mintProposalCallWrite} = useContractWrite(mintProposalCallConfig)
+  const {data, isSuccess, isLoading, writeAsync : mintProposalCallWrite} = useContractWrite({
+    ...mintProposalCallConfig,
+    onError(){
+      toast.error("Something went wrong...")
+    },
+    onSuccess(){
+      console.log("mint done with args =>", {objectName,objectPictureHash,authPictureHash,storagePictureHash,sharesQty});
+      toast.success("🎉 your request has been sent to our team. Follow up in your Request status page !!!")
+    }
+  })
 
   const mintProposalCall = async()=>{
+    if (!props.isGoodNetwork) {
+      toast.error("Change network to mint")
+      return
+    }
     // handle lack of information
     if (!isFilled) {
-      toast.error("please fill all the information")
+      toast.error("please fill all the informations")
       return
     }
     // handle bad shares qty
@@ -128,12 +147,11 @@ const Create = (props : CreateProps) => {
     try{
       const tx = await mintProposalCallWrite?.();
       const res = await tx?.wait()
+
     } catch (error) {
       console.error(error);
     } finally {
       setMintProposalCallLoader(false)
-      console.log("mint done with args =>", {objectName,objectPictureHash,authPictureHash,storagePictureHash,sharesQty});
-      toast.success("🎉 your request has been sent to our team. Follow up in your Request status page !!!")
       
     }
     
@@ -239,9 +257,11 @@ const Create = (props : CreateProps) => {
               wrapperClass="blocks-wrapper"
             /> </button>
               :
-              <button className={`create__button create__button--big ${isFilled? "":"create__button--darkBlue"}`} onClick={mintProposalCall}>SUBMIT</button>
+              <button className={`create__button create__button--big ${isFilled && props.isGoodNetwork? "":"create__button--darkBlue"}`} onClick={mintProposalCall}>
+                {props.isGoodNetwork? "SUBMIT" : "CHANGE NETWORK"}
+              </button>
               :
-              <button className='create__button create__button--big' disabled={true}>CONNECT YOUR ACCOUNT</button>
+              <button className='create__button create__button--big create__button--darkBlue' disabled={true} >CONNECT YOUR ACCOUNT</button>
               }
             </div>
         </div>

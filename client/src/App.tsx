@@ -11,11 +11,14 @@ import Request from './components/Request';
 import Admin from './components/Admin';
 import contractAddress from "./contracts/CollectorChain/CollectorChain-address.json"
 import contractABI from "./contracts/CollectorChain/CollectorChain.json"
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import RequestDetail from './components/RequestDetail';
 import { ToastContainer } from 'react-toastify';
+import { log } from 'console';
 
-
+interface ContractAddress {
+  [key: string]: string;
+}
 
 function App() {
   //! :::: LOCAL STATE ::::
@@ -25,13 +28,31 @@ function App() {
   const { address, isConnected } = useAccount()
   const {chain} = useNetwork()
 
-  const contractAddressTyped : `0x${string}`= `0x${contractAddress.CollectorChain.substring(2)}`
+  //!test
+  const network : string | undefined = chain?.network
+  const json : ContractAddress = contractAddress
+  // console.log("json",json);
+  
+  //! par defaut, on indique le netwrok mumbai pour récupérer l'adresse
+  // const contractAddr : any = !network ? json.mumbai : json[network]
+  const contractAddr : any = json.mumbai
+  // console.log("chain",chain,"chainId",network,"contractAddr", contractAddr);
+  //! --- fin test
 
-   const {data : owner} : {data? : string} = useContractRead({
+  // const contractAddressTyped : `0x${string}`= `0x${contractAddress.localhost.substring(2)}`
+  const contractAddressTyped : `0x${string}`= `0x${contractAddr.substring(2)}`
+  // console.log("contract address typed",contractAddressTyped, "chain", chain);
+  
+
+  
+
+  const {data : owner} : {data? : string} = useContractRead({
     address : contractAddressTyped,
     abi:contractABI.abi,
     functionName:'owner'
   })
+
+  const isGoodNetwork = useMemo(()=> {return chain?.id == process.env.REACT_APP_CHAIN_ID},[chain?.id])
 
   useEffect(()=>{
     if(address == owner) {
@@ -39,14 +60,13 @@ function App() {
     } else {
       setIsAdmin(false)
     }
-    // console.log("contract address =>", addressTyped);
-    // console.log("connected address =>", address);
+    console.log("contract address =>", contractAddressTyped);
+    console.log("connected address =>", address);
     console.log("contract owner address =>",owner);   
     console.log("network =>",chain);
     const infuraApiKey = process.env.REACT_APP_INFURA_API_KEY as string
     console.log("infura API key =>", infuraApiKey);
-
-
+    console.log("isGoodNetwork=>",isGoodNetwork, chain?.id, process.env.REACT_APP_CHAIN_ID);
      
   },[address,owner, chain])
 
@@ -62,7 +82,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home/>}/>
           <Route path="/howitworks" element={<HowItWorks/>}/>
-          <Route path="/create" element={<Create contractAddress={contractAddressTyped} address={address}/>}/>
+          <Route path="/create" element={<Create contractAddress={contractAddressTyped} address={address} isGoodNetwork={isGoodNetwork}/>}/>
           <Route path="/request" element={<Request/>}/>
           <Route path="/admin" element={<Admin contractAddress={contractAddressTyped} isAdmin={isAdmin}/>}/>
           <Route path="/requestdetail/:id" element={<RequestDetail/>}/>

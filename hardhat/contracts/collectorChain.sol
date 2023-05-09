@@ -31,29 +31,31 @@ contract CollectorChain is ERC1155URIStorage, ERC2981, Ownable {
         uint256 nftId;
         address minter;
         string nftName;
-        uint256 stockerId;
-        Status status;
-        string imageURL;
+        string objectImageURL;
+        string authImageURL;
+        string storageImageURL;
         uint256 sharesQty;
+        Status status;
     }
 
-    /// @notice main information of the NFT
-    struct Stocker {
-        address stockerAddr;
-        string stockerName;
-    }
+    /// @notice main information on the stocker (will be use in V2)
+    // struct Stocker {
+    //     address stockerAddr;
+    //     string stockerName;
+    // }
 
     /// @notice mapping of all the NFT related to their ID
     mapping(uint256 => Nft) public nftList;
     /// @dev mapping to be able to create require on nftId
     mapping(uint256 => bool) public isNftExist;
-    /// @notice mapping of all the stocker related to their ID
-    mapping(uint256 => Stocker) public stockerList;
+    /// @notice mapping of all the stocker related to their ID (for V2)
+    // mapping(uint256 => Stocker) public stockerList;
 
     /// @dev events for front end purpose
     event mintProposalCreationEvent(uint256 mintProposalId);
     event mintProposalStatusUpdateEvent(uint256 mintProposalId, uint8 status);
-    event stockerCreationEvent(uint256 stockerId);
+
+    // event stockerCreationEvent(uint256 stockerId);
 
     constructor() ERC1155(collectionURI_) {}
 
@@ -66,13 +68,15 @@ contract CollectorChain is ERC1155URIStorage, ERC2981, Ownable {
     /// @notice ask for a mint
     /// @dev set the initial shares quantity to 1
     /// @param _nftName name of the nft
-    /// @param _stockerId id of the stocker of the object
-    /// @param _imageURL URL of the main picture of the NFT
+    /// @param _objectImageURL URL of the main picture of the NFT
+    /// @param _authImageURL URL of the proof of authentification picture of the NFT
+    /// @param _storageImageURL URL of the proof of storage picture of the NFT
     /// @param _sharesQty quantity of fraction wanted for the NFT
     function createMintProposal(
         string calldata _nftName,
-        uint256 _stockerId,
-        string calldata _imageURL,
+        string calldata _objectImageURL,
+        string calldata _authImageURL,
+        string calldata _storageImageURL,
         uint256 _sharesQty
     ) external {
         uint256 currentNftId = _nftIdCounter;
@@ -80,10 +84,11 @@ contract CollectorChain is ERC1155URIStorage, ERC2981, Ownable {
             currentNftId,
             msg.sender,
             _nftName,
-            _stockerId,
-            Status.proposed,
-            _imageURL,
-            _sharesQty
+            _objectImageURL,
+            _authImageURL,
+            _storageImageURL,
+            _sharesQty,
+            Status.proposed
         );
         nftList[currentNftId] = newNft;
         isNftExist[currentNftId] = true;
@@ -134,20 +139,20 @@ contract CollectorChain is ERC1155URIStorage, ERC2981, Ownable {
         emit mintProposalStatusUpdateEvent(_nftId, 3);
     }
 
-    /// @notice creation of a new stocker
+    /// @notice creation of a new stocker (for V2)
     /// @notice only for contract owner
     /// @param _stockerAddr wallet address of the stocker (to manage potential royaltee)
     /// @param _stockerName Name of the stocker
-    function stockerCreation(
-        address _stockerAddr,
-        string calldata _stockerName
-    ) external onlyOwner {
-        uint256 currentStockerId = _stockerIdCounter;
-        Stocker memory newStocker = Stocker(_stockerAddr, _stockerName);
-        stockerList[currentStockerId] = newStocker;
-        emit stockerCreationEvent(_stockerIdCounter);
-        _stockerIdCounter++;
-    }
+    // function stockerCreation(
+    //     address _stockerAddr,
+    //     string calldata _stockerName
+    // ) external onlyOwner {
+    //     uint256 currentStockerId = _stockerIdCounter;
+    //     Stocker memory newStocker = Stocker(_stockerAddr, _stockerName);
+    //     stockerList[currentStockerId] = newStocker;
+    //     emit stockerCreationEvent(_stockerIdCounter);
+    //     _stockerIdCounter++;
+    // }
 
     /// @notice function to modify the collection base fee (applied to all nft)
     /// @param _fee value in bips (ie : 500 = 5% of fee)

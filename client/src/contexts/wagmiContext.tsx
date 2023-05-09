@@ -1,5 +1,5 @@
 import { WagmiConfig, createClient, configureChains } from 'wagmi'
-import { hardhat, arbitrum, goerli } from 'wagmi/chains'
+import { hardhat, goerli,polygonMumbai } from 'wagmi/chains'
 
 
 import { infuraProvider } from 'wagmi/providers/infura'
@@ -19,7 +19,7 @@ import { getNetwork, JsonRpcProvider } from '@ethersproject/providers'
 const infuraApiKey = process.env.REACT_APP_INFURA_API_KEY as string
 
 const { chains, provider } = configureChains(
-  [hardhat, goerli],
+  [hardhat, goerli,polygonMumbai],
   [/*infuraProvider({ apiKey: infuraApiKey }),*/ publicProvider()],
 )
 

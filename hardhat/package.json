@@ -11,6 +11,7 @@
     "solidity-coverage": "^0.8.2"
   },
   "scripts": {
-    "deploy": "npx hardhat --network localhost run scripts/deploy.ts"
+    "deploy_hardhat": "npx hardhat --network localhost run scripts/deploy.ts",
+    "deploy_mumbai": "npx hardhat --network mumbai run scripts/deploy.ts"
   }
 }
