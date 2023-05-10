@@ -1,4 +1,4 @@
-import React, { useState,MouseEvent, useEffect } from 'react'
+import React, { useState,MouseEvent, useEffect, useRef } from 'react'
 import "./styles.scss"
 import logo from "../../image/logo_CC.png"
 import { Menu,Login, Logout } from '@mui/icons-material'
@@ -9,6 +9,8 @@ import MenuLogged from '../MenuLogged'
 import { useAccount,  useConnect,  useContractRead,  useDisconnect} from 'wagmi'
 import Jazzicon, {jsNumberForAddress} from 'react-jazzicon'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import useOnClickOutside from '../Hooks/useOnClickOutside'
+import { log } from 'console'
 
 
 interface HeaderProps {
@@ -25,23 +27,27 @@ const Header = (props : HeaderProps) => {
 
   const location = useLocation()
 
+  //! :::: LOCAL STATE ::::
+  const [menuVisibility, setMenuVisibility] = useState<boolean>()
+  const [loginVisibility, setLoginVisibility] = useState<boolean>()
+  const [loggedVisibility, setLoggedVisibility] = useState<boolean>()
+  const [formatedAddress,setFormatedAddress] = useState("")
+  
   useEffect(()=>{
+    console.log("::::::::USEEFFECCT::::::");
+    
     setMenuVisibility(false)
     setLoginVisibility(false)
     setLoggedVisibility(false)
     window.scrollTo(0,0)
   },[location,props.isConnected])
 
-  //! :::: LOCAL STATE ::::
-  const [menuVisibility, setMenuVisibility] = useState(false)
-  const [loginVisibility, setLoginVisibility] = useState(false)
-  const [loggedVisibility, setLoggedVisibility] = useState(false)
-  const [formatedAddress,setFormatedAddress] = useState("")
 
    
 
 
   //! :::: FUNCTIONS ::::
+  // menu displaying
   const onMenuButtonClick = (e: MouseEvent)=>{
     setMenuVisibility(!menuVisibility)
     setLoginVisibility(false)
@@ -63,6 +69,11 @@ const Header = (props : HeaderProps) => {
     var last = s.slice(-size);
     return first + "..." + last;
   }
+  
+
+  // menu disapearing
+  
+  // end menu disapearing
 
   useEffect(()=>{
     if( props.isConnected){
@@ -96,7 +107,7 @@ const Header = (props : HeaderProps) => {
        }
       </div>
     </div>
-    {menuVisibility && <MenuApp owner={props.owner} address={props.address}/>}
+    {menuVisibility && <MenuApp owner={props.owner} address={props.address} />}
     {loginVisibility && <MenuLogin/>}
     {loggedVisibility && <MenuLogged/>}
     </>

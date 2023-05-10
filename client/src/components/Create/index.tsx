@@ -40,6 +40,8 @@ const Create = (props : CreateProps) => {
   const [authPictureLoader,setAuthPictureLoader] = useState<boolean>(false)
   const [storagePictureLoader,setStoragePictureLoader] = useState<boolean>(false)
   const [mintPorposalCallLoader, setMintProposalCallLoader] = useState<boolean>(false)
+  // submission status
+  const [isSubmit,setIsSubmit] = useState<boolean>(false)
   // WAGMI hook
   const {isConnected } = useAccount()
 
@@ -256,6 +258,8 @@ const Create = (props : CreateProps) => {
               wrapperStyle={{}}
               wrapperClass="blocks-wrapper"
             /> </button>
+              : isSubmit ?
+              <div className='create__button__icon create__button__icon--done' ><CheckIcon fontSize='large'/></div>
               :
               <button className={`create__button create__button--big ${isFilled && props.isGoodNetwork? "":"create__button--darkBlue"}`} onClick={mintProposalCall}>
                 {props.isGoodNetwork? "SUBMIT" : "CHANGE NETWORK"}

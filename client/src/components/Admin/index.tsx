@@ -24,27 +24,8 @@ interface NFTItem {
   status : number
 }
 
-interface fetchedData {
-  data : NFTItem[]
-}
-
 const Admin = (props: AdminProps) => {
-  //! TEST EVENTS AVEC WAGMI
-  const [stateNftList,setStateNftList] = useState<any>([])
-
-  
-  const GetNft = async (id : number) => {
-    console.log("id from GetNft=>",id);
-    
-    const {data : nftItem} = await useContractRead({
-      address: props.contractAddress,
-      abi: contractABI.abi,
-      functionName : "nftList",
-      args : [id]
-    })
-    return nftItem
-  }
-
+  //! WAGMI
   const {data : nftCounter} = useContractRead({
     address: props.contractAddress,
     abi: contractABI.abi,
@@ -55,14 +36,13 @@ const Admin = (props: AdminProps) => {
   //? :::: Potential solution using multicall --> the issue is that multicall is not suported by hardhat
   const numberArray : number[] = []
 
-  if(true) {
-    const nftCounterTyped : any = nftCounter
-    for(let i = 0 ; i < nftCounterTyped ; i++){
-      numberArray.push(i)
-    }
-    console.log("number array=>", numberArray);
-    
+  const nftCounterTyped : any = nftCounter
+  for(let i = 0 ; i < nftCounterTyped ; i++){
+    numberArray.push(i)
   }
+  // console.log("number array=>", numberArray);
+    
+  
   
   const nftReads : any = numberArray.map(
     (number) => 
@@ -110,7 +90,7 @@ const Admin = (props: AdminProps) => {
 //     console.log('nft1 from useEffect=>',nftItem1Typed);
     
 //     })
-  //! FIN TEST EVENT AVEC WAGMI
+  //! FIN WAGMI
 
 
 
@@ -118,38 +98,19 @@ const Admin = (props: AdminProps) => {
     <>
     {props.isAdmin === true ? 
     <>
-    <h1 className='admin'>Mint request</h1> 
+    <h1 className='admin'>Mint request administration</h1> 
     <div className="admin__nftList">
       {nfts?.map((nft : any)=> 
-        <div className="admin__nftList__item">
+        <div className="admin__nftList__item" key={nft.nftId}>
           <p>{nft.nftId.toString()}</p>
           <p>{nft.nftName}</p>
           <p>{
             nft.status === 0 && <>pending</>
             }</p>
           <p><img className="admin__nftList__item--img" src={`https://ipfs.io/ipfs/${nft.objectImageURL}`} alt="object main" /></p>
-          <Link to="/requestdetail/0"><button><SettingsIcon/></button></Link>
+          <Link to={`/requestdetail/${nft.nftId}`}><button><SettingsIcon/></button></Link>
         </div>
       )}
-      {/* {nftItem0Typed && <div className="admin__nftList__item">
-        <p>{nftItem0Typed.nftId.toString()}</p>
-        <p>{nftItem0Typed.nftName}</p>
-        <p>{
-          nftItem0Typed.status === 0 && <>pending</>
-          }</p>
-        <p><img className="admin__nftList__item--img" src={`https://ipfs.io/ipfs/${nftItem0Typed.objectImageURL}`} alt="object main" /></p>
-        <Link to="/requestdetail/0"><button><SettingsIcon/></button></Link>
-      </div>}
-      {nftItem1Typed && <div className="admin__nftList__item">
-        <p>{nftItem1Typed.nftId.toString()}</p>
-        <p>{nftItem1Typed.nftName}</p>
-        <p>{
-          nftItem1Typed.status === 0 && <>pending</>
-          }</p>
-        <p><img className="admin__nftList__item--img" src={`https://ipfs.io/ipfs/${nftItem1Typed.objectImageURL}`} alt="object main" /></p>
-        <button><SettingsIcon/></button>
-
-      </div>} */}
     </div>
     </>
     : <div className='admin'>You're not the admin</div> }
