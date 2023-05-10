@@ -128,3 +128,16 @@
     background-color: #2b385A;
     color: white;
 }
+
+.modal {
+
+    img {
+        position: absolute;
+        top: 25%;
+        outline: 0;
+        width: 100%;
+        aspect-ratio: 1;
+        // border: 2px solid #000;
+
+    }
+}
