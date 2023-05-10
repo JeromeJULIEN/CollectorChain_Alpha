@@ -172,7 +172,7 @@ const Create = (props : CreateProps) => {
   return (
     <div className='create'>
         <div className="create__title">
-            SUBMIT YOUR OBJECT (...SOON)
+            SUBMIT YOUR OBJECT
         </div>
         <div className="create__text">
         Please provide all the requested informations 

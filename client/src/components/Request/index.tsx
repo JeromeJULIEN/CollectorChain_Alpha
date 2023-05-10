@@ -4,6 +4,8 @@ import contractABI from "../../contracts/CollectorChain/CollectorChain.json"
 import { UseContractConfig, useContractRead, useContractReads, useContractWrite, usePrepareContractWrite } from 'wagmi'
 import { Link, useNavigate } from 'react-router-dom'
 import SettingsIcon from '@mui/icons-material/Settings';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+
 
 
 
@@ -57,7 +59,7 @@ useEffect(()=>{
       ownedNft.push(nft)
     }
   })
-  // console.log("ownedNft=>",ownedNft, ownedNft.length);
+  console.log("ownedNft=>",ownedNft, ownedNft.length);
   setOwnedNftList(ownedNft)
   
   
@@ -69,17 +71,22 @@ useEffect(()=>{
     <div className='request'>
         <h1 className='request'>My mint request</h1> 
         {ownedNftList.length > 0 ? 
-        <div className="request">
+        <div className="request blueBackground">
           {ownedNftList.map((nft : any)=> 
             <div className="request__nftList__item" key={nft.nftId}>
-              <p>{nft.nftId.toString()}</p>
-              <p>{nft.nftName}</p>
-              <p>{
-                nft.status === 0 && <>pending</>
-                }</p>
-              <p><img className="request__nftList__item--img" src={`https://ipfs.io/ipfs/${nft.objectImageURL}`} alt="object main" /></p>
-              <Link to={`/requestdetail/${nft.nftId}`}><button><SettingsIcon/></button></Link>
+            <div className="request__nftList__item__img"><img  src={`https://ipfs.io/ipfs/${nft.objectImageURL}`} alt="object main" /></div>
+            <div className="request__nftList__item__data">
+              <p className="request__nftList__item__data--title">{nft.nftName}</p>
+              <p className="request__nftList__item__data--status">Status : 
+                {nft.status === 0 && <p className="admin__nftList__item__data--status--orange"> pending</p>}
+                {nft.status === 1 && <p className="admin__nftList__item__data--status--green"> accepted</p>}
+                {nft.status === 2 && <p className="admin__nftList__item__data--status--red"> refused</p>}
+              </p>
             </div>
+            <Link to={`/requestdetail/${nft.nftId}`}>
+              <div className='request__button__icon'><ArrowForwardIcon fontSize='large'/></div>
+            </Link>
+          </div>
           )}
         </div>
         : 

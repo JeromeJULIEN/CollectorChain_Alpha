@@ -11,10 +11,58 @@
             align-items: center;
             margin: 0 20px;
 
-            &--img {
-                aspect-ratio: 1;
-                height: 40px;
+            &__img {
+                img {
+                    aspect-ratio: 1;
+                    height: 80px;
+                }
+            }
+
+            &__data {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+
+                &--title {
+                    font-weight: bold;
+                    margin: 0;
+                    margin-top: 1rem;
+                }
+
+                &--status {
+                    display: flex;
+                    align-items: center;
+                    gap: 0 1rem;
+                    margin: 0;
+                    margin-bottom: 1rem;
+
+                    &--orange {
+                        color: orange;
+                        font-weight: bold;
+                    }
+                }
             }
         }
     }
+
+    &__button {
+        &__icon {
+            color: white;
+            background-color: #4AADFF;
+            height: 77px;
+            width: 76px;
+            margin-top: 3px;
+            margin-left: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+    }
+}
+
+.blueBackground {
+    margin-top: 2px;
+    background-color: #2b385A;
+    color: white;
 }

@@ -6,6 +6,8 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import contractABI from "../../contracts/CollectorChain/CollectorChain.json"
 import contractAddress from "../../contracts/CollectorChain/CollectorChain-address.json"
 import { Link } from 'react-router-dom';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+
 
 
 interface AdminProps {
@@ -99,16 +101,21 @@ const Admin = (props: AdminProps) => {
     {props.isAdmin === true ? 
     <>
     <h1 className='admin'>Mint request administration</h1> 
-    <div className="admin__nftList">
+    <div className="admin__nftList blueBackground">
       {nfts?.map((nft : any)=> 
         <div className="admin__nftList__item" key={nft.nftId}>
-          <p>{nft.nftId.toString()}</p>
-          <p>{nft.nftName}</p>
-          <p>{
-            nft.status === 0 && <>pending</>
-            }</p>
-          <p><img className="admin__nftList__item--img" src={`https://ipfs.io/ipfs/${nft.objectImageURL}`} alt="object main" /></p>
-          <Link to={`/requestdetail/${nft.nftId}`}><button><SettingsIcon/></button></Link>
+          <div className="admin__nftList__item__img"><img  src={`https://ipfs.io/ipfs/${nft.objectImageURL}`} alt="object main" /></div>
+          <div className="admin__nftList__item__data">
+            <p className="admin__nftList__item__data--title">{nft.nftName}</p>
+            <p className="admin__nftList__item__data--status">Status : 
+              {nft.status === 0 && <p className="admin__nftList__item__data--status--orange"> pending</p>}
+              {nft.status === 1 && <p className="admin__nftList__item__data--status--green"> accepted</p>}
+              {nft.status === 2 && <p className="admin__nftList__item__data--status--red"> refused</p>}
+            </p>
+          </div>
+          <Link to={`/requestdetail/${nft.nftId}`}>
+            <div className='admin__button__icon'><ArrowForwardIcon fontSize='large'/></div>
+          </Link>
         </div>
       )}
     </div>
