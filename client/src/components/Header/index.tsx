@@ -107,7 +107,7 @@ const Header = (props : HeaderProps) => {
        }
       </div>
     </div>
-    {menuVisibility && <MenuApp owner={props.owner} address={props.address} />}
+    {menuVisibility && <MenuApp owner={props.owner} address={props.address} isConnected={props.isConnected}/>}
     {loginVisibility && <MenuLogin/>}
     {loggedVisibility && <MenuLogged/>}
     </>

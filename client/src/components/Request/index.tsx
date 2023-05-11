@@ -84,7 +84,7 @@ useEffect(() => {
 
   return (
     <div className='request'>
-        <h1 className='request'>My mint request</h1> 
+        <h1 className='request__title'>My mint request</h1> 
         {isLoading ? 
         <Blocks
           visible={true}
@@ -96,7 +96,7 @@ useEffect(() => {
         />
         :
         ownedNftList.length > 0 ? 
-        <div className="request blueBackground">
+        <div className="blueBackground">
           {ownedNftList.map((nft : any)=> 
             <div className="request__nftList__item" key={nft.nftId}>
             <div className="request__nftList__item__img"><img  src={`https://ipfs.io/ipfs/${nft.objectImageURL}`} alt="object main" /></div>

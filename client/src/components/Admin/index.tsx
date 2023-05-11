@@ -60,7 +60,7 @@ const Admin = (props: AdminProps) => {
   )
 
   const {data : nfts}  = useContractReads({contracts: nftReads})
-  // console.log("nfts =>", nfts);
+  console.log("nfts =>", nfts);
   //? ::::: end test multicall
 
   // Loader at page init
@@ -113,20 +113,25 @@ const Admin = (props: AdminProps) => {
 
 
   return (
-    <>
-    {props.isAdmin === true ? 
-    <>
-    <h1 className='admin'>Mint request administration</h1> 
-    {isLoading ? 
-    <Blocks
-      visible={true}
-      height="80"
-      width="80"
-      ariaLabel="blocks-loading"
-      wrapperStyle={{}}
-      wrapperClass="blocks-wrapper"
-    />
+    <div className='admin'>
+    {props.isAdmin === false ? 
+    <h1 className='admin__title'>You're not the admin</h1> 
     :
+    isLoading ? 
+    <>
+      <h1 className='admin__title'>Mint request administration</h1> 
+      <Blocks
+        visible={true}
+        height="80"
+        width="80"
+        ariaLabel="blocks-loading"
+        wrapperStyle={{}}
+        wrapperClass="blocks-wrapper"
+      />
+    </>
+    :
+    <>
+    <h1 className='admin__title'>Mint request administration</h1> 
     <div className="admin__nftList blueBackground">
       {nfts?.map((nft : any)=> 
         <div className="admin__nftList__item" key={nft.nftId}>
@@ -144,11 +149,10 @@ const Admin = (props: AdminProps) => {
           </Link>
         </div>
       )}
-    </div>
+    </div>    
+    </>
     }
-    </>
-    : <div className='admin'>You're not the admin</div> }
-    </>
+    </div>
     
   )
 }

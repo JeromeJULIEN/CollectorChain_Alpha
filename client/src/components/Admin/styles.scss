@@ -1,5 +1,10 @@
 .admin {
-    margin-top: 120px;
+    margin-top: 80px;
+    min-height: calc(100vh - 150px);
+
+    &__title {
+        padding-top: 1rem;
+    }
 
     &__nftList {
         display: flex;
@@ -41,6 +46,11 @@
                         color: orange;
                         font-weight: bold;
                     }
+
+                    &--green {
+                        color: #59ff74;
+                        font-weight: bold;
+                    }
                 }
             }
         }
@@ -66,4 +76,15 @@
     margin-top: 2px;
     background-color: #2b385A;
     color: white;
+}
+
+.blocks-wrapper {
+    position: absolute;
+    top: 50%;
+    left: calc(50% - 38px);
+    background-color: white;
+    height: 77px;
+    width: 76px;
+    margin-top: 3px;
+    margin-left: 3px;
 }

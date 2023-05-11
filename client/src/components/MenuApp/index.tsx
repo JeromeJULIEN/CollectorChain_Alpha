@@ -8,6 +8,7 @@ import useOnClickOutside from '../Hooks/useOnClickOutside'
 interface MenuAppProps {
   owner? : string, 
   address? : `0x${string}` | undefined,
+  isConnected?: boolean
 
 }
 
@@ -25,8 +26,8 @@ const MenuApp = (props : MenuAppProps) => {
       <Link  className="menuApp__item" to="/howitworks">HOW IT WORKS</Link>
       <Link className="menuApp__item" to="/create">CREATE YOUR OBJECT</Link>
       <div className="menuApp__item" onClick={openLink}>COLLECTION</div>
-      <Link className="menuApp__item" to="/request">MY REQUEST</Link>
-      {props.owner == props.address && <Link className="menuApp__item" to="/admin">ADMIN</Link>}
+      {props.isConnected && <Link className="menuApp__item" to="/request">MY REQUEST</Link>}
+      {props.owner == props.address && props.isConnected && <Link className="menuApp__item" to="/admin">ADMIN</Link>}
     </div>
   )
 }

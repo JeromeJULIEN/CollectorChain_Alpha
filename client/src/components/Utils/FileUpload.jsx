@@ -2,7 +2,7 @@ import axios from "axios"
 
 
 export const handleSubmission = async(selectedFile) => {
-    
+    console.log("selected file =>",selectedFile);
     const formData = new FormData();
     
     formData.append('file', selectedFile)
@@ -14,7 +14,7 @@ export const handleSubmission = async(selectedFile) => {
     
     const options = JSON.stringify({
       pinataMetadata: {
-        name: "AlyraNFT",
+        name: "CollectorChain_Beta",
       },
       pinataOptions: {
         cidVersion: 0

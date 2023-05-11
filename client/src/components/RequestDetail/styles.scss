@@ -1,8 +1,10 @@
 .requestDetail {
-    margin-top: 120px;
+    margin-top: 80px;
+    min-height: calc(100vh - 150px);
 
     &__title {
         margin: 0 20px;
+        padding-top: 1rem;
         display: flex;
         justify-content: flex-start;
     }
@@ -15,6 +17,11 @@
 
         &--orange {
             color: orange;
+            font-weight: bold;
+        }
+
+        &--green {
+            color: #59ff74;
             font-weight: bold;
         }
     }
@@ -96,6 +103,7 @@
 
         &--darkBlue {
             background-color: #3176af;
+            color: #2b385A;
         }
 
         &--red {
@@ -130,14 +138,46 @@
 }
 
 .modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     img {
-        position: absolute;
-        top: 25%;
         outline: 0;
-        width: 100%;
+        width: 75%;
         aspect-ratio: 1;
-        // border: 2px solid #000;
+        box-shadow: 0px 0px 15px #2b385A;
 
+
+
+    }
+}
+
+.blocks-wrapper {
+    position: absolute;
+    top: 50%;
+    left: calc(50% - 38px);
+    background-color: white;
+    height: 77px;
+    width: 76px;
+    margin-top: 3px;
+    margin-left: 3px;
+}
+
+@media (min-width: 721px) {
+    .requestDetail {
+        &__title {
+            justify-content: center;
+        }
+
+        &__status {
+            justify-content: center;
+        }
+    }
+
+    .modal {
+        img {
+            width: 50%;
+        }
     }
 }

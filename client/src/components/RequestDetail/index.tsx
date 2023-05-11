@@ -2,13 +2,16 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import './styles.scss'
 import BackspaceIcon from '@mui/icons-material/Backspace';
-import { useContractRead } from 'wagmi';
+import { useContractRead, usePrepareContractWrite,useContractWrite } from 'wagmi';
 import contractABI from "../../contracts/CollectorChain/CollectorChain.json"
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { toast } from 'react-toastify';
 import { Modal } from '@mui/material';
 import { wait } from '../Utils/wait';
 import { Blocks } from 'react-loader-spinner';
+import generateTokenUri from '../Utils/generateTokenUri';
+import { handleSubmission } from '../Utils/FileUpload';
+import { jsonUpload } from '../Utils/jsonUpload';
 
 
 
@@ -37,8 +40,10 @@ const RequestDetail = (props: requestDetailProps) => {
   const [objPictureModal,setObjPictureModal] = useState<boolean>(false)
   const [authPictureModal,setAuthPictureModal] = useState<boolean>(false)
   const [storagePictureModal,setStoragePictureModal] = useState<boolean>(false)
+  const [isMintLoading,setIsMintLoading] = useState<boolean>(false)
   
   //! :::: WAGMI ::::
+  // Loading of the displayed nft
   const {data : nft} : {data? : NFTItem}= useContractRead({
     address : props.contractAddress,
     abi:contractABI.abi,
@@ -48,8 +53,59 @@ const RequestDetail = (props: requestDetailProps) => {
       console.log('Error', error)
     },
   })
-  //! :::: TEST ::::
-  console.log("nft to display =>",nft, "id =>",id);
+
+  // Request validation
+  const {config : validationConfig} = usePrepareContractWrite({
+    address : props.contractAddress,
+    abi: contractABI.abi,
+    functionName: "setMintProposalStatus",
+    args: [true,id],
+    onSuccess(data){
+      console.log('succes validationConfig', data);
+    },
+    onError(data){
+      console.error('error validationConfig',data);
+      
+    }
+  })
+
+  const{write : validationWrite} = useContractWrite(validationConfig)
+
+  const validate = async() =>{
+    setIsMintLoading(true)
+    await validationWrite?.()
+    setIsMintLoading(false)
+  }
+
+  // Request mint
+  const {config : mintConfig} = usePrepareContractWrite({
+    address : props.contractAddress,
+    abi: contractABI.abi,
+    functionName: "mintNft",
+    args: [id,nft?.objectImageURL],
+    onSuccess(data){
+      console.log('succes mintConfig', data);
+    },
+    onError(data){
+      console.error('error mintConfig',data);
+      
+    }
+  })
+
+  const{write : mintWrite} = useContractWrite(mintConfig)
+
+  const mint = async() =>{
+      setIsMintLoading(true)
+      const tokenURI = generateTokenUri(nft?.nftName,nft?.sharesQty,nft?.objectImageURL,nft?.authImageURL,nft?.storageImageURL)
+      // await mintWrite?.()
+      const hash = await jsonUpload(tokenURI)
+      console.log("token URI =>", hash);
+      
+      setIsMintLoading(false)
+    }
+
+  // Request cancelation
+
 
   // Loader at page init
   const [isLoading,setIsLoading] = useState<boolean>(true)
@@ -64,21 +120,29 @@ const RequestDetail = (props: requestDetailProps) => {
     handleLoading()
   }, [nft]);
 
+  const isOwner = useMemo(()=>{
+    console.log("nft.minter =>",nft?.minter, "address =>", props.address);
+    if (nft?.minter === props.address){
+      return true
+    } else return false
+  },[nft, props.address])
+  
+
   //! :::: FUNCTIONS ::::
   const navigate = useNavigate()
   const navigateToPrevious = () => {
     navigate(-1)
   }
 
-  // const formatETHAddress = (s:any, size:number) =>{;
-  //   var first = s.slice(0, size + 1);
-  //   var last = s.slice(-size);
-  //   return first + "..." + last;
-  // }
+  const formatETHAddress = (s:any, size:number) =>{;
+    var first = s.slice(0, size + 1);
+    var last = s.slice(-size);
+    return first + "..." + last;
+  }
 
-  // const addressToDisplay = useMemo(()=>{
-  //   return formatETHAddress(nft?.minter,3)
-  // },[nft])
+  const addressToDisplay = useMemo(()=>{
+    return formatETHAddress(nft?.minter,3)
+  },[nft])
 
   const copyToClipboard = () => {
     if (nft) {
@@ -109,7 +173,13 @@ const RequestDetail = (props: requestDetailProps) => {
     setStoragePictureModal(false)
   }
 
+  //! :::: TEST ::::
+  // console.log("nft to display =>",nft, "id =>",id);
 
+  // const test =() =>{
+  //   console.log("boooo");
+    
+  // }
 
   
 
@@ -151,10 +221,23 @@ const RequestDetail = (props: requestDetailProps) => {
             </div>
           </div>
           <div className="requestDetail__item__data">
-            {/* <p className="requestDetail__item__data__text">Minter : {addressToDisplay}<ContentCopyIcon onClick={copyToClipboard}/></p> */}
-            <p className="requestDetail__item__data__text">Fraction asked : {nft?.sharesQty.toString()}</p>
-            {props.isAdmin && <button className="requestDetail__button requestDetail__button--big" >ACCEPT AND MINT</button>}
-            {props.isAdmin && <button className="requestDetail__button requestDetail__button--big requestDetail__button--red" >REFUSE</button>}
+            <p className="requestDetail__item__data__text">Minter : <strong>{addressToDisplay}</strong><ContentCopyIcon onClick={copyToClipboard}/></p>
+            <p className="requestDetail__item__data__text">Fraction asked : <strong>{nft?.sharesQty.toString()}</strong></p>
+            {props.isAdmin && nft?.status === 0 &&
+            <>
+            <button className="requestDetail__button requestDetail__button--big" onClick={validate} >
+              ACCEPT
+            </button>
+            <button className="requestDetail__button requestDetail__button--big requestDetail__button--red">
+              REFUSE
+            </button>
+            </>
+            }
+            {isOwner && nft?.status === 1 &&
+            <button className="requestDetail__button requestDetail__button--big" onClick={mint} >
+              MINT
+            </button>
+            }
           </div>
         </div>
     </div>
