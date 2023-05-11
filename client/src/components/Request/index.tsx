@@ -5,6 +5,8 @@ import { UseContractConfig, useContractRead, useContractReads, useContractWrite,
 import { Link, useNavigate } from 'react-router-dom'
 import SettingsIcon from '@mui/icons-material/Settings';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { wait } from '../Utils/wait'
+import { Blocks } from 'react-loader-spinner'
 
 
 
@@ -65,12 +67,35 @@ useEffect(()=>{
   
 },[nfts, props.address])
 
+// Loader at page init
+const [isLoading,setIsLoading] = useState<boolean>(true)
+
+useEffect(() => {
+  const handleLoading = async() => {
+    if (ownedNftList) {
+      await wait(1000)
+      setIsLoading(false);
+    }
+  }
+  handleLoading()
+}, [ownedNftList]);
+
 
 
   return (
     <div className='request'>
         <h1 className='request'>My mint request</h1> 
-        {ownedNftList.length > 0 ? 
+        {isLoading ? 
+        <Blocks
+          visible={true}
+          height="80"
+          width="80"
+          ariaLabel="blocks-loading"
+          wrapperStyle={{}}
+          wrapperClass="blocks-wrapper"
+        />
+        :
+        ownedNftList.length > 0 ? 
         <div className="request blueBackground">
           {ownedNftList.map((nft : any)=> 
             <div className="request__nftList__item" key={nft.nftId}>

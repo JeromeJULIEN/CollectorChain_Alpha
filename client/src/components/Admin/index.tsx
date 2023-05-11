@@ -7,6 +7,9 @@ import contractABI from "../../contracts/CollectorChain/CollectorChain.json"
 import contractAddress from "../../contracts/CollectorChain/CollectorChain-address.json"
 import { Link } from 'react-router-dom';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { Blocks } from 'react-loader-spinner';
+import { wait } from '../Utils/wait';
+
 
 
 
@@ -60,6 +63,19 @@ const Admin = (props: AdminProps) => {
   // console.log("nfts =>", nfts);
   //? ::::: end test multicall
 
+  // Loader at page init
+  const [isLoading,setIsLoading] = useState<boolean>(true)
+
+  useEffect(() => {
+    const handleLoading = async() => {
+      if (nfts) {
+        await wait(1000)
+        setIsLoading(false);
+      }
+    }
+    handleLoading()
+  }, [nfts]);
+
   //? ::: backup pour test sans multicall
   // const FetchNftList = async() => {
   //   const nftCounterTyped :any = nftCounter
@@ -101,6 +117,16 @@ const Admin = (props: AdminProps) => {
     {props.isAdmin === true ? 
     <>
     <h1 className='admin'>Mint request administration</h1> 
+    {isLoading ? 
+    <Blocks
+      visible={true}
+      height="80"
+      width="80"
+      ariaLabel="blocks-loading"
+      wrapperStyle={{}}
+      wrapperClass="blocks-wrapper"
+    />
+    :
     <div className="admin__nftList blueBackground">
       {nfts?.map((nft : any)=> 
         <div className="admin__nftList__item" key={nft.nftId}>
@@ -119,6 +145,7 @@ const Admin = (props: AdminProps) => {
         </div>
       )}
     </div>
+    }
     </>
     : <div className='admin'>You're not the admin</div> }
     </>

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import './styles.scss'
 import BackspaceIcon from '@mui/icons-material/Backspace';
@@ -7,6 +7,8 @@ import contractABI from "../../contracts/CollectorChain/CollectorChain.json"
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { toast } from 'react-toastify';
 import { Modal } from '@mui/material';
+import { wait } from '../Utils/wait';
+import { Blocks } from 'react-loader-spinner';
 
 
 
@@ -48,6 +50,19 @@ const RequestDetail = (props: requestDetailProps) => {
   })
   //! :::: TEST ::::
   console.log("nft to display =>",nft, "id =>",id);
+
+  // Loader at page init
+  const [isLoading,setIsLoading] = useState<boolean>(true)
+
+  useEffect(() => {
+    const handleLoading = async() => {
+      if (nft) {
+        await wait(1000)
+        setIsLoading(false);
+      }
+    }
+    handleLoading()
+  }, [nft]);
 
   //! :::: FUNCTIONS ::::
   const navigate = useNavigate()
@@ -100,7 +115,18 @@ const RequestDetail = (props: requestDetailProps) => {
 
   return (
     <>
-    {nft &&
+    {isLoading ? 
+    <div className='requestDetail'>
+      <Blocks
+        visible={true}
+        height="80"
+        width="80"
+        ariaLabel="blocks-loading"
+        wrapperStyle={{}}
+        wrapperClass="blocks-wrapper"
+      />
+    </div>
+    :
     <div className='requestDetail'>
         <h1 className='requestDetail__title'>{nft?.nftName} <button onClick={navigateToPrevious}><BackspaceIcon/></button></h1>
         <h2 className="requestDetail__status">
