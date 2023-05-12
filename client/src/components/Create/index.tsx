@@ -129,7 +129,7 @@ const Create = (props : CreateProps) => {
       toast.success("🎉 your request has been sent to our team. Follow up in your Request status page !!!")
     }
   })
-  
+
 
   const mintProposalCall = async()=>{
     if (!props.isGoodNetwork) {
@@ -197,7 +197,7 @@ const Create = (props : CreateProps) => {
                 width="80"
                 ariaLabel="blocks-loading"
                 wrapperStyle={{}}
-                wrapperClass="blocks-wrapper"
+                wrapperClass="blocks-wrapper-create"
               /> :
               <div className='create__button__icon' onClick={()=>handleObjectPictureSubmission()}><ArrowForwardIcon fontSize='large'/></div>
               :
@@ -217,7 +217,7 @@ const Create = (props : CreateProps) => {
                 width="80"
                 ariaLabel="blocks-loading"
                 wrapperStyle={{}}
-                wrapperClass="blocks-wrapper"
+                wrapperClass="blocks-wrapper-create"
               /> :
               <div className='create__button__icon' onClick={()=>handleAuthPictureSubmission()}><ArrowForwardIcon fontSize='large'/></div>
               :
@@ -237,7 +237,7 @@ const Create = (props : CreateProps) => {
                 width="80"
                 ariaLabel="blocks-loading"
                 wrapperStyle={{}}
-                wrapperClass="blocks-wrapper"
+                wrapperClass="blocks-wrapper-create"
               /> :
               <div className='create__button__icon' onClick={()=>handleStoragePictureSubmission()}><ArrowForwardIcon fontSize='large'/></div>
               :

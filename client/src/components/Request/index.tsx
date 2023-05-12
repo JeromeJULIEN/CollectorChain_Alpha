@@ -7,6 +7,9 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { wait } from '../Utils/wait'
 import { Blocks } from 'react-loader-spinner'
+import openseaLogo from "../../image/openSea_logo.png"
+import { log } from 'console'
+
 
 
 
@@ -80,6 +83,9 @@ useEffect(() => {
   handleLoading()
 }, [ownedNftList]);
 
+const openNftLink = (e : any) => (  
+  window.open(`https://testnets.opensea.io/assets/mumbai/0x0f36e01b1b0acf17718383e7fe2e873be7b706ec/${e.target.id}`)
+)
 
 
   return (
@@ -107,6 +113,7 @@ useEffect(() => {
                 {nft.status === 1 && <p className="admin__nftList__item__data--status--green"> accepted</p>}
                 {nft.status === 2 && <p className="admin__nftList__item__data--status--red"> refused</p>}
                 {nft.status === 3 && <p className="admin__nftList__item__data--status--green"> Created</p>}
+                {nft?.status === 3 && <img className="admin__nftList__item__image" src={openseaLogo} alt='opensea logo' onClick={openNftLink} id={nft.nftId}></img>}
               </p>
             </div>
             <Link to={`/requestdetail/${nft.nftId}`}>

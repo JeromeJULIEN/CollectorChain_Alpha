@@ -36,7 +36,7 @@ const URI = {
             "value": stockingId
         },
         {
-            "trait_type": "Rarity",
+            "trait_type": "Physical supply",
             "value": rarityToDisplay
         },
     ]

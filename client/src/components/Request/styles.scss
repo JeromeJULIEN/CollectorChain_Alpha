@@ -28,6 +28,12 @@
                 flex-direction: column;
                 justify-content: center;
 
+                img {
+                    width: 30px;
+                    height: 30px;
+
+                }
+
                 &--title {
                     font-weight: bold;
                     margin: 0;
@@ -51,7 +57,9 @@
                         font-weight: bold;
                     }
                 }
+
             }
+
         }
     }
 
