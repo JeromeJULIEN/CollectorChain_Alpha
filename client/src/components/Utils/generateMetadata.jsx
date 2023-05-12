@@ -1,4 +1,16 @@
-const generateMetadata = (name, fraction,objectImage,proofOfAuth,proofOfStorage) => {
+const generateMetadata = (name, fraction,objectImage,proofOfAuth,proofOfStorage,stocker,stockingId,rarity) => {
+
+let rarityToDisplay = ""
+    
+const setRarityToDisplay = () => {
+    if (!rarity) {
+        rarityToDisplay = "unknow"
+    } else {
+        rarityToDisplay = rarity.toString()
+    }
+}
+
+setRarityToDisplay()
 
 const URI = {
     "name": name,
@@ -14,7 +26,19 @@ const URI = {
         {
             "trait_type": "Fraction",
             "value": fraction.toString()
-        }
+        },
+        {
+            "trait_type": "Stocker",
+            "value": stocker
+        },
+        {
+            "trait_type": "Stocking Id",
+            "value": stockingId
+        },
+        {
+            "trait_type": "Rarity",
+            "value": rarityToDisplay
+        },
     ]
 }
 

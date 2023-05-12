@@ -6,12 +6,13 @@ import { useContractRead, usePrepareContractWrite,useContractWrite } from 'wagmi
 import contractABI from "../../contracts/CollectorChain/CollectorChain.json"
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { toast } from 'react-toastify';
-import { Modal } from '@mui/material';
+import { Modal, imageListClasses } from '@mui/material';
 import { wait } from '../Utils/wait';
 import { Blocks } from 'react-loader-spinner';
 import { jsonUpload } from '../Utils/jsonUpload';
 import generateMetadata from '../Utils/generateMetadata';
-import { TRUE } from 'sass';
+import openseaLogo from "../../image/openSea_logo.png"
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 
 
@@ -96,21 +97,29 @@ const RequestDetail = (props: requestDetailProps) => {
     address : "0x7b04f3a108104cc806f64Af41868784741345329",
     abi : contractABI.abi,
     functionName : "mintNft",
-    args:[id,tokenURI]
+    args:[id,tokenURI],
+    onError(data){
+      console.error('error mintConfig',data);
+      
+    }
   })
   
   const {write : mintWrite} = useContractWrite(mintConfig)
   
   // Process : 1 - JSON Metadata creation / 2 - pin JSON to IPFS / 3 - mint with metadata ipfsHash
   const generateTokenURI = async() => {
+    console.log("rarity before metadata",rarity);
+    
     const metadata = await generateMetadata(
       nft?.nftName,
       nft?.sharesQty,
       nft?.objectImageURL,
       nft?.authImageURL,
-      nft?.storageImageURL
+      nft?.storageImageURL,
+      stocker,
+      stockingId,
+      rarity
     )
-    // await mintWrite?.()
     const tokenURIHash : string = await jsonUpload(metadata,nft?.nftId,nft?.nftName)
     setTokenURI(`https://ipfs.io/ipfs/${tokenURIHash}`)
   }
@@ -186,6 +195,10 @@ const RequestDetail = (props: requestDetailProps) => {
     } else return
   }
 
+  const openNftLink = () => (
+    window.open(`https://testnets.opensea.io/assets/mumbai/0x0f36e01b1b0acf17718383e7fe2e873be7b706ec/${id}`)
+  )
+
   // Modal visibility management
   const openObjectModal = () => {
     setObjPictureModal(true)
@@ -234,12 +247,13 @@ const RequestDetail = (props: requestDetailProps) => {
     </div>
     :
     <div className='requestDetail'>
-        <h1 className='requestDetail__title'>{nft?.nftName} <button onClick={navigateToPrevious}><BackspaceIcon/></button></h1>
+        <h1 className='requestDetail__title'>{nft?.nftName} <button className='navigateToPrevious' onClick={navigateToPrevious}><HighlightOffIcon fontSize='large'/></button></h1>
         <h2 className="requestDetail__status">
-          <p>Status : </p> 
           {nft?.status === 0 && <p className="requestDetail__status--orange"> pending</p>}
           {nft?.status === 1 && <p className="requestDetail__status--green"> accepted</p>}
           {nft?.status === 2 && <p className="requestDetail__status--red"> refused</p>}
+          {nft?.status === 3 && <p className="requestDetail__status--green"> Created</p>}
+          {nft?.status === 3 && <img className="requestDetail__status__image" src={openseaLogo} alt='opensea logo' onClick={openNftLink}></img>}
         </h2>
         <div className="requestDetail__item blueBackground">
           <div className="requestDetail__item__pictures">
@@ -263,11 +277,7 @@ const RequestDetail = (props: requestDetailProps) => {
           </div>
           {props.isAdmin && nft?.status === 0 &&
           <div className='requestDetail__buttonPanel'>
-            <h1 className="requestDetail__title">Additional information for minting</h1>
-            <input type="text" className='requestDetail__button requestDetail__button--big requestDetail__button--darkBlue' placeholder='Stocker' onChange={handleStockerChange} />
-            <input type="text" className='requestDetail__button requestDetail__button--big requestDetail__button--darkBlue' placeholder='Stocking Id' onChange={handleStockingIdChange} />
-            <input type="text" className='requestDetail__button requestDetail__button--big requestDetail__button--darkBlue' placeholder='Rarity (set to "unknow" if empty)' onChange={handleRarityChange} />
-            <button className={`requestDetail__button requestDetail__button--big ${isFilled? "" : "requestDetail__button--disable"}`} onClick={validate} >
+            <button className="requestDetail__button requestDetail__button--big" onClick={validate} >
               ACCEPT
             </button>
             <button className="requestDetail__button requestDetail__button--big requestDetail__button--red">
@@ -277,7 +287,11 @@ const RequestDetail = (props: requestDetailProps) => {
           }
           {isOwner && nft?.status === 1 &&
           <div className="requestDetail__buttonPanel">
-            <button className="requestDetail__button requestDetail__button--big" onClick={mint} >
+            <h1 className="requestDetail__title">Additional information for minting</h1>
+            <input type="text" className='requestDetail__button requestDetail__button--big requestDetail__button--darkBlue' placeholder='Stocker' onChange={handleStockerChange} />
+            <input type="text" className='requestDetail__button requestDetail__button--big requestDetail__button--darkBlue' placeholder='Stocking Id' onChange={handleStockingIdChange} />
+            <input type="text" className='requestDetail__button requestDetail__button--big requestDetail__button--darkBlue' placeholder='Rarity (set to "unknow" if empty)' onChange={handleRarityChange} />
+            <button className={`requestDetail__button requestDetail__button--big ${isFilled? "" : "requestDetail__button--disable"}`} onClick={mint} >
               MINT
             </button>
           </div>
