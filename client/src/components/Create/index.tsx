@@ -129,6 +129,7 @@ const Create = (props : CreateProps) => {
       toast.success("🎉 your request has been sent to our team. Follow up in your Request status page !!!")
     }
   })
+  
 
   const mintProposalCall = async()=>{
     if (!props.isGoodNetwork) {
