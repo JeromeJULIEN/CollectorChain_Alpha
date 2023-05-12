@@ -8,7 +8,7 @@ type Props = {}
 
 const Footer = (props: Props) => {
   const openLink = () =>{
-    window.open("https://testnets.opensea.io/collection/collector-chain-beta")
+    window.open(process.env.REACT_APP_COLLECTION_URL)
   }
 
   const openMail =() =>{

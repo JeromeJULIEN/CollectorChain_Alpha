@@ -16,7 +16,7 @@ const MenuApp = (props : MenuAppProps) => {
  
   //! :::: FUNCTIONS ::::
   const openLink = () =>{
-    window.open("https://testnets.opensea.io/collection/collector-chain-beta")
+    window.open(process.env.REACT_APP_COLLECTION_URL)
   }
 
   

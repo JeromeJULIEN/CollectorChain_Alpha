@@ -261,7 +261,7 @@ const Create = (props : CreateProps) => {
               : isSubmit ?
               <div className='create__button__icon create__button__icon--done' ><CheckIcon fontSize='large'/></div>
               :
-              <button className={`create__button create__button--big ${isFilled && props.isGoodNetwork? "":"create__button--darkBlue"}`} onClick={mintProposalCall}>
+              <button className={`create__button create__button--big ${isFilled && props.isGoodNetwork? "":"create__button--disable"}`} onClick={mintProposalCall}>
                 {props.isGoodNetwork? "SUBMIT" : "CHANGE NETWORK"}
               </button>
               :

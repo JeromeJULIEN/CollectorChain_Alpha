@@ -139,9 +139,10 @@ const Admin = (props: AdminProps) => {
           <div className="admin__nftList__item__data">
             <p className="admin__nftList__item__data--title">{nft.nftName}</p>
             <p className="admin__nftList__item__data--status">Status : 
-              {nft.status === 0 && <p className="admin__nftList__item__data--status--orange"> pending</p>}
-              {nft.status === 1 && <p className="admin__nftList__item__data--status--green"> accepted</p>}
-              {nft.status === 2 && <p className="admin__nftList__item__data--status--red"> refused</p>}
+              {nft.status === 0 && <p className="admin__nftList__item__data--status--orange"> Pending</p>}
+              {nft.status === 1 && <p className="admin__nftList__item__data--status--green"> Accepted</p>}
+              {nft.status === 2 && <p className="admin__nftList__item__data--status--red"> Refused</p>}
+              {nft.status === 3 && <p className="admin__nftList__item__data--status--green"> Created</p>}
             </p>
           </div>
           <Link to={`/requestdetail/${nft.nftId}`}>

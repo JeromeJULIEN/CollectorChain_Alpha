@@ -2,6 +2,21 @@
     margin-top: 80px;
     min-height: calc(100vh - 150px);
 
+    input[type='file'] {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+    }
+
+    input[type='text']::placeholder,
+    input[type='text'] {
+        color: white;
+        text-align: center;
+    }
+
     &__title {
         margin: 0 20px;
         padding-top: 1rem;
@@ -70,6 +85,10 @@
         }
     }
 
+    &__buttonPanel {
+        margin: 0 20px;
+    }
+
 
     &__button {
         display: flex;
@@ -108,6 +127,11 @@
 
         &--red {
             background-color: #FF5C5C;
+        }
+
+        &--disable {
+            background-color: #3176af;
+            color: grey;
         }
 
         &__icon {

@@ -9,9 +9,9 @@ import { toast } from 'react-toastify';
 import { Modal } from '@mui/material';
 import { wait } from '../Utils/wait';
 import { Blocks } from 'react-loader-spinner';
-import generateTokenUri from '../Utils/generateTokenUri';
-import { handleSubmission } from '../Utils/FileUpload';
 import { jsonUpload } from '../Utils/jsonUpload';
+import generateMetadata from '../Utils/generateMetadata';
+import { TRUE } from 'sass';
 
 
 
@@ -41,7 +41,21 @@ const RequestDetail = (props: requestDetailProps) => {
   const [authPictureModal,setAuthPictureModal] = useState<boolean>(false)
   const [storagePictureModal,setStoragePictureModal] = useState<boolean>(false)
   const [isMintLoading,setIsMintLoading] = useState<boolean>(false)
-  
+  const [tokenURI,setTokenURI] = useState<string>()
+  const [stocker,setStocker] = useState<string>()
+  const [stockingId,setStockingId] = useState<string>()
+  const [rarity,setRarity] = useState<number>()
+
+  // Functions to handle input value change
+  const handleStockerChange = (event : any) => {
+    setStocker(event.target.value)
+  }
+  const handleStockingIdChange = (event : any) => {
+    setStockingId(event.target.value)
+  }
+  const handleRarityChange = (event : any) => {
+    setRarity(event.target.value)
+  }
   //! :::: WAGMI ::::
   // Loading of the displayed nft
   const {data : nft} : {data? : NFTItem}= useContractRead({
@@ -54,7 +68,7 @@ const RequestDetail = (props: requestDetailProps) => {
     },
   })
 
-  // Request validation
+  // REQUEST VALIDATION
   const {config : validationConfig} = usePrepareContractWrite({
     address : props.contractAddress,
     abi: contractABI.abi,
@@ -77,32 +91,41 @@ const RequestDetail = (props: requestDetailProps) => {
     setIsMintLoading(false)
   }
 
-  // Request mint
+  // REQUEST MINT
   const {config : mintConfig} = usePrepareContractWrite({
-    address : props.contractAddress,
-    abi: contractABI.abi,
-    functionName: "mintNft",
-    args: [id,nft?.objectImageURL],
-    onSuccess(data){
-      console.log('succes mintConfig', data);
-    },
-    onError(data){
-      console.error('error mintConfig',data);
-      
-    }
+    address : "0x7b04f3a108104cc806f64Af41868784741345329",
+    abi : contractABI.abi,
+    functionName : "mintNft",
+    args:[id,tokenURI]
   })
+  
+  const {write : mintWrite} = useContractWrite(mintConfig)
+  
+  // Process : 1 - JSON Metadata creation / 2 - pin JSON to IPFS / 3 - mint with metadata ipfsHash
+  const generateTokenURI = async() => {
+    const metadata = await generateMetadata(
+      nft?.nftName,
+      nft?.sharesQty,
+      nft?.objectImageURL,
+      nft?.authImageURL,
+      nft?.storageImageURL
+    )
+    // await mintWrite?.()
+    const tokenURIHash : string = await jsonUpload(metadata,nft?.nftId,nft?.nftName)
+    setTokenURI(`https://ipfs.io/ipfs/${tokenURIHash}`)
+  }
 
-  const{write : mintWrite} = useContractWrite(mintConfig)
-
-  const mint = async() =>{
+  const launchMint = async() =>{
       setIsMintLoading(true)
-      const tokenURI = generateTokenUri(nft?.nftName,nft?.sharesQty,nft?.objectImageURL,nft?.authImageURL,nft?.storageImageURL)
-      // await mintWrite?.()
-      const hash = await jsonUpload(tokenURI)
-      console.log("token URI =>", hash);
-      
+      console.log("token URI =>", tokenURI);
+      mintWrite?.()
       setIsMintLoading(false)
     }
+
+  const mint = () => {
+    generateTokenURI()
+    launchMint()
+  }
 
   // Request cancelation
 
@@ -126,6 +149,14 @@ const RequestDetail = (props: requestDetailProps) => {
       return true
     } else return false
   },[nft, props.address])
+
+  const isFilled = useMemo(()=> {
+    if(stocker && stockingId ) {
+      return true
+    } else {
+      return false
+    }
+  },[stocker,stockingId])
   
 
   //! :::: FUNCTIONS ::::
@@ -134,14 +165,18 @@ const RequestDetail = (props: requestDetailProps) => {
     navigate(-1)
   }
 
-  const formatETHAddress = (s:any, size:number) =>{;
+  const formatETHAddress = (s:any, size:number) =>{
     var first = s.slice(0, size + 1);
     var last = s.slice(-size);
     return first + "..." + last;
   }
 
   const addressToDisplay = useMemo(()=>{
-    return formatETHAddress(nft?.minter,3)
+    if(nft?.minter) {
+      return formatETHAddress(nft?.minter,3)
+    } else {
+      return "xxx"
+    }
   },[nft])
 
   const copyToClipboard = () => {
@@ -175,7 +210,8 @@ const RequestDetail = (props: requestDetailProps) => {
 
   //! :::: TEST ::::
   // console.log("nft to display =>",nft, "id =>",id);
-
+  // console.log("isFilled=>",isFilled);
+  
   // const test =() =>{
   //   console.log("boooo");
     
@@ -223,22 +259,29 @@ const RequestDetail = (props: requestDetailProps) => {
           <div className="requestDetail__item__data">
             <p className="requestDetail__item__data__text">Minter : <strong>{addressToDisplay}</strong><ContentCopyIcon onClick={copyToClipboard}/></p>
             <p className="requestDetail__item__data__text">Fraction asked : <strong>{nft?.sharesQty.toString()}</strong></p>
-            {props.isAdmin && nft?.status === 0 &&
-            <>
-            <button className="requestDetail__button requestDetail__button--big" onClick={validate} >
+            <p className="requestDetail__item__data__text">Token id : <strong>{nft?.nftId.toString()}</strong></p>
+          </div>
+          {props.isAdmin && nft?.status === 0 &&
+          <div className='requestDetail__buttonPanel'>
+            <h1 className="requestDetail__title">Additional information for minting</h1>
+            <input type="text" className='requestDetail__button requestDetail__button--big requestDetail__button--darkBlue' placeholder='Stocker' onChange={handleStockerChange} />
+            <input type="text" className='requestDetail__button requestDetail__button--big requestDetail__button--darkBlue' placeholder='Stocking Id' onChange={handleStockingIdChange} />
+            <input type="text" className='requestDetail__button requestDetail__button--big requestDetail__button--darkBlue' placeholder='Rarity (set to "unknow" if empty)' onChange={handleRarityChange} />
+            <button className={`requestDetail__button requestDetail__button--big ${isFilled? "" : "requestDetail__button--disable"}`} onClick={validate} >
               ACCEPT
             </button>
             <button className="requestDetail__button requestDetail__button--big requestDetail__button--red">
               REFUSE
             </button>
-            </>
-            }
-            {isOwner && nft?.status === 1 &&
+          </div>
+          }
+          {isOwner && nft?.status === 1 &&
+          <div className="requestDetail__buttonPanel">
             <button className="requestDetail__button requestDetail__button--big" onClick={mint} >
               MINT
             </button>
-            }
           </div>
+          }
         </div>
     </div>
     }

@@ -1,7 +1,7 @@
 import axios from "axios"
 
 
-export const jsonUpload = async(selectedFile) => {
+export const jsonUpload = async(selectedFile,tokenId,tokenName) => {
     console.log("selected file =>",selectedFile);
     
     var data = JSON.stringify({
@@ -9,11 +9,7 @@ export const jsonUpload = async(selectedFile) => {
         "cidVersion": 1
       },
       "pinataMetadata": {
-        "name": "testing",
-        "keyvalues": {
-          "customKey": "customValue",
-          "customKey2": "customValue2"
-        }
+        "name": `collectorChainBeta_id${tokenId}_${tokenName}`,
       },
       "pinataContent": selectedFile
     });
@@ -33,6 +29,7 @@ export const jsonUpload = async(selectedFile) => {
     try{
       const res = await axios(config);
       console.log("ipfsHash =>",res.data.IpfsHash)
+      return res.data.IpfsHash
     } catch (error) {
       console.log(error);
     }
