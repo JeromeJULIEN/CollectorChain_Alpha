@@ -81,18 +81,30 @@ const Create = (props : CreateProps) => {
 
   // function to handle ipfs uploas through "FileUpload" component
   const handleObjectPictureSubmission = async() =>{
+    if (!objectPicture) {
+      toast.error("please, select a file",{autoClose:2000})
+      return
+    }
     setObjectPictureLoader(true)
     const hash = await handleSubmission(objectPicture)
     setObjectPictureHash(hash)
     setObjectPictureLoader(false)
   }
   const handleAuthPictureSubmission = async() =>{
+    if (!authPicture) {
+      toast.error("please, select a file",{autoClose:2000})
+      return
+    }
     setAuthPictureLoader(true)
     const hash = await handleSubmission(authPicture)
     setAuthPictureHash(hash)
     setAuthPictureLoader(false)
   }
   const handleStoragePictureSubmission = async() =>{
+    if (!storagePicture) {
+      toast.error("please, select a file",{autoClose:2000})
+      return
+    }
     setStoragePictureLoader(true)
     const hash = await handleSubmission(storagePicture)
     setStoragePictureHash(hash)
@@ -126,7 +138,6 @@ const Create = (props : CreateProps) => {
     },
     onSuccess(){
       console.log("mint done with args =>", {objectName,objectPictureHash,authPictureHash,storagePictureHash,sharesQty});
-      toast.success("🎉 your request has been sent to our team. Follow up in your Request status page !!!")
     }
   })
 
@@ -154,6 +165,8 @@ const Create = (props : CreateProps) => {
     } catch (error) {
       console.error(error);
     } finally {
+      toast.success("🎉 your request has been sent to our team. Follow up in your Request status page !!!")
+      setIsSubmit(true)
       setMintProposalCallLoader(false)
       
     }
@@ -257,7 +270,7 @@ const Create = (props : CreateProps) => {
               width="80"
               ariaLabel="blocks-loading"
               wrapperStyle={{}}
-              wrapperClass="blocks-wrapper"
+              wrapperClass="blocks-wrapper-create"
             /> </button>
               : isSubmit ?
               <div className='create__button__icon create__button__icon--done' ><CheckIcon fontSize='large'/></div>
