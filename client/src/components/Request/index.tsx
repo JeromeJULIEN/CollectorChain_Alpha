@@ -109,11 +109,11 @@ const openNftLink = (e : any) => (
             <div className="request__nftList__item__data">
               <p className="request__nftList__item__data--title">{nft.nftName}</p>
               <p className="request__nftList__item__data--status">Status : 
-                {nft.status === 0 && <p className="admin__nftList__item__data--status--orange"> pending</p>}
-                {nft.status === 1 && <p className="admin__nftList__item__data--status--green"> accepted</p>}
-                {nft.status === 2 && <p className="admin__nftList__item__data--status--red"> refused</p>}
-                {nft.status === 3 && <p className="admin__nftList__item__data--status--green"> Created</p>}
-                {nft?.status === 3 && <img className="admin__nftList__item__image" src={openseaLogo} alt='opensea logo' onClick={openNftLink} id={nft.nftId}></img>}
+                {nft.status === 0 && <p className="request__nftList__item__data--status--orange"> pending</p>}
+                {nft.status === 1 && <p className="request__nftList__item__data--status--green"> accepted</p>}
+                {nft.status === 2 && <p className="request__nftList__item__data--status--red"> refused</p>}
+                {nft.status === 3 && <p className="request__nftList__item__data--status--blue"> Created</p>}
+                {nft?.status === 3 && <img className="request__nftList__item__image" src={openseaLogo} alt='opensea logo' onClick={openNftLink} id={nft.nftId}></img>}
               </p>
             </div>
             <Link to={`/requestdetail/${nft.nftId}`}>

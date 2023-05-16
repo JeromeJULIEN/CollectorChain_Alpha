@@ -42,10 +42,14 @@ const RequestDetail = (props: requestDetailProps) => {
   const [authPictureModal,setAuthPictureModal] = useState<boolean>(false)
   const [storagePictureModal,setStoragePictureModal] = useState<boolean>(false)
   const [isMintLoading,setIsMintLoading] = useState<boolean>(false)
+  const [isValidateLoading,setIsValidateLoading] = useState<boolean>(false)
+  const [isRefuseLoading,setIsRefuseLoading] = useState<boolean>(false)
   const [tokenURI,setTokenURI] = useState<string>()
   const [stocker,setStocker] = useState<string>()
   const [stockingId,setStockingId] = useState<string>()
   const [rarity,setRarity] = useState<number>()
+  const [statusChange,setStatusChange] = useState(false)
+
 
   // Functions to handle input value change
   const handleStockerChange = (event : any) => {
@@ -64,6 +68,7 @@ const RequestDetail = (props: requestDetailProps) => {
     abi:contractABI.abi,
     functionName : "nftList",
     args : [id],
+    watch:true, // to update the nft status when using "validate", "refuse", and "mint"
     onError(error) {
       console.log('Error', error)
     },
@@ -84,32 +89,68 @@ const RequestDetail = (props: requestDetailProps) => {
     }
   })
 
-  const{write : validationWrite} = useContractWrite(validationConfig)
+  const{writeAsync : validationWrite} = useContractWrite(validationConfig)
 
   const validate = async() =>{
-    setIsMintLoading(true)
-    await validationWrite?.()
-    setIsMintLoading(false)
+    setIsValidateLoading(true)
+    try{
+      const tx : any= await validationWrite?.()
+      const res = await tx?.wait()
+    } catch(error){
+      console.error(error);
+      toast.error("Something when wrong during the transaction...")
+    } finally {
+      setStatusChange(!statusChange)
+      setIsValidateLoading(false)
+    }
+  }
+
+  // REQUEST REFUSE MINT
+  const {config : refuseConfig} = usePrepareContractWrite({
+    address : props.contractAddress,
+    abi: contractABI.abi,
+    functionName: "setMintProposalStatus",
+    args: [false,id],
+    onSuccess(data){
+      console.log('succes refuseConfig', data);
+    },
+    onError(data){
+      console.error('error refuseConfig',data);
+      
+    }
+  })
+
+  const{writeAsync : refuseWrite} = useContractWrite(refuseConfig)
+
+  const refuse = async() =>{
+    setIsRefuseLoading(true)
+    try{
+      const tx : any= await refuseWrite?.()
+      const res = await tx?.wait()
+    } catch(error){
+      console.error(error);
+      toast.error("Something when wrong during the transaction...")
+    } finally {
+      setStatusChange(!statusChange)
+      setIsRefuseLoading(false)
+    }
   }
 
   // REQUEST MINT
   const {config : mintConfig} = usePrepareContractWrite({
-    address : "0x7b04f3a108104cc806f64Af41868784741345329",
+    address : props.contractAddress,
     abi : contractABI.abi,
     functionName : "mintNft",
     args:[id,tokenURI],
     onError(data){
-      console.error('error mintConfig',data);
-      
+      console.error('error mintConfig',data);      
     }
   })
   
-  const {write : mintWrite} = useContractWrite(mintConfig)
+  const {writeAsync : mintWrite} = useContractWrite(mintConfig)
   
   // Process : 1 - JSON Metadata creation / 2 - pin JSON to IPFS / 3 - mint with metadata ipfsHash
-  const generateTokenURI = async() => {
-    console.log("rarity before metadata",rarity);
-    
+  const generateTokenURI = async() => {  
     const metadata = await generateMetadata(
       nft?.nftName,
       nft?.sharesQty,
@@ -119,21 +160,33 @@ const RequestDetail = (props: requestDetailProps) => {
       stocker,
       stockingId,
       rarity
-    )
+    )    
     const tokenURIHash : string = await jsonUpload(metadata,nft?.nftId,nft?.nftName)
-    setTokenURI(`https://ipfs.io/ipfs/${tokenURIHash}`)
+    await setTokenURI(`https://ipfs.io/ipfs/${tokenURIHash}`)
   }
 
   const launchMint = async() =>{
-      setIsMintLoading(true)
-      console.log("token URI =>", tokenURI);
-      mintWrite?.()
-      setIsMintLoading(false)
+    if (!tokenURI) {
+      toast.error("Something when with the item metadata...")
+      return
     }
-
-  const mint = () => {
-    generateTokenURI()
-    launchMint()
+    try {
+      const tx : any = await mintWrite?.()
+      const res = await tx?.wait()
+      toast.success(`Great job!, ${nft?.nftName} property is now split in ${nft?.sharesQty} fractions`)
+    } catch(error){
+      console.error(error);
+      toast.error("Something when wrong during the transaction...")
+    }
+  }
+  
+  const mint = async () => {
+    setIsMintLoading(true);
+    await generateTokenURI() ;
+    console.log("token URI =>", tokenURI);
+    await launchMint();
+    // setStatusChange(!statusChange)
+    setIsMintLoading(false);
   }
 
   // Request cancelation
@@ -151,6 +204,10 @@ const RequestDetail = (props: requestDetailProps) => {
     }
     handleLoading()
   }, [nft]);
+
+  useEffect(()=>{
+    console.log("status changed", statusChange);
+  },[statusChange])
 
   const isOwner = useMemo(()=>{
     console.log("nft.minter =>",nft?.minter, "address =>", props.address);
@@ -252,7 +309,7 @@ const RequestDetail = (props: requestDetailProps) => {
           {nft?.status === 0 && <p className="requestDetail__status--orange"> pending</p>}
           {nft?.status === 1 && <p className="requestDetail__status--green"> accepted</p>}
           {nft?.status === 2 && <p className="requestDetail__status--red"> refused</p>}
-          {nft?.status === 3 && <p className="requestDetail__status--green"> Created</p>}
+          {nft?.status === 3 && <p className="requestDetail__status--blue"> Created</p>}
           {nft?.status === 3 && <img className="requestDetail__status__image" src={openseaLogo} alt='opensea logo' onClick={openNftLink}></img>}
         </h2>
         <div className="requestDetail__item blueBackground">
@@ -277,12 +334,31 @@ const RequestDetail = (props: requestDetailProps) => {
           </div>
           {props.isAdmin && nft?.status === 0 &&
           <div className='requestDetail__buttonPanel'>
+            {isValidateLoading ? 
+            <Blocks
+              visible={true}
+              height="80"
+              width="80"
+              ariaLabel="blocks-loading"
+              wrapperStyle={{}}
+              wrapperClass="blocks-wrapper-requestDetail"
+            /> 
+            :
             <button className="requestDetail__button requestDetail__button--big" onClick={validate} >
-              ACCEPT
-            </button>
-            <button className="requestDetail__button requestDetail__button--big requestDetail__button--red">
-              REFUSE
-            </button>
+            ACCEPT
+            </button>}
+            {isRefuseLoading ?<Blocks
+              visible={true}
+              height="80"
+              width="80"
+              ariaLabel="blocks-loading"
+              wrapperStyle={{}}
+              wrapperClass="blocks-wrapper-requestDetail--refuse"
+            />
+            :
+            <button className="requestDetail__button requestDetail__button--big requestDetail__button--red" onClick={refuse}>
+            REFUSE
+            </button>}
           </div>
           }
           {isOwner && nft?.status === 1 &&
@@ -291,9 +367,18 @@ const RequestDetail = (props: requestDetailProps) => {
             <input type="text" className='requestDetail__button requestDetail__button--big requestDetail__button--darkBlue' placeholder='Stocker' onChange={handleStockerChange} />
             <input type="text" className='requestDetail__button requestDetail__button--big requestDetail__button--darkBlue' placeholder='Stocking Id' onChange={handleStockingIdChange} />
             <input type="text" className='requestDetail__button requestDetail__button--big requestDetail__button--darkBlue' placeholder='Rarity (set to "unknow" if empty)' onChange={handleRarityChange} />
+            {isMintLoading ? <Blocks
+              visible={true}
+              height="80"
+              width="80"
+              ariaLabel="blocks-loading"
+              wrapperStyle={{}}
+              wrapperClass="blocks-wrapper-requestDetail"
+            />
+            :
             <button className={`requestDetail__button requestDetail__button--big ${isFilled? "" : "requestDetail__button--disable"}`} onClick={mint} >
-              MINT
-            </button>
+            MINT
+            </button>}
           </div>
           }
         </div>

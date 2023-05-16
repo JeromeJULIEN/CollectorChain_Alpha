@@ -9,6 +9,8 @@ import { Link } from 'react-router-dom';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Blocks } from 'react-loader-spinner';
 import { wait } from '../Utils/wait';
+import openseaLogo from "../../image/openSea_logo.png"
+
 
 
 
@@ -110,6 +112,11 @@ const Admin = (props: AdminProps) => {
 //     })
   //! FIN WAGMI
 
+  //! :::: FUNCTIONS ::::
+  const openNftLink = (e : any) => (  
+    window.open(`https://testnets.opensea.io/assets/mumbai/0x0f36e01b1b0acf17718383e7fe2e873be7b706ec/${e.target.id}`)
+  )
+
 
 
   return (
@@ -142,7 +149,9 @@ const Admin = (props: AdminProps) => {
               {nft.status === 0 && <p className="admin__nftList__item__data--status--orange"> Pending</p>}
               {nft.status === 1 && <p className="admin__nftList__item__data--status--green"> Accepted</p>}
               {nft.status === 2 && <p className="admin__nftList__item__data--status--red"> Refused</p>}
-              {nft.status === 3 && <p className="admin__nftList__item__data--status--green"> Created</p>}
+              {nft.status === 3 && <p className="admin__nftList__item__data--status--blue"> Created</p>}
+              {nft?.status === 3 && <img className="admin__nftList__item__image" src={openseaLogo} alt='opensea logo' onClick={openNftLink} id={nft.nftId}></img>}
+
             </p>
           </div>
           <Link to={`/requestdetail/${nft.nftId}`}>

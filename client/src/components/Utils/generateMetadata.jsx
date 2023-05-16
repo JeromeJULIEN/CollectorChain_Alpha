@@ -5,7 +5,9 @@ let rarityToDisplay = ""
 const setRarityToDisplay = () => {
     if (!rarity) {
         rarityToDisplay = "unknow"
-    } else {
+    } else if (rarity == 1) {
+        rarityToDisplay = "unique"
+    }else{
         rarityToDisplay = rarity.toString()
     }
 }

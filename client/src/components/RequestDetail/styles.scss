@@ -46,6 +46,16 @@
             color: #59ff74;
             font-weight: bold;
         }
+
+        &--red {
+            color: red;
+            font-weight: bold;
+        }
+
+        &--blue {
+            color: #2081e2;
+            font-weight: bold;
+        }
     }
 
     &__item {
@@ -198,6 +208,23 @@
     top: 50%;
     left: calc(50% - 38px);
     background-color: white;
+    height: 77px;
+    width: 76px;
+    margin-top: 3px;
+    margin-left: 3px;
+}
+
+.blocks-wrapper-requestDetail {
+    background-color: #4AADFF;
+    height: 77px;
+    width: 76px;
+    margin-top: 3px;
+    margin-left: 3px;
+}
+
+.blocks-wrapper-requestDetail--refuse {
+    background-color: #FF5C5C;
+    color: red;
     height: 77px;
     width: 76px;
     margin-top: 3px;

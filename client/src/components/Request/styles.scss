@@ -14,12 +14,17 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin: 0 20px;
+            padding: 0 20px;
+
+            &:nth-child(even) {
+                background-color: #394b78;
+            }
 
             &__img {
                 img {
                     aspect-ratio: 1;
                     height: 80px;
+                    background-color: white;
                 }
             }
 
@@ -54,6 +59,16 @@
 
                     &--green {
                         color: #59ff74;
+                        font-weight: bold;
+                    }
+
+                    &--red {
+                        color: red;
+                        font-weight: bold;
+                    }
+
+                    &--blue {
+                        color: #2081e2;
                         font-weight: bold;
                     }
                 }
