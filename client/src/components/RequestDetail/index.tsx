@@ -151,6 +151,7 @@ const RequestDetail = (props: requestDetailProps) => {
   
   // Process : 1 - JSON Metadata creation / 2 - pin JSON to IPFS / 3 - mint with metadata ipfsHash
   const generateTokenURI = async() => {  
+    setIsMintLoading(true);
     const metadata = await generateMetadata(
       nft?.nftName,
       nft?.sharesQty,
@@ -162,10 +163,14 @@ const RequestDetail = (props: requestDetailProps) => {
       rarity
     )    
     const tokenURIHash : string = await jsonUpload(metadata,nft?.nftId,nft?.nftName)
-    await setTokenURI(`https://ipfs.io/ipfs/${tokenURIHash}`)
+    setTokenURI(`https://ipfs.io/ipfs/${tokenURIHash}`)
+    setIsMintLoading(false);
+    toast.success("Data succesfully stored, object is ready for mint", {autoClose:2000})
   }
 
-  const launchMint = async() =>{
+  const mint = async() =>{
+    setIsMintLoading(true);
+    console.log("token URI =>", tokenURI);
     if (!tokenURI) {
       toast.error("Something when with the item metadata...")
       return
@@ -177,18 +182,11 @@ const RequestDetail = (props: requestDetailProps) => {
     } catch(error){
       console.error(error);
       toast.error("Something when wrong during the transaction...")
+    } finally {
+      setIsMintLoading(false);
     }
   }
   
-  const mint = async () => {
-    setIsMintLoading(true);
-    await generateTokenURI() ;
-    console.log("token URI =>", tokenURI);
-    await launchMint();
-    // setStatusChange(!statusChange)
-    setIsMintLoading(false);
-  }
-
   // Request cancelation
 
 
@@ -366,7 +364,7 @@ const RequestDetail = (props: requestDetailProps) => {
             <h1 className="requestDetail__title">Additional information for minting</h1>
             <input type="text" className='requestDetail__button requestDetail__button--big requestDetail__button--darkBlue' placeholder='Stocker' onChange={handleStockerChange} />
             <input type="text" className='requestDetail__button requestDetail__button--big requestDetail__button--darkBlue' placeholder='Stocking Id' onChange={handleStockingIdChange} />
-            <input type="text" className='requestDetail__button requestDetail__button--big requestDetail__button--darkBlue' placeholder='Rarity (set to "unknow" if empty)' onChange={handleRarityChange} />
+            <input type="text" className='requestDetail__button requestDetail__button--big requestDetail__button--darkBlue' placeholder='Rarity ("unknow" if empty)' onChange={handleRarityChange} />
             {isMintLoading ? <Blocks
               visible={true}
               height="80"
@@ -375,10 +373,15 @@ const RequestDetail = (props: requestDetailProps) => {
               wrapperStyle={{}}
               wrapperClass="blocks-wrapper-requestDetail"
             />
-            :
-            <button className={`requestDetail__button requestDetail__button--big ${isFilled? "" : "requestDetail__button--disable"}`} onClick={mint} >
+            : tokenURI ? 
+            <button className="requestDetail__button requestDetail__button--big" onClick={mint} >
             MINT
-            </button>}
+            </button>
+            :
+            <button className={`requestDetail__button requestDetail__button--big ${isFilled? "" : "requestDetail__button--disable"}`} onClick={generateTokenURI} >
+            VALIDATE DATA
+            </button>
+            }
           </div>
           }
         </div>
