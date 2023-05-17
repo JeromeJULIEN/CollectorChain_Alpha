@@ -15,7 +15,8 @@ import ConnectModal from '../Modals/connectModal';
 interface CreateProps {
   contractAddress? : `0x${string}`,
   address? : `0x${string}`,
-  isGoodNetwork? : boolean
+  isGoodNetwork? : boolean,
+  isConnected? : boolean
 }
 
 const Create = (props : CreateProps) => {
@@ -44,8 +45,7 @@ const Create = (props : CreateProps) => {
   const [mintPorposalCallLoader, setMintProposalCallLoader] = useState<boolean>(false)
   // submission status
   const [isSubmit,setIsSubmit] = useState<boolean>(false)
-  // WAGMI hook
-  const {isConnected } = useAccount()
+  
 
   const isFilled = useMemo(()=> {
     if (objectName && sharesQty && objectPictureHash && authPictureHash && storagePictureHash){
@@ -187,14 +187,14 @@ const Create = (props : CreateProps) => {
   
   return (
     <div className='create'>
+        {!props.isConnected && <ConnectModal/>}
+        {!props.isGoodNetwork && props.isConnected && <SwitchNetworkModal/>}
         <div className="create__title">
             SUBMIT YOUR OBJECT
         </div>
         <div className="create__text">
         Please provide all the requested informations 
         </div>
-        {!isConnected && <ConnectModal/>}
-        {!props.isGoodNetwork && isConnected && <SwitchNetworkModal/>}
         <div className="blueBackground">
             <div className="create__title--center">Name of your object</div>
             <div className="horizontalBox">
@@ -267,7 +267,7 @@ const Create = (props : CreateProps) => {
             </div>
             <div className="create__title--center create__title--center--last">Submit your request</div>
             <div className="horizontalBox">
-              {isConnected ? mintPorposalCallLoader ?
+              {props.isConnected ? mintPorposalCallLoader ?
               <button className="create__button create__button--big"  onClick={mintProposalCall}><Blocks
               visible={true}
               height="80"

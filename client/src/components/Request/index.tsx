@@ -9,6 +9,8 @@ import { wait } from '../Utils/wait'
 import { Blocks } from 'react-loader-spinner'
 import openseaLogo from "../../image/openSea_logo.png"
 import { log } from 'console'
+import ConnectModal from '../Modals/connectModal'
+import SwitchNetworkModal from '../Modals/switchNetworkModal'
 
 
 
@@ -17,7 +19,8 @@ import { log } from 'console'
 interface RequestProps {
   contractAddress? : `0x${string}`,
   address? : `0x${string}`,
-  isGoodNetwork? : boolean
+  isGoodNetwork? : boolean,
+  isConnected? : boolean
 }
 
 const Request = (props : RequestProps) => {
@@ -91,6 +94,8 @@ const openNftLink = (e : any) => (
 
   return (
     <div className='request'>
+        {!props.isConnected && <ConnectModal/>}
+        {!props.isGoodNetwork && props.isConnected && <SwitchNetworkModal/>}
         <h1 className='request__title'>My mint request</h1> 
         {isLoading ? 
         <Blocks

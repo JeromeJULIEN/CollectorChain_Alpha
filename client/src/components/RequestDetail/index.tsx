@@ -13,6 +13,8 @@ import { jsonUpload } from '../Utils/jsonUpload';
 import generateMetadata from '../Utils/generateMetadata';
 import openseaLogo from "../../image/openSea_logo.png"
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import ConnectModal from '../Modals/connectModal';
+import SwitchNetworkModal from '../Modals/switchNetworkModal';
 
 
 
@@ -20,7 +22,8 @@ interface requestDetailProps {
   contractAddress? : `0x${string}`,
   address? : `0x${string}`,
   isGoodNetwork? : boolean,
-  isAdmin? : boolean
+  isAdmin? : boolean,
+  isConnected? : boolean
 }
 
 interface NFTItem {
@@ -302,6 +305,8 @@ const RequestDetail = (props: requestDetailProps) => {
     </div>
     :
     <div className='requestDetail'>
+        {!props.isConnected && <ConnectModal/>}
+        {!props.isGoodNetwork && props.isConnected && <SwitchNetworkModal/>}
         <h1 className='requestDetail__title'>{nft?.nftName} <button className='navigateToPrevious' onClick={navigateToPrevious}><HighlightOffIcon fontSize='large'/></button></h1>
         <h2 className="requestDetail__status">
           {nft?.status === 0 && <p className="requestDetail__status--orange"> pending</p>}

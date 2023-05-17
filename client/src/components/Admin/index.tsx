@@ -10,6 +10,8 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { Blocks } from 'react-loader-spinner';
 import { wait } from '../Utils/wait';
 import openseaLogo from "../../image/openSea_logo.png"
+import ConnectModal from '../Modals/connectModal';
+import SwitchNetworkModal from '../Modals/switchNetworkModal';
 
 
 
@@ -18,7 +20,8 @@ import openseaLogo from "../../image/openSea_logo.png"
 interface AdminProps {
   isAdmin : boolean,
   contractAddress? : `0x${string}` | undefined,
-  isGoodNetwork? : boolean
+  isGoodNetwork? : boolean,
+  isConnected? : boolean
 }
 
 const Admin = (props: AdminProps) => {
@@ -111,6 +114,8 @@ const Admin = (props: AdminProps) => {
 
   return (
     <div className='admin'>
+    {!props.isConnected && <ConnectModal/>}
+    {!props.isGoodNetwork && props.isConnected && <SwitchNetworkModal/>}
     {props.isAdmin === false ? 
     <h1 className='admin__title'>You're not the admin</h1> 
     :

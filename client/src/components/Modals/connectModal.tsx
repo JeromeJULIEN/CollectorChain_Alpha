@@ -12,11 +12,8 @@ const ConnectModal = (props: Props) => {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false); 
 
-    const {switchNetwork} = useSwitchNetwork()
-    const chainId : number | undefined = Number(process.env.REACT_APP_CHAIN_ID) 
-
     const { connect, connectors} =  useConnect()
-    const connector : any = connectors[0]
+    const connector : any = connectors[0] // only metamask --> to change if needed
 
     console.log(":::::: connector =>", connector);
     
@@ -36,7 +33,7 @@ const ConnectModal = (props: Props) => {
         >
             <div className='connectModal__content'>
                 <p>Not connected</p>
-                <button className='connectModal__content__button' onClick={()=> connect?.(connector)}>Connect your wallet</button>
+                <button className='connectModal__content__button' onClick={()=> connect?.({connector})}>CONNECT YOUR WALLET</button>
             </div>
         </Modal>
     )

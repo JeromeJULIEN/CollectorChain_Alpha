@@ -82,10 +82,10 @@ function App() {
         <Routes>
           <Route path="/" element={<Home/>}/>
           <Route path="/howitworks" element={<HowItWorks/>}/>
-          <Route path="/create" element={<Create contractAddress={contractAddressTyped} address={address} isGoodNetwork={isGoodNetwork}/>}/>
-          <Route path="/request" element={<Request contractAddress={contractAddressTyped} address={address} isGoodNetwork={isGoodNetwork}/>}/>
-          <Route path="/admin" element={<Admin contractAddress={contractAddressTyped} isAdmin={isAdmin} isGoodNetwork={isGoodNetwork}/>}/>
-          <Route path="/requestdetail/:id" element={<RequestDetail contractAddress={contractAddressTyped} address={address} isGoodNetwork={isGoodNetwork} isAdmin={isAdmin}/>}/>
+          <Route path="/create" element={<Create contractAddress={contractAddressTyped} address={address} isGoodNetwork={isGoodNetwork} isConnected={isConnected}/>}/>
+          <Route path="/request" element={<Request contractAddress={contractAddressTyped} address={address} isGoodNetwork={isGoodNetwork}  isConnected={isConnected}/>}/>
+          <Route path="/admin" element={<Admin contractAddress={contractAddressTyped} isAdmin={isAdmin} isGoodNetwork={isGoodNetwork}  isConnected={isConnected}/>}/>
+          <Route path="/requestdetail/:id" element={<RequestDetail contractAddress={contractAddressTyped} address={address} isGoodNetwork={isGoodNetwork} isAdmin={isAdmin}  isConnected={isConnected}/>}/>
 
 
         </Routes>
