@@ -83,8 +83,8 @@ function App() {
           <Route path="/" element={<Home/>}/>
           <Route path="/howitworks" element={<HowItWorks/>}/>
           <Route path="/create" element={<Create contractAddress={contractAddressTyped} address={address} isGoodNetwork={isGoodNetwork}/>}/>
-          <Route path="/request" element={<Request contractAddress={contractAddressTyped} address={address}/>}/>
-          <Route path="/admin" element={<Admin contractAddress={contractAddressTyped} isAdmin={isAdmin}/>}/>
+          <Route path="/request" element={<Request contractAddress={contractAddressTyped} address={address} isGoodNetwork={isGoodNetwork}/>}/>
+          <Route path="/admin" element={<Admin contractAddress={contractAddressTyped} isAdmin={isAdmin} isGoodNetwork={isGoodNetwork}/>}/>
           <Route path="/requestdetail/:id" element={<RequestDetail contractAddress={contractAddressTyped} address={address} isGoodNetwork={isGoodNetwork} isAdmin={isAdmin}/>}/>
 
 

@@ -8,6 +8,8 @@ import contractABI from "../../contracts/CollectorChain/CollectorChain.json"
 import { UseContractConfig, useContractRead, useContractWrite, usePrepareContractWrite, useAccount, useConnect } from 'wagmi'
 import { ethers } from 'ethers';
 import { toast } from 'react-toastify';
+import SwitchNetworkModal from '../Modals/switchNetworkModal';
+import ConnectModal from '../Modals/connectModal';
 
 
 interface CreateProps {
@@ -191,6 +193,8 @@ const Create = (props : CreateProps) => {
         <div className="create__text">
         Please provide all the requested informations 
         </div>
+        {!isConnected && <ConnectModal/>}
+        {!props.isGoodNetwork && isConnected && <SwitchNetworkModal/>}
         <div className="blueBackground">
             <div className="create__title--center">Name of your object</div>
             <div className="horizontalBox">

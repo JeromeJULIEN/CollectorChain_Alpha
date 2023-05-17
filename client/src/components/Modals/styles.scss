@@ -1,0 +1,56 @@
+.switchNetworkModal,
+.connectModal,
+.css-79ws1d-MuiModal-root {
+    position: absolute;
+    top: 40%;
+    left: 15%;
+    width: 70%;
+    height: 22%;
+    z-index: 5;
+    // display: flex;
+    // flex-direction: column;
+    // align-items: center;
+    // justify-content: center;
+
+    background-color: #2b385A;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+
+    font-family: 'Quantico', sans-serif;
+    color: white;
+    font-size: 1.5rem;
+
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        &__button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: none;
+            background-color: #4AADFF;
+
+            background-image:
+                linear-gradient(to right, #2b385a 3px, transparent 1px),
+                linear-gradient(to bottom, #2b385a 3px, transparent 1px);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 0;
+
+            color: white;
+            font-family: 'Quantico', sans-serif;
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 10px;
+            // width: calc(100% - 20px);
+            // margin-left: 40px;
+            // margin-top: 10px;
+            // margin-bottom: 40px;
+            height: 100px;
+            cursor: pointer;
+        }
+    }
+
+}

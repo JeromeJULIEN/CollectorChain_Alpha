@@ -359,7 +359,7 @@ const RequestDetail = (props: requestDetailProps) => {
             </button>}
           </div>
           }
-          {isOwner && nft?.status === 1 &&
+          {props.isAdmin && nft?.status === 1 &&
           <div className="requestDetail__buttonPanel">
             <h1 className="requestDetail__title">Additional information for minting</h1>
             <input type="text" className='requestDetail__button requestDetail__button--big requestDetail__button--darkBlue' placeholder='Stocker' onChange={handleStockerChange} />

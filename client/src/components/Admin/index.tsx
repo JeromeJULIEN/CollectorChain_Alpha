@@ -16,19 +16,9 @@ import openseaLogo from "../../image/openSea_logo.png"
 
 
 interface AdminProps {
-    isAdmin : boolean,
-    contractAddress? : `0x${string}` | undefined
-}
-
-interface NFTItem {
-  nftId : number,
-  minter : string,
-  title : string,
-  objectImageURL : string,
-  authImageURL : string,
-  storageImageURL : string,
-  sharesQty : number,
-  status : number
+  isAdmin : boolean,
+  contractAddress? : `0x${string}` | undefined,
+  isGoodNetwork? : boolean
 }
 
 const Admin = (props: AdminProps) => {

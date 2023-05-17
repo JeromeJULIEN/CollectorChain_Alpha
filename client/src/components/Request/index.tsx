@@ -16,7 +16,8 @@ import { log } from 'console'
 
 interface RequestProps {
   contractAddress? : `0x${string}`,
-  address? : `0x${string}`
+  address? : `0x${string}`,
+  isGoodNetwork? : boolean
 }
 
 const Request = (props : RequestProps) => {
