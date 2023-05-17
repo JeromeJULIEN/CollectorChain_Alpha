@@ -11,3 +11,6 @@ REPORT_GAS=true npx hardhat test
 npx hardhat node
 npx hardhat run scripts/deploy.ts
 ```
+
+## contract address history :
+mumbai test 1 : 0x7b04f3a108104cc806f64Af41868784741345329 / opensea url : https://testnets.opensea.io/collection/collectorchainbeta2

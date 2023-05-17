@@ -121,20 +121,23 @@ contract CollectorChain is ERC1155URIStorage, ERC2981, Ownable {
 
     /// @notice mint the NFT once the proposal accepted
     /// @notice update the nbr of fraction of the nft
-    /// @notice only for the nft proposer
+    /// @notice only for the contract owner
     /// @dev set msg.sender as royalty receiver though ERC2981 methos '_setToKenRoyalty'
     /// @param _nftId id of the NFT to update
     /// @param _nftURI URI of the NFT minted
-    function mintNft(uint256 _nftId, string calldata _nftURI) external {
+    function mintNft(
+        uint256 _nftId,
+        string calldata _nftURI
+    ) external onlyOwner {
         require(
             nftList[_nftId].status == Status.accepted,
             "nft status isn't accepted"
         );
-        require(msg.sender == nftList[_nftId].minter, "not the nft proposer");
+        // require(msg.sender == nftList[_nftId].minter, "not the nft proposer");
         uint256 sharesQty = nftList[_nftId].sharesQty;
-        _mint(msg.sender, _nftId, sharesQty, "");
+        _mint(nftList[_nftId].minter, _nftId, sharesQty, "");
         _setURI(_nftId, _nftURI);
-        _setTokenRoyalty(_nftId, msg.sender, _baseFeeNumerator);
+        _setTokenRoyalty(_nftId, nftList[_nftId].minter, _baseFeeNumerator);
         nftList[_nftId].status = Status.minted;
         emit mintProposalStatusUpdateEvent(_nftId, 3);
     }
