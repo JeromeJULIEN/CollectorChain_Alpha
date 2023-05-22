@@ -109,6 +109,12 @@
 
         &--darkBlue {
             background-color: #3176af;
+            transition: all .2s;
+
+            &:hover {
+                background-color: #4AADFF;
+                transition: all .2s;
+            }
         }
 
         &--disable {

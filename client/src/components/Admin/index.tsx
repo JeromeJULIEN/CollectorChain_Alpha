@@ -12,6 +12,7 @@ import { wait } from '../Utils/wait';
 import openseaLogo from "../../image/openSea_logo.png"
 import ConnectModal from '../Modals/connectModal';
 import SwitchNetworkModal from '../Modals/switchNetworkModal';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 
 
