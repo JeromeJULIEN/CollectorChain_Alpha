@@ -1,4 +1,4 @@
-import { ToggleButtonGroup, createTheme } from "@mui/material";
+import { ToggleButtonGroup, createTheme, ToggleButton } from "@mui/material";
 
 const Colors = {
     primary : "#4AADFF",
@@ -26,6 +26,9 @@ const theme = createTheme({
             defaultProps:{
                 
             }
+        },
+        ToggleButton:{
+        
         }
     },
     typography:{

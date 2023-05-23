@@ -173,10 +173,10 @@ const Admin = (props: AdminProps) => {
     <div className='admin'>
     {!props.isConnected && <ConnectModal/>}
     {!props.isGoodNetwork && props.isConnected && <SwitchNetworkModal/>}
-    {props.isAdmin === false ? 
+    {/* {props.isAdmin === false ? 
     <h1 className='admin__title'>You're not the admin</h1> 
-    :
-    isLoading ? 
+    : */}
+    {isLoading ? 
     <>
       <h1 className='admin__title'>Mint request administration</h1> 
       <Blocks

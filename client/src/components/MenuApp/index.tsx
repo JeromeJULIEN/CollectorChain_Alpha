@@ -27,7 +27,7 @@ const MenuApp = (props : MenuAppProps) => {
       <Link className="menuApp__item" to="/create">CREATE YOUR OBJECT</Link>
       <div className="menuApp__item" onClick={openLink}>COLLECTION</div>
       {props.isConnected && <Link className="menuApp__item" to="/request">MY REQUEST</Link>}
-      {props.owner == props.address && props.isConnected && <Link className="menuApp__item" to="/admin">ADMIN</Link>}
+      {/*props.owner == props.address && */props.isConnected && <Link className="menuApp__item" to="/admin">ADMIN</Link>}
     </div>
   )
 }
