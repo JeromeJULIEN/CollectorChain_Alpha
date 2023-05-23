@@ -13,9 +13,20 @@ import openseaLogo from "../../image/openSea_logo.png"
 import ConnectModal from '../Modals/connectModal';
 import SwitchNetworkModal from '../Modals/switchNetworkModal';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 
-
+interface NftType {
+  nftId : number,
+  nftName : string,
+  minter : string,
+  objectImageURL : string,
+  storageImageURL : string,
+  authImageURL : string,
+  sharesQty : number,
+  status : number
+}
 
 
 interface AdminProps {
@@ -29,9 +40,18 @@ const Admin = (props: AdminProps) => {
   //! :::: IFINITE SCROLL VARIABLES ::::
   const dataIncrement = 5
   const [hasMore,setHasMore] = useState(true)
-  const [stateNfts,setStateNfts] = useState([])
+  const [stateNfts,setStateNfts] = useState<NftType[] | undefined>([])
   const [infiniteScrollDataLength,setInfiniteScrollDataLength] = useState(dataIncrement) 
   const [infiniteScrollCounter, setInfiniteScrollCounter] = useState(0)
+
+  //! :::: SORTING VARIABLE ::::
+  const [sortingValue,setSortingValue] = useState("all")
+
+  const sortChange = (event : any, newSort:string) => {
+    console.log("event =>", event.target, "new sort=>",newSort);
+    setSortingValue(newSort)
+    
+  }
 
   //! WAGMI
   const {data : nftCounter} : { data: number | undefined } = useContractRead({
@@ -44,11 +64,19 @@ const Admin = (props: AdminProps) => {
   //? :::: MULTICALL --> Warning : multicall is not suported by hardhat
   const numberArray : number[] = []
 
-  const nftCounterTyped : any = nftCounter
-  for(let i = 0 ; i < nftCounterTyped ; i++){
-    numberArray.push(i)
+  const nftCounterTyped : number | undefined = nftCounter
+
+  if(nftCounter) {
+    console.error("nft counter =>", nftCounter.toString());
+    
+    // for(let i = 0 ; i < nftCounterTyped ; i++){
+    //   numberArray.push(i)
+    // }
+    for(let i = (parseInt(nftCounter.toString())-1) ; i >= 0 ; i--){
+      numberArray.push(i)
+    }
+    console.log("number array=>", numberArray);
   }
-  // console.log("number array=>", numberArray);
     
   
   
@@ -62,7 +90,7 @@ const Admin = (props: AdminProps) => {
     } as const)
   )
 
-  const {data : nfts}  = useContractReads({contracts: nftReads})
+  const {data : nfts} : {data : NftType[] | undefined}  = useContractReads({contracts: nftReads})
   console.log("nfts =>", nfts);
   //? ::::: end test multicall
 
@@ -77,11 +105,11 @@ const Admin = (props: AdminProps) => {
 //! :::: INFINITE SCROLL ::::
   // function to update number of data to display
   const loadMoreNFT = () => {
-    console.log(":::: LOAD MORE PLEASE :::: stateNfts.length =>", stateNfts.length, "and nftCounter =>",nftCounterTyped.toNumber());
-    if(!nftCounter) {return}
+    console.log(":::: LOAD MORE PLEASE :::: stateNfts.length =>", stateNfts?.length, "and nftCounter =>",nftCounterTyped);
+    if(!nftCounterTyped) {return}
     console.log("old counter =>", infiniteScrollCounter, "data length =>", infiniteScrollDataLength);
     // condition to load more data
-    if (infiniteScrollDataLength <= nftCounterTyped.toNumber()) {
+    if (infiniteScrollDataLength <= nftCounterTyped/*.toNumber()*/) {
       console.error('try to load more');
       setInfiniteScrollCounter(infiniteScrollCounter+1)
       setInfiniteScrollDataLength(infiniteScrollDataLength + dataIncrement)
@@ -98,15 +126,29 @@ const Admin = (props: AdminProps) => {
   // useEffect to update the list with the new number of data
   useEffect(() => {
     const handleLoading = async() => {
-      if (nfts && Array.isArray(nfts)) {
+      if (nfts /*&& Array.isArray(nfts)*/) {
         await wait(1000)
         setIsLoading(false);
-        const slicedNfts = nfts.slice(0,infiniteScrollDataLength)
-        setStateNfts(slicedNfts as never[])
+        const slicedNfts : any = nfts.slice(0,infiniteScrollDataLength)
+        setStateNfts(slicedNfts)
       }
     }
     handleLoading()
   }, [nfts, infiniteScrollDataLength]);
+
+  //! :::: SORTING ::::
+  useEffect(()=> {
+    if(sortingValue === "all") {
+      const allNfts : any = nfts?.slice(0,infiniteScrollDataLength)
+      setStateNfts(allNfts)
+    } else {
+      const allNfts : NftType[] | undefined  = nfts?.slice(0,infiniteScrollDataLength)
+      const sortedNfts = allNfts?.filter(nft => nft.status == parseInt(sortingValue) )
+      console.log("new sorting value =>", sortingValue);
+      console.log("new sorted nfts =>", sortedNfts);
+      setStateNfts(sortedNfts)
+    }
+  },[sortingValue])
 
   //! :::: FUNCTIONS ::::
   const openNftLink = (e : any) => (  
@@ -137,6 +179,29 @@ const Admin = (props: AdminProps) => {
     :
     <>
     <h1 className='admin__title'>Mint request administration</h1> 
+    <ToggleButtonGroup
+      size='small'
+      value={sortingValue}
+      exclusive
+      onChange={sortChange}
+      aria-label="nft sorting"
+    >
+      <ToggleButton value="all" aria-label="all">
+        <p>All</p>
+      </ToggleButton>
+      <ToggleButton value="0" aria-label="pending">
+        <p>Pending</p>
+      </ToggleButton>
+      <ToggleButton value="1" aria-label="accepted">
+        <p>Accepted</p>
+      </ToggleButton>
+      <ToggleButton value="3" aria-label="created" >
+        <p>Created</p>
+      </ToggleButton>
+      <ToggleButton value="2" aria-label="refused" >
+        <p>Refused</p>
+      </ToggleButton>
+    </ToggleButtonGroup>
     <div className="admin__nftList blueBackground">
       <InfiniteScroll
         dataLength={infiniteScrollDataLength}
