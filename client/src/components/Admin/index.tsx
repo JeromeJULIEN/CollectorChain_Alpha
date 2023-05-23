@@ -269,7 +269,13 @@ const Admin = (props: AdminProps) => {
             </Link>
           </div>
         )}
-        {props.route === "user" && ownedNfts?.map((nft : any)=> 
+        {props.route === "user" && ownedNfts?.length == 0 ?
+        <>
+          <p>It seems that your didn't ask for any <strong>creation</strong> for the moment !</p>
+          <button className='admin__button__init'><Link className='link' to='/create'>CREATE YOUR FIRST ASSET</Link> </button>
+        </>
+        :
+         ownedNfts?.map((nft : any)=> 
           <div className="admin__nftList__item" key={nft.nftId}>
             <div className="admin__nftList__item__img"><img  src={`https://ipfs.io/ipfs/${nft.objectImageURL}`} alt="object main" /></div>
             <div className="admin__nftList__item__data">
