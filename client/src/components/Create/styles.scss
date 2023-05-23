@@ -98,6 +98,14 @@
         // margin-bottom: 40px;
         height: 80px;
         cursor: pointer;
+        transition: all .2s;
+
+
+        &:hover {
+            text-shadow: 0px 0px 5px white;
+            transition: all .2s;
+
+        }
 
 
 
@@ -114,12 +122,18 @@
             &:hover {
                 background-color: #4AADFF;
                 transition: all .2s;
+                text-shadow: none;
+
             }
         }
 
         &--disable {
             background-color: #3176af;
             color: grey;
+
+            &:hover {
+                text-shadow: none;
+            }
         }
 
         &__icon {

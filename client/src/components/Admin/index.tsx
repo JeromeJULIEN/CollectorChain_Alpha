@@ -209,7 +209,12 @@ const Admin = (props: AdminProps) => {
     </>
     :
     <>
-    {props.route === "admin" && <h1 className='admin__title'>Mint requests administration</h1> }
+    {props.route === "admin" && 
+      <>
+        <h1 className='admin__title'>Mint requests administration</h1> 
+        {!props.isAdmin && <p>For demo only. You shouldn't have acces</p>}
+      </>
+    }
     {props.route === "user" && <h1 className='admin__title'>My creation requests </h1> }
     <ToggleButtonGroupCustom
       size='small'
@@ -237,7 +242,7 @@ const Admin = (props: AdminProps) => {
         <p>Refused</p>
       </ToggleButton>
     </ToggleButtonGroupCustom>
-    <div className="admin__nftList blueBackground">
+    <div className="admin__nftList blueBackground_admin">
       <InfiniteScroll
         dataLength={infiniteScrollDataLength}
         next={loadMoreNFT}

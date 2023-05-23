@@ -335,8 +335,9 @@ const RequestDetail = (props: requestDetailProps) => {
             <p className="requestDetail__item__data__text">Fraction asked : <strong>{nft?.sharesQty.toString()}</strong></p>
             <p className="requestDetail__item__data__text">Token id : <strong>{nft?.nftId.toString()}</strong></p>
           </div>
-          {props.isAdmin && nft?.status === 0 &&
+          {/*props.isAdmin && */nft?.status === 0 &&
           <div className='requestDetail__buttonPanel'>
+            {!props.isAdmin && <p>For demo. You shouldn't see bellow. Buttons are disabled</p>}
             {isValidateLoading ? 
             <Blocks
               visible={true}
@@ -347,7 +348,7 @@ const RequestDetail = (props: requestDetailProps) => {
               wrapperClass="blocks-wrapper-requestDetail"
             /> 
             :
-            <button className="requestDetail__button requestDetail__button--big" onClick={validate} >
+            <button className="requestDetail__button requestDetail__button--big" onClick={validate} disabled={!props.isAdmin} >
             ACCEPT
             </button>}
             {isRefuseLoading ?<Blocks
@@ -359,17 +360,18 @@ const RequestDetail = (props: requestDetailProps) => {
               wrapperClass="blocks-wrapper-requestDetail--refuse"
             />
             :
-            <button className="requestDetail__button requestDetail__button--big requestDetail__button--red" onClick={refuse}>
+            <button className="requestDetail__button requestDetail__button--big requestDetail__button--red" onClick={refuse} disabled={!props.isAdmin}>
             REFUSE
             </button>}
           </div>
           }
-          {props.isAdmin && nft?.status === 1 &&
+          {/*props.isAdmin && */nft?.status === 1 &&
           <div className="requestDetail__buttonPanel">
             <h1 className="requestDetail__title">Additional information for minting</h1>
+            {!props.isAdmin && <p>For demo. You shouldn't see bellow. Validation is disabled</p>}
             <input type="text" className='requestDetail__button requestDetail__button--big requestDetail__button--darkBlue' placeholder='Stocker' onChange={handleStockerChange} />
             <input type="text" className='requestDetail__button requestDetail__button--big requestDetail__button--darkBlue' placeholder='Stocking Id' onChange={handleStockingIdChange} />
-            <input type="text" className='requestDetail__button requestDetail__button--big requestDetail__button--darkBlue' placeholder='Rarity ("unknow" if empty)' onChange={handleRarityChange} />
+            <input type="text" className='requestDetail__button requestDetail__button--big requestDetail__button--darkBlue responsiveText' placeholder='Rarity ("unknow" if empty)' onChange={handleRarityChange} />
             {isMintLoading ? <Blocks
               visible={true}
               height="80"
@@ -379,11 +381,11 @@ const RequestDetail = (props: requestDetailProps) => {
               wrapperClass="blocks-wrapper-requestDetail"
             />
             : tokenURI ? 
-            <button className="requestDetail__button requestDetail__button--big" onClick={mint} >
+            <button className="requestDetail__button requestDetail__button--big" onClick={mint} disabled={!props.isAdmin} >
             MINT
             </button>
             :
-            <button className={`requestDetail__button requestDetail__button--big ${isFilled? "" : "requestDetail__button--disable"}`} onClick={generateTokenURI} >
+            <button className={`requestDetail__button requestDetail__button--big ${isFilled? "" : "requestDetail__button--disable"}`} onClick={generateTokenURI} disabled={!props.isAdmin}>
             VALIDATE DATA
             </button>
             }

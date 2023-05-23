@@ -128,6 +128,14 @@
         margin: 10px 0;
         height: 80px;
         cursor: pointer;
+        transition: all .2s;
+
+        &:hover {
+            border: transparent;
+            text-shadow: 0px 0px 5px white;
+            transition: all .2s;
+
+        }
 
 
 
@@ -140,15 +148,31 @@
         &--darkBlue {
             background-color: #3176af;
             color: #2b385A;
+            transition: all .2s;
+
+
+            &:hover {
+                background-color: #4AADFF;
+                transition: all .2s;
+                text-shadow: none;
+
+
+            }
         }
 
         &--red {
             background-color: #FF5C5C;
+            transition: all .2s;
+
         }
 
         &--disable {
             background-color: #3176af;
             color: grey;
+
+            &:hover {
+                text-shadow: none;
+            }
         }
 
         &--status {
@@ -243,5 +267,11 @@
         img {
             width: 50%;
         }
+    }
+}
+
+.responsiveText {
+    @media (max-width : 721px) {
+        font-size: 1.5rem;
     }
 }
