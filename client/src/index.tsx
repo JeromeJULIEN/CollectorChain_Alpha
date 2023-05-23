@@ -6,6 +6,8 @@ import reportWebVitals from './reportWebVitals';
 import { WagmiProvider } from './contexts/wagmiContext';  
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { ThemeProvider } from '@mui/material';
+import theme from './styles/styles';
 
 
 const root = ReactDOM.createRoot(
@@ -13,21 +15,23 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <WagmiProvider>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-      <App />
-    </WagmiProvider>
+    <ThemeProvider theme={theme}>
+      <WagmiProvider>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
+        <App />
+      </WagmiProvider>
+    </ThemeProvider>
   </React.StrictMode>
 );
 

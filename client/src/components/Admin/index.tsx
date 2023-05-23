@@ -15,6 +15,7 @@ import SwitchNetworkModal from '../Modals/switchNetworkModal';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import MyToggleButton, { ToggleButtonGroupCustom } from '../../styles/ToggleButton';
 
 
 interface NftType {
@@ -129,8 +130,19 @@ const Admin = (props: AdminProps) => {
       if (nfts /*&& Array.isArray(nfts)*/) {
         await wait(1000)
         setIsLoading(false);
-        const slicedNfts : any = nfts.slice(0,infiniteScrollDataLength)
-        setStateNfts(slicedNfts)
+        const slicedNfts  = nfts.slice(0,infiniteScrollDataLength)
+        // setStateNfts(slicedNfts)
+        if(sortingValue === "all") {
+          // const allNfts : any = nfts?.slice(0,infiniteScrollDataLength)
+          setStateNfts(slicedNfts)
+        } else {
+          // const allNfts : NftType[] | undefined  = nfts?.slice(0,infiniteScrollDataLength)
+          const sortedNfts = slicedNfts?.filter(nft => nft.status == parseInt(sortingValue) )
+          console.log("new sorting value =>", sortingValue);
+          console.log("new sorted nfts =>", sortedNfts);
+          setStateNfts(sortedNfts)
+        }
+
       }
     }
     handleLoading()
@@ -179,12 +191,15 @@ const Admin = (props: AdminProps) => {
     :
     <>
     <h1 className='admin__title'>Mint request administration</h1> 
-    <ToggleButtonGroup
+    <ToggleButtonGroupCustom
       size='small'
+      color='primary'
       value={sortingValue}
       exclusive
       onChange={sortChange}
       aria-label="nft sorting"
+      sx={{height:'2rem',margin:'1rem 0',borderRadius:'none', fontWeight:500}}
+      fullWidth={true}
     >
       <ToggleButton value="all" aria-label="all">
         <p>All</p>
@@ -201,7 +216,7 @@ const Admin = (props: AdminProps) => {
       <ToggleButton value="2" aria-label="refused" >
         <p>Refused</p>
       </ToggleButton>
-    </ToggleButtonGroup>
+    </ToggleButtonGroupCustom>
     <div className="admin__nftList blueBackground">
       <InfiniteScroll
         dataLength={infiniteScrollDataLength}
