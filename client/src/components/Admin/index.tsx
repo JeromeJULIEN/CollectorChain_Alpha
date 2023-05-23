@@ -34,7 +34,9 @@ interface AdminProps {
   isAdmin : boolean,
   contractAddress? : `0x${string}` | undefined,
   isGoodNetwork? : boolean,
-  isConnected? : boolean
+  isConnected? : boolean,
+  address? : `0x${string}`,
+  route? : string
 }
 
 const Admin = (props: AdminProps) => {
@@ -42,6 +44,7 @@ const Admin = (props: AdminProps) => {
   const dataIncrement = 5
   const [hasMore,setHasMore] = useState(true)
   const [stateNfts,setStateNfts] = useState<NftType[] | undefined>([])
+  const [ownedNfts,setOwnedNfts] = useState<NftType[] | undefined>([])
   const [infiniteScrollDataLength,setInfiniteScrollDataLength] = useState(dataIncrement) 
   const [infiniteScrollCounter, setInfiniteScrollCounter] = useState(0)
 
@@ -93,6 +96,7 @@ const Admin = (props: AdminProps) => {
 
   const {data : nfts} : {data : NftType[] | undefined}  = useContractReads({contracts: nftReads})
   console.log("nfts =>", nfts);
+
   //? ::::: end test multicall
 
   // Loader at page init
@@ -142,6 +146,10 @@ const Admin = (props: AdminProps) => {
           console.log("new sorted nfts =>", sortedNfts);
           setStateNfts(sortedNfts)
         }
+        // if (props.route === 'user') {
+        //   const ownedNfts = stateNfts?.filter(nft => nft.minter == props.address )
+        //   setStateNfts(ownedNfts)
+        // }
 
       }
     }
@@ -162,6 +170,17 @@ const Admin = (props: AdminProps) => {
     }
   },[sortingValue])
 
+
+  //! :::: FILTERING NFTS FOR USER REQUEST VIEW ::::
+  useEffect(()=>{
+    if (props.route === 'user') {
+        const ownedNfts = stateNfts?.filter(nft => nft.minter == props.address )
+        setOwnedNfts(ownedNfts)
+        console.error("owned nfts =>", ownedNfts);
+        
+      } else return
+  },[props.address,stateNfts])
+
   //! :::: FUNCTIONS ::::
   const openNftLink = (e : any) => (  
     window.open(`https://testnets.opensea.io/assets/mumbai/0x0f36e01b1b0acf17718383e7fe2e873be7b706ec/${e.target.id}`)
@@ -178,7 +197,7 @@ const Admin = (props: AdminProps) => {
     : */}
     {isLoading ? 
     <>
-      <h1 className='admin__title'>Mint request administration</h1> 
+      <h1 className='admin__title'>Mint requests administration</h1> 
       <Blocks
         visible={true}
         height="80"
@@ -190,7 +209,8 @@ const Admin = (props: AdminProps) => {
     </>
     :
     <>
-    <h1 className='admin__title'>Mint request administration</h1> 
+    {props.route === "admin" && <h1 className='admin__title'>Mint requests administration</h1> }
+    {props.route === "user" && <h1 className='admin__title'>My creation requests </h1> }
     <ToggleButtonGroupCustom
       size='small'
       color='primary'
@@ -225,7 +245,26 @@ const Admin = (props: AdminProps) => {
         loader={<h3>Loading...</h3>}
       >
         {/* {nfts?.map((nft : any)=>  */}
-        {stateNfts?.map((nft : any)=> 
+        {props.route === "admin" && stateNfts?.map((nft : any)=> 
+          <div className="admin__nftList__item" key={nft.nftId}>
+            <div className="admin__nftList__item__img"><img  src={`https://ipfs.io/ipfs/${nft.objectImageURL}`} alt="object main" /></div>
+            <div className="admin__nftList__item__data">
+              <p className="admin__nftList__item__data--title">{nft.nftName}</p>
+              <p className="admin__nftList__item__data--status">
+                {nft.status === 0 && <p className="admin__nftList__item__data--status--orange"> Pending</p>}
+                {nft.status === 1 && <p className="admin__nftList__item__data--status--green"> Accepted</p>}
+                {nft.status === 2 && <p className="admin__nftList__item__data--status--red"> Refused</p>}
+                {nft.status === 3 && <p className="admin__nftList__item__data--status--blue"> Created</p>}
+                {nft?.status === 3 && <img className="admin__nftList__item__image" src={openseaLogo} alt='opensea logo' onClick={openNftLink} id={nft.nftId}></img>}
+
+              </p>
+            </div>
+            <Link to={`/requestdetail/${nft.nftId}`}>
+              <div className='admin__button__icon'><ArrowForwardIcon fontSize='large'/></div>
+            </Link>
+          </div>
+        )}
+        {props.route === "user" && ownedNfts?.map((nft : any)=> 
           <div className="admin__nftList__item" key={nft.nftId}>
             <div className="admin__nftList__item__img"><img  src={`https://ipfs.io/ipfs/${nft.objectImageURL}`} alt="object main" /></div>
             <div className="admin__nftList__item__data">
