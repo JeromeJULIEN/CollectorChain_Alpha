@@ -12,35 +12,75 @@ import { wait } from '../Utils/wait';
 import openseaLogo from "../../image/openSea_logo.png"
 import ConnectModal from '../Modals/connectModal';
 import SwitchNetworkModal from '../Modals/switchNetworkModal';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import MyToggleButton, { ToggleButtonGroupCustom } from '../../styles/ToggleButton';
 
 
-
+interface NftType {
+  nftId : number,
+  nftName : string,
+  minter : string,
+  objectImageURL : string,
+  storageImageURL : string,
+  authImageURL : string,
+  sharesQty : number,
+  status : number
+}
 
 
 interface AdminProps {
   isAdmin : boolean,
   contractAddress? : `0x${string}` | undefined,
   isGoodNetwork? : boolean,
-  isConnected? : boolean
+  isConnected? : boolean,
+  address? : `0x${string}`,
+  route? : string
 }
 
 const Admin = (props: AdminProps) => {
+  //! :::: IFINITE SCROLL VARIABLES ::::
+  const dataIncrement = 5
+  const [hasMore,setHasMore] = useState(true)
+  const [stateNfts,setStateNfts] = useState<NftType[] | undefined>([])
+  const [ownedNfts,setOwnedNfts] = useState<NftType[] | undefined>([])
+  const [infiniteScrollDataLength,setInfiniteScrollDataLength] = useState(dataIncrement) 
+  const [infiniteScrollCounter, setInfiniteScrollCounter] = useState(0)
+
+  //! :::: SORTING VARIABLE ::::
+  const [sortingValue,setSortingValue] = useState("all")
+
+  const sortChange = (event : any, newSort:string) => {
+    console.log("event =>", event.target, "new sort=>",newSort);
+    setSortingValue(newSort)
+    
+  }
+
   //! WAGMI
-  const {data : nftCounter} = useContractRead({
+  const {data : nftCounter} : { data: number | undefined } = useContractRead({
     address: props.contractAddress,
     abi: contractABI.abi,
     functionName : "_nftIdCounter",
     args : []
   })
 
-  //? :::: Potential solution using multicall --> the issue is that multicall is not suported by hardhat
+  //? :::: MULTICALL --> Warning : multicall is not suported by hardhat
   const numberArray : number[] = []
 
-  const nftCounterTyped : any = nftCounter
-  for(let i = 0 ; i < nftCounterTyped ; i++){
-    numberArray.push(i)
+  const nftCounterTyped : number | undefined = nftCounter
+
+  if(nftCounter) {
+    console.error("nft counter =>", nftCounter.toString());
+    
+    // for(let i = 0 ; i < nftCounterTyped ; i++){
+    //   numberArray.push(i)
+    // }
+    for(let i = (parseInt(nftCounter.toString())-1) ; i >= 0 ; i--){
+      numberArray.push(i)
+    }
+    console.log("number array=>", numberArray);
   }
-  // console.log("number array=>", numberArray);
     
   
   
@@ -54,56 +94,92 @@ const Admin = (props: AdminProps) => {
     } as const)
   )
 
-  const {data : nfts}  = useContractReads({contracts: nftReads})
+  const {data : nfts} : {data : NftType[] | undefined}  = useContractReads({contracts: nftReads})
   console.log("nfts =>", nfts);
+
   //? ::::: end test multicall
 
   // Loader at page init
   const [isLoading,setIsLoading] = useState<boolean>(true)
 
+  
+
+  //! FIN WAGMI
+
+  
+//! :::: INFINITE SCROLL ::::
+  // function to update number of data to display
+  const loadMoreNFT = () => {
+    console.log(":::: LOAD MORE PLEASE :::: stateNfts.length =>", stateNfts?.length, "and nftCounter =>",nftCounterTyped);
+    if(!nftCounterTyped) {return}
+    console.log("old counter =>", infiniteScrollCounter, "data length =>", infiniteScrollDataLength);
+    // condition to load more data
+    if (infiniteScrollDataLength <= nftCounterTyped/*.toNumber()*/) {
+      console.error('try to load more');
+      setInfiniteScrollCounter(infiniteScrollCounter+1)
+      setInfiniteScrollDataLength(infiniteScrollDataLength + dataIncrement)
+      console.log("new counter =>", infiniteScrollCounter);
+      console.log("new data length =>", infiniteScrollDataLength);
+    } else 
+    // condition to stop loading new data
+    {
+      console.error('should stop');
+      setHasMore(false)
+    }
+  }
+
+  // useEffect to update the list with the new number of data
   useEffect(() => {
     const handleLoading = async() => {
-      if (nfts) {
+      if (nfts /*&& Array.isArray(nfts)*/) {
         await wait(1000)
         setIsLoading(false);
+        const slicedNfts  = nfts.slice(0,infiniteScrollDataLength)
+        // setStateNfts(slicedNfts)
+        if(sortingValue === "all") {
+          // const allNfts : any = nfts?.slice(0,infiniteScrollDataLength)
+          setStateNfts(slicedNfts)
+        } else {
+          // const allNfts : NftType[] | undefined  = nfts?.slice(0,infiniteScrollDataLength)
+          const sortedNfts = slicedNfts?.filter(nft => nft.status == parseInt(sortingValue) )
+          console.log("new sorting value =>", sortingValue);
+          console.log("new sorted nfts =>", sortedNfts);
+          setStateNfts(sortedNfts)
+        }
+        // if (props.route === 'user') {
+        //   const ownedNfts = stateNfts?.filter(nft => nft.minter == props.address )
+        //   setStateNfts(ownedNfts)
+        // }
+
       }
     }
     handleLoading()
-  }, [nfts]);
+  }, [nfts, infiniteScrollDataLength]);
 
-  //? ::: backup pour test sans multicall
-  // const FetchNftList = async() => {
-  //   const nftCounterTyped :any = nftCounter
-  //   console.log("nftCounter from fetchNftList", nftCounterTyped.toNumber());
-  //   let nftList = []
-  //   const nft0 = await nftList.push(GetNft(0)) 
-  //   setStateNftList(nft0)
-  //   const nft1 = await nftList.push(GetNft(1)) 
-  //   setStateNftList(nft1)
-  //   return nftList
-  // }
-  
-  //   const {data : nftItem0} = useContractRead({
-//         address: props.contractAddress,
-//         abi: contractABI.abi,
-//         functionName : "nftList",
-//         args : [0]
-//   })
-//   const {data : nftItem1} = useContractRead({
-//     address: props.contractAddress,
-//     abi: contractABI.abi,
-//     functionName : "nftList",
-//     args : [1]
-// })
-//   const nftItem0Typed : any = nftItem0
-//   const nftItem1Typed : any = nftItem1
-  
-//   useEffect(()=>{
-//     console.log('nft0 from useEffect=>',nftItem0Typed);
-//     console.log('nft1 from useEffect=>',nftItem1Typed);
-    
-//     })
-  //! FIN WAGMI
+  //! :::: SORTING ::::
+  useEffect(()=> {
+    if(sortingValue === "all") {
+      const allNfts : any = nfts?.slice(0,infiniteScrollDataLength)
+      setStateNfts(allNfts)
+    } else {
+      const allNfts : NftType[] | undefined  = nfts?.slice(0,infiniteScrollDataLength)
+      const sortedNfts = allNfts?.filter(nft => nft.status == parseInt(sortingValue) )
+      console.log("new sorting value =>", sortingValue);
+      console.log("new sorted nfts =>", sortedNfts);
+      setStateNfts(sortedNfts)
+    }
+  },[sortingValue])
+
+
+  //! :::: FILTERING NFTS FOR USER REQUEST VIEW ::::
+  useEffect(()=>{
+    if (props.route === 'user') {
+        const ownedNfts = stateNfts?.filter(nft => nft.minter == props.address )
+        setOwnedNfts(ownedNfts)
+        console.error("owned nfts =>", ownedNfts);
+        
+      } else return
+  },[props.address,stateNfts])
 
   //! :::: FUNCTIONS ::::
   const openNftLink = (e : any) => (  
@@ -116,12 +192,12 @@ const Admin = (props: AdminProps) => {
     <div className='admin'>
     {!props.isConnected && <ConnectModal/>}
     {!props.isGoodNetwork && props.isConnected && <SwitchNetworkModal/>}
-    {props.isAdmin === false ? 
+    {/* {props.isAdmin === false ? 
     <h1 className='admin__title'>You're not the admin</h1> 
-    :
-    isLoading ? 
+    : */}
+    {isLoading ? 
     <>
-      <h1 className='admin__title'>Mint request administration</h1> 
+      <h1 className='admin__title'>Mint requests administration</h1> 
       <Blocks
         visible={true}
         height="80"
@@ -133,27 +209,86 @@ const Admin = (props: AdminProps) => {
     </>
     :
     <>
-    <h1 className='admin__title'>Mint request administration</h1> 
-    <div className="admin__nftList blueBackground">
-      {nfts?.map((nft : any)=> 
-        <div className="admin__nftList__item" key={nft.nftId}>
-          <div className="admin__nftList__item__img"><img  src={`https://ipfs.io/ipfs/${nft.objectImageURL}`} alt="object main" /></div>
-          <div className="admin__nftList__item__data">
-            <p className="admin__nftList__item__data--title">{nft.nftName}</p>
-            <p className="admin__nftList__item__data--status">Status : 
-              {nft.status === 0 && <p className="admin__nftList__item__data--status--orange"> Pending</p>}
-              {nft.status === 1 && <p className="admin__nftList__item__data--status--green"> Accepted</p>}
-              {nft.status === 2 && <p className="admin__nftList__item__data--status--red"> Refused</p>}
-              {nft.status === 3 && <p className="admin__nftList__item__data--status--blue"> Created</p>}
-              {nft?.status === 3 && <img className="admin__nftList__item__image" src={openseaLogo} alt='opensea logo' onClick={openNftLink} id={nft.nftId}></img>}
+    {props.route === "admin" && 
+      <>
+        <h1 className='admin__title'>Mint requests administration</h1> 
+        {!props.isAdmin && <p>For demo only. You shouldn't have acces</p>}
+      </>
+    }
+    {props.route === "user" && <h1 className='admin__title'>My creation requests </h1> }
+    <ToggleButtonGroupCustom
+      size='small'
+      color='primary'
+      value={sortingValue}
+      exclusive
+      onChange={sortChange}
+      aria-label="nft sorting"
+      sx={{height:'2rem',margin:'1rem 0',borderRadius:'none', fontWeight:500}}
+      fullWidth={true}
+    >
+      <ToggleButton value="all" aria-label="all">
+        <p>All</p>
+      </ToggleButton>
+      <ToggleButton value="0" aria-label="pending">
+        <p>Pending</p>
+      </ToggleButton>
+      <ToggleButton value="1" aria-label="accepted">
+        <p>Accepted</p>
+      </ToggleButton>
+      <ToggleButton value="3" aria-label="created" >
+        <p>Created</p>
+      </ToggleButton>
+      <ToggleButton value="2" aria-label="refused" >
+        <p>Refused</p>
+      </ToggleButton>
+    </ToggleButtonGroupCustom>
+    <div className="admin__nftList blueBackground_admin">
+      <InfiniteScroll
+        dataLength={infiniteScrollDataLength}
+        next={loadMoreNFT}
+        hasMore={hasMore}
+        loader={<h3>Loading...</h3>}
+      >
+        {/* {nfts?.map((nft : any)=>  */}
+        {props.route === "admin" && stateNfts?.map((nft : any)=> 
+          <div className="admin__nftList__item" key={nft.nftId}>
+            <div className="admin__nftList__item__img"><img  src={`https://ipfs.io/ipfs/${nft.objectImageURL}`} alt="object main" /></div>
+            <div className="admin__nftList__item__data">
+              <p className="admin__nftList__item__data--title">{nft.nftName}</p>
+              <p className="admin__nftList__item__data--status">
+                {nft.status === 0 && <p className="admin__nftList__item__data--status--orange"> Pending</p>}
+                {nft.status === 1 && <p className="admin__nftList__item__data--status--green"> Accepted</p>}
+                {nft.status === 2 && <p className="admin__nftList__item__data--status--red"> Refused</p>}
+                {nft.status === 3 && <p className="admin__nftList__item__data--status--blue"> Created</p>}
+                {nft?.status === 3 && <img className="admin__nftList__item__image" src={openseaLogo} alt='opensea logo' onClick={openNftLink} id={nft.nftId}></img>}
 
-            </p>
+              </p>
+            </div>
+            <Link to={`/requestdetail/${nft.nftId}`}>
+              <div className='admin__button__icon'><ArrowForwardIcon fontSize='large'/></div>
+            </Link>
           </div>
-          <Link to={`/requestdetail/${nft.nftId}`}>
-            <div className='admin__button__icon'><ArrowForwardIcon fontSize='large'/></div>
-          </Link>
-        </div>
-      )}
+        )}
+        {props.route === "user" && ownedNfts?.map((nft : any)=> 
+          <div className="admin__nftList__item" key={nft.nftId}>
+            <div className="admin__nftList__item__img"><img  src={`https://ipfs.io/ipfs/${nft.objectImageURL}`} alt="object main" /></div>
+            <div className="admin__nftList__item__data">
+              <p className="admin__nftList__item__data--title">{nft.nftName}</p>
+              <p className="admin__nftList__item__data--status">
+                {nft.status === 0 && <p className="admin__nftList__item__data--status--orange"> Pending</p>}
+                {nft.status === 1 && <p className="admin__nftList__item__data--status--green"> Accepted</p>}
+                {nft.status === 2 && <p className="admin__nftList__item__data--status--red"> Refused</p>}
+                {nft.status === 3 && <p className="admin__nftList__item__data--status--blue"> Created</p>}
+                {nft?.status === 3 && <img className="admin__nftList__item__image" src={openseaLogo} alt='opensea logo' onClick={openNftLink} id={nft.nftId}></img>}
+
+              </p>
+            </div>
+            <Link to={`/requestdetail/${nft.nftId}`}>
+              <div className='admin__button__icon'><ArrowForwardIcon fontSize='large'/></div>
+            </Link>
+          </div>
+        )}
+      </InfiniteScroll>
     </div>    
     </>
     }

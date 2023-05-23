@@ -17,8 +17,20 @@
         justify-content: center;
         text-decoration: none;
         color: white;
+        cursor: pointer;
+        transition: all .2s;
 
-        Link {
+        &:hover {
+            background-color: #2b385a;
+            font-weight: bold;
+            transition: all .2s;
+            box-shadow: inset 0px -10px 5px -10px black;
+
+        }
+
+
+        Link,
+        div {
             text-decoration: none;
             color: white;
 

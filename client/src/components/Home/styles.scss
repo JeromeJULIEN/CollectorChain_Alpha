@@ -63,6 +63,12 @@
         width: calc(100vw - 40px);
         margin: 20px;
         height: 80px;
+        transition: all .2s;
+
+        &:hover {
+            transition: all .2s;
+            background-color: #3176af;
+        }
     }
 
 }
