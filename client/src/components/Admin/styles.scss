@@ -15,6 +15,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 0 20px;
+            height: 200px;
 
             &:nth-child(even) {
                 background-color: #394b78;
@@ -25,7 +26,6 @@
                     aspect-ratio: 1;
                     height: 80px;
                     background-color: white;
-
                 }
             }
 
@@ -33,11 +33,20 @@
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
+                align-items: flex-start;
+                flex-grow: 2;
+                margin-left: 1rem;
+
+                @media (min-width: 721px) {
+                    align-items: center;
+
+                }
 
                 &--title {
                     font-weight: bold;
                     margin: 0;
                     margin-top: 1rem;
+                    text-align: left;
                 }
 
                 &--status {
@@ -71,6 +80,7 @@
 
             &__image {
                 height: 30px;
+                cursor: pointer;
             }
         }
     }
@@ -87,7 +97,14 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            transition: all .2s;
+
+            &:hover {
+                background-color: #3176af;
+                transition: all .2s;
+            }
         }
+
     }
 }
 
