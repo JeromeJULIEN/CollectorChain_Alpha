@@ -433,7 +433,7 @@ const Home = (props: Props) => {
                 <br/>EASY TO USE
             </div>
             <div className="home__text--rightAlign">
-                Get access to uncommon collectibles all over the world, and finely manage your investment. <strong>Buy and put on sell at any time</strong>,part or all of a collectible shares
+                Get access to uncommon collectibles all over the world, and finely manage your investment. <strong>Buy and put on sell at any time</strong>,part or all of a collectible's shares
             </div>
             <button><Link className='link' to='/create'>FRACTIONALIZE YOUR COLLECTIBLE</Link> </button>
         </div>
@@ -442,8 +442,8 @@ const Home = (props: Props) => {
         </div>
         <div className="home__text">
             <p>Collector Chain is a platform  which <strong>ease your collector hobby</strong> thanks to shares fractionalization.</p>
-            <p>Moreover, by acquiring real shares of the object instead of the real object, <strong>collect is becoming more sustainable</strong> by avoiding new object production pressure</p>
-            <p>Depending of your position, you will find specifics advantages :</p>
+            <p>Moreover, by acquiring real ownership shares of the object instead of the real object, <strong>collect is becoming more sustainable</strong> by avoiding new object production pressure</p>
+            <p>Depending of your position in the collectible market, you will find specifics advantages :</p>
         </div>
         <div className="home__text">
         <strong>1- FOR PROFESSIONAL SELLERS</strong>  <br/>
@@ -455,7 +455,7 @@ const Home = (props: Props) => {
         </div>
         <div className="home__text">
         <strong>3- FOR COLLECTORS </strong> <br/>
-        Increase your collection capacity thanks to frazionalization
+        Increase your collection capacity thanks to fractionalization
         </div>
         <div className="home__text">
         <strong>4- FOR INVESTORS</strong>  <br/>
@@ -466,7 +466,7 @@ const Home = (props: Props) => {
                 <br/>OUR COLLECTIONS
             </div>
             <div className="home__text--rightAlign">
-            Visit our opensea collection to buy your first shares
+            Visit our collection to buy your first ownership shares
             </div>
             <button onClick={openLink}>VISIT OUR COLLECTION</button>
         </div>

@@ -10,6 +10,10 @@
     border-bottom-right-radius: 5px;
     z-index: 10;
 
+    @media (max-width : 721px) {
+        font-size: 1.4rem;
+    }
+
     &__item {
         padding: 1.5rem 0;
         display: flex;
@@ -21,7 +25,7 @@
         transition: all .2s;
 
         &:hover {
-            background-color: #2b385a;
+            background-color: #101010;
             font-weight: bold;
             transition: all .2s;
             box-shadow: inset 0px -10px 5px -10px black;

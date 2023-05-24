@@ -13,7 +13,7 @@ const HowItWorks = (props: Props) => {
         </div>
         <div className="howItWorks__text">
             <p>Based on blockchain technology, Collector Chain insert the scarcity and stocking informations of the assets into custom ownership shares NFTs</p>
-            <p>Proof of authenticity and proof of secured storage <strong>are directly integrated into the shares</strong></p>
+            <p>The proof of authenticity and proof of secured storage <strong>are directly integrated in each ownership shares</strong></p>
         </div>
         <div className="howItWorks__image">
             <div className="howItWorks__image-item"></div>
@@ -425,7 +425,7 @@ const HowItWorks = (props: Props) => {
             <div className="howItWorks__text--rightAlign">
                 <p>Collector Chain collectibles are<strong> authentified by our experts panel</strong></p>
                 <p>They are stored and insured by <strong>professional storage partners</strong></p>
-                <p><strong>Proof of authenticity and Proof of storage</strong> provided by our partners are displayed for all asset in the collection</p>
+                <p><strong>The proof of authenticity and proof of storage</strong> provided by our partners are availables and displayed for all the assets of the collection</p>
             </div>
             {/* <div className="logo">
                 <img src={logoBrinks} alt="logo_brinks" />
@@ -440,11 +440,11 @@ const HowItWorks = (props: Props) => {
         </div>
         <div className="howItWorks__text">
         <strong>1- SUBMIT YOUR OBJECT</strong>  <br/>
-        Propose your object and provide the main informations on it : proof of ownership, proof of storage in one of our storage partner, number of fractions (1 to 100) wanted
+        Propose your object and provide the main informations on it : proof of ownership, proof of storage in one of our storage partner, number of fractions wanted(1 to 100) 
         </div>
         <div className="howItWorks__text">
         <strong>2- VALIDATION </strong> <br/>
-        After security checks, the admin validate your submission, create the ownership fractions thanks to the same number of NFTs and send all the fractions to your wallet
+        After security checks, the admin validate your submission, create the ownership fractions and sends them all to your wallet in the form of NFTs
         </div>
         <div className="howItWorks__text">
         <strong>3- MAKE WHAT YOU WANT !</strong>  <br/>

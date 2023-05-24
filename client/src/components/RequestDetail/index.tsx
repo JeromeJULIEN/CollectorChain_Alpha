@@ -337,7 +337,7 @@ const RequestDetail = (props: requestDetailProps) => {
           </div>
           {/*props.isAdmin && */nft?.status === 0 &&
           <div className='requestDetail__buttonPanel'>
-            {!props.isAdmin && <p>For demo. You shouldn't see bellow. Buttons are disabled</p>}
+            {!props.isAdmin && <p>For demo only. You shouldn't see bellow. Buttons are disabled</p>}
             {isValidateLoading ? 
             <Blocks
               visible={true}
@@ -368,7 +368,7 @@ const RequestDetail = (props: requestDetailProps) => {
           {/*props.isAdmin && */nft?.status === 1 &&
           <div className="requestDetail__buttonPanel">
             <h1 className="requestDetail__title">Additional information for minting</h1>
-            {!props.isAdmin && <p>For demo. You shouldn't see bellow. Validation is disabled</p>}
+            {!props.isAdmin && <p>For demo only. You shouldn't see bellow. Validation is disabled</p>}
             <input type="text" className='requestDetail__button requestDetail__button--big requestDetail__button--darkBlue' placeholder='Stocker' onChange={handleStockerChange} />
             <input type="text" className='requestDetail__button requestDetail__button--big requestDetail__button--darkBlue' placeholder='Stocking Id' onChange={handleStockingIdChange} />
             <input type="text" className='requestDetail__button requestDetail__button--big requestDetail__button--darkBlue responsiveText' placeholder='Rarity ("unknow" if empty)' onChange={handleRarityChange} />

@@ -69,7 +69,6 @@ const Header = (props : HeaderProps) => {
 
   // menu disapearing
   const handleClickOutside = () => {
-    console.log("click outside");
     setMenuVisibility(false)
     setLoginVisibility(false)
     setLoggedVisibility(false) 
