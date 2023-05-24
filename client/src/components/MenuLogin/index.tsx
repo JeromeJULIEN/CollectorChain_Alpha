@@ -17,7 +17,7 @@ const MenuLogin = (props: Props) => {
           key={connector.id}
           onClick={() => connect({ connector })}
         >
-          {connector.name.toUpperCase()}
+          CONNECT {connector.name.toUpperCase()}
           {!connector.ready && ' (unsupported)'}
           {isLoading &&
             connector.id === pendingConnector?.id &&

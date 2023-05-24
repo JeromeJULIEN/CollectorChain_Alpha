@@ -12,7 +12,7 @@ const MenuLogged = (props: Props) => {
   return (
     <div className='menuLogged'>
         {/* <button className='menuLogged__item' onClick={()=>disconnect()}>MY COLLECTION</button> */}
-        <Link className='menuLogged__item' to="/request">MY REQUEST</Link>
+        <Link className='menuLogged__item' to="/request">MY REQUESTS</Link>
         <button className='menuLogged__item' onClick={()=>disconnect()}>DISCONNECT</button>
     </div>
   )
