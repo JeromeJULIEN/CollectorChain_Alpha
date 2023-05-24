@@ -8,9 +8,8 @@ import MenuLogin from '../MenuLogin'
 import MenuLogged from '../MenuLogged'
 import { useAccount,  useConnect,  useContractRead,  useDisconnect} from 'wagmi'
 import Jazzicon, {jsNumberForAddress} from 'react-jazzicon'
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import useOnClickOutside from '../Hooks/useOnClickOutside'
-import { log } from 'console'
+import {useOnClickOutside} from 'usehooks-ts'
+
 
 
 interface HeaderProps {
@@ -21,10 +20,6 @@ interface HeaderProps {
 
 const Header = (props : HeaderProps) => { 
 
-  
-  const {disconnect} = useDisconnect()
-
-
   const location = useLocation()
 
   //! :::: LOCAL STATE ::::
@@ -32,6 +27,7 @@ const Header = (props : HeaderProps) => {
   const [loginVisibility, setLoginVisibility] = useState<boolean>()
   const [loggedVisibility, setLoggedVisibility] = useState<boolean>()
   const [formatedAddress,setFormatedAddress] = useState("")
+  const ref = useRef(null)
   
   useEffect(()=>{
     console.log("::::::::USEEFFECCT::::::");
@@ -72,6 +68,14 @@ const Header = (props : HeaderProps) => {
   
 
   // menu disapearing
+  const handleClickOutside = () => {
+    console.log("click outside");
+    setMenuVisibility(false)
+    setLoginVisibility(false)
+    setLoggedVisibility(false) 
+  }
+
+  useOnClickOutside(ref,handleClickOutside)
   
   // end menu disapearing
 
@@ -84,7 +88,7 @@ const Header = (props : HeaderProps) => {
 
   return (
     <>
-    <div className='header'>
+    <div className='header' ref={ref}>
        <div className="header__menu" onClick={onMenuButtonClick}>
         <Menu className="header__menu-button" />
       </div>
@@ -106,10 +110,10 @@ const Header = (props : HeaderProps) => {
        </div>
        }
       </div>
-    </div>
     {menuVisibility && <MenuApp owner={props.owner} address={props.address} isConnected={props.isConnected}/>}
     {loginVisibility && <MenuLogin/>}
     {loggedVisibility && <MenuLogged/>}
+    </div>
     </>
   )
 }
