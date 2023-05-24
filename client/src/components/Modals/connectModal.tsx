@@ -27,7 +27,7 @@ const ConnectModal = (props: Props) => {
                     top: "40%",
                     left: "15%",
                     width: "70%",
-                    height: "22%",
+                    height: "30%",
                     zIndex:"5"
                 }}
         >

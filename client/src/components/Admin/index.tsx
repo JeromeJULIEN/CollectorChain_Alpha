@@ -196,7 +196,7 @@ const Admin = (props: AdminProps) => {
     : */}
     {isLoading ? 
     <>
-      <h1 className='admin__title'>Mint requests administration</h1> 
+      {/* <h1 className='admin__title'>Fractionalization requests administration</h1>  */}
       <Blocks
         visible={true}
         height="80"
@@ -210,11 +210,11 @@ const Admin = (props: AdminProps) => {
     <>
     {props.route === "admin" && 
       <>
-        <h1 className='admin__title'>Mint requests administration</h1> 
+        <h1 className='admin__title'>Fractionalization requests administration</h1> 
         {!props.isAdmin && <p>For demo only. You shouldn't have acces</p>}
       </>
     }
-    {props.route === "user" && <h1 className='admin__title'>My creation requests </h1> }
+    {props.route === "user" && <h1 className='admin__title'>My fractionalization requests </h1> }
     <ToggleButtonGroup
       size='small'
       color='primary'
