@@ -15,7 +15,6 @@ import SwitchNetworkModal from '../Modals/switchNetworkModal';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import MyToggleButton, { ToggleButtonGroupCustom } from '../../styles/ToggleButton';
 
 
 interface NftType {
@@ -41,7 +40,7 @@ interface AdminProps {
 
 const Admin = (props: AdminProps) => {
   //! :::: IFINITE SCROLL VARIABLES ::::
-  const dataIncrement = 5
+  const dataIncrement = 10 // nbr of item loaded at each step
   const [hasMore,setHasMore] = useState(true)
   const [stateNfts,setStateNfts] = useState<NftType[] | undefined>([])
   const [ownedNfts,setOwnedNfts] = useState<NftType[] | undefined>([])
@@ -216,7 +215,7 @@ const Admin = (props: AdminProps) => {
       </>
     }
     {props.route === "user" && <h1 className='admin__title'>My creation requests </h1> }
-    <ToggleButtonGroupCustom
+    <ToggleButtonGroup
       size='small'
       color='primary'
       value={sortingValue}
@@ -241,7 +240,7 @@ const Admin = (props: AdminProps) => {
       <ToggleButton value="2" aria-label="refused" >
         <p>Refused</p>
       </ToggleButton>
-    </ToggleButtonGroupCustom>
+    </ToggleButtonGroup>
     <div className="admin__nftList blueBackground_admin">
       <InfiniteScroll
         dataLength={infiniteScrollDataLength}
@@ -269,7 +268,13 @@ const Admin = (props: AdminProps) => {
             </Link>
           </div>
         )}
-        {props.route === "user" && ownedNfts?.map((nft : any)=> 
+        {props.route === "user" && ownedNfts?.length == 0 ?
+        <>
+          <p>It seems that your didn't ask for any <strong>creation</strong> for the moment !</p>
+          <button className='admin__button__init'><Link className='link' to='/create'>CREATE YOUR FIRST ASSET</Link> </button>
+        </>
+        :
+         ownedNfts?.map((nft : any)=> 
           <div className="admin__nftList__item" key={nft.nftId}>
             <div className="admin__nftList__item__img"><img  src={`https://ipfs.io/ipfs/${nft.objectImageURL}`} alt="object main" /></div>
             <div className="admin__nftList__item__data">
