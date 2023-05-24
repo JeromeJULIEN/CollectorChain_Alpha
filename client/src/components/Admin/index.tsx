@@ -15,7 +15,6 @@ import SwitchNetworkModal from '../Modals/switchNetworkModal';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import MyToggleButton, { ToggleButtonGroupCustom } from '../../styles/ToggleButton';
 
 
 interface NftType {
@@ -41,7 +40,7 @@ interface AdminProps {
 
 const Admin = (props: AdminProps) => {
   //! :::: IFINITE SCROLL VARIABLES ::::
-  const dataIncrement = 5
+  const dataIncrement = 10 // nbr of item loaded at each step
   const [hasMore,setHasMore] = useState(true)
   const [stateNfts,setStateNfts] = useState<NftType[] | undefined>([])
   const [ownedNfts,setOwnedNfts] = useState<NftType[] | undefined>([])
@@ -216,7 +215,7 @@ const Admin = (props: AdminProps) => {
       </>
     }
     {props.route === "user" && <h1 className='admin__title'>My creation requests </h1> }
-    <ToggleButtonGroupCustom
+    <ToggleButtonGroup
       size='small'
       color='primary'
       value={sortingValue}
@@ -241,7 +240,7 @@ const Admin = (props: AdminProps) => {
       <ToggleButton value="2" aria-label="refused" >
         <p>Refused</p>
       </ToggleButton>
-    </ToggleButtonGroupCustom>
+    </ToggleButtonGroup>
     <div className="admin__nftList blueBackground_admin">
       <InfiniteScroll
         dataLength={infiniteScrollDataLength}
