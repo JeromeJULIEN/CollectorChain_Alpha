@@ -12,7 +12,8 @@ const HowItWorks = (props: Props) => {
             TRUSTED TECHNOLOGY
         </div>
         <div className="howItWorks__text">
-        Based on blockchain technology, Collector Chain insered the scarcity and the ownership of the assets
+            <p>Based on blockchain technology, Collector Chain insert the scarcity and stocking informations of the assets into custom ownership shares NFTs</p>
+            <p>Proof of authenticity and proof of secured storage <strong>are directly integrated into the shares</strong></p>
         </div>
         <div className="howItWorks__image">
             <div className="howItWorks__image-item"></div>
@@ -422,8 +423,9 @@ const HowItWorks = (props: Props) => {
                 <br/>TRUSTED PARTNERS
             </div>
             <div className="howItWorks__text--rightAlign">
-            Collector Chain collectibles are stored and insured by professional partners <br/>
-            Proof of storage provided by our partners are displayed for all asset in the collection
+                <p>Collector Chain collectibles are<strong> authentified by our experts panel</strong></p>
+                <p>They are stored and insured by <strong>professional storage partners</strong></p>
+                <p><strong>Proof of authenticity and Proof of storage</strong> provided by our partners are displayed for all asset in the collection</p>
             </div>
             {/* <div className="logo">
                 <img src={logoBrinks} alt="logo_brinks" />
@@ -434,16 +436,19 @@ const HowItWorks = (props: Props) => {
             OUR PROCESS
         </div>
         <div className="howItWorks__text">
-        <strong>1- SUBMIT YOUR CREATION</strong>  <br/>
-        Propose your object and provide the main information on it : proof of ownership, proof of storage, number of fraction wanted
+        You can follow in real time the advancement of your requests in "my requests" tab
+        </div>
+        <div className="howItWorks__text">
+        <strong>1- SUBMIT YOUR OBJECT</strong>  <br/>
+        Propose your object and provide the main informations on it : proof of ownership, proof of storage in one of our storage partner, number of fractions (1 to 100) wanted
         </div>
         <div className="howItWorks__text">
         <strong>2- VALIDATION </strong> <br/>
-        After security checks, the admin validate your submission
+        After security checks, the admin validate your submission, create the ownership fractions thanks to the same number of NFTs and send all the fractions to your wallet
         </div>
         <div className="howItWorks__text">
-        <strong>3- RECEIVE YOUR SHARES</strong>  <br/>
-        Receive your fractionalized asset directly in your wallet
+        <strong>3- MAKE WHAT YOU WANT !</strong>  <br/>
+        Once the fractions received, you can sell fraction by fraction, or simply hold them !
         </div>
     </div>
   )
