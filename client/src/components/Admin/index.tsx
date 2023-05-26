@@ -39,10 +39,12 @@ interface AdminProps {
 }
 
 const Admin = (props: AdminProps) => {
+
+  const [stateNfts,setStateNfts] = useState<NftType[] | undefined>([]) // NFTs array used for display
+
   //! :::: IFINITE SCROLL VARIABLES ::::
   const dataIncrement = 10 // nbr of item loaded at each step
   const [hasMore,setHasMore] = useState(true)
-  const [stateNfts,setStateNfts] = useState<NftType[] | undefined>([])
   const [ownedNfts,setOwnedNfts] = useState<NftType[] | undefined>([])
   const [infiniteScrollDataLength,setInfiniteScrollDataLength] = useState(dataIncrement) 
   const [infiniteScrollCounter, setInfiniteScrollCounter] = useState(0)
@@ -130,10 +132,10 @@ const Admin = (props: AdminProps) => {
   // useEffect to update the list with the new number of data
   useEffect(() => {
     const handleLoading = async() => {
-      if (nfts /*&& Array.isArray(nfts)*/) {
+      if (nfts?.length == nftCounter /*&& Array.isArray(nfts)*/) {
         await wait(1000)
         setIsLoading(false);
-        const slicedNfts  = nfts.slice(0,infiniteScrollDataLength)
+        const slicedNfts  = nfts?.slice(0,infiniteScrollDataLength)
         // setStateNfts(slicedNfts)
         if(sortingValue === "all") {
           // const allNfts : any = nfts?.slice(0,infiniteScrollDataLength)
@@ -153,7 +155,7 @@ const Admin = (props: AdminProps) => {
       }
     }
     handleLoading()
-  }, [nfts, infiniteScrollDataLength]);
+  }, [nfts, infiniteScrollDataLength, nftCounter]);
 
   //! :::: SORTING ::::
   useEffect(()=> {
@@ -225,19 +227,19 @@ const Admin = (props: AdminProps) => {
       sx={{height:'2rem',margin:'1rem 0',borderRadius:'none', fontWeight:500}}
       fullWidth={true}
     >
-      <ToggleButton value="all" aria-label="all">
+      <ToggleButton value="all" aria-label="all" sx={{fontWeight:'bold'}}>
         <p>All</p>
       </ToggleButton>
-      <ToggleButton value="0" aria-label="pending">
+      <ToggleButton value="0" aria-label="pending" sx={{fontWeight:'bold'}}>
         <p>Pending</p>
       </ToggleButton>
-      <ToggleButton value="1" aria-label="accepted">
+      <ToggleButton value="1" aria-label="accepted" sx={{fontWeight:'bold'}}>
         <p>Accepted</p>
       </ToggleButton>
-      <ToggleButton value="3" aria-label="created" >
+      <ToggleButton value="3" aria-label="created" sx={{fontWeight:'bold'}}>
         <p>Created</p>
       </ToggleButton>
-      <ToggleButton value="2" aria-label="refused" >
+      <ToggleButton value="2" aria-label="refused" sx={{fontWeight:'bold'}}>
         <p>Refused</p>
       </ToggleButton>
     </ToggleButtonGroup>

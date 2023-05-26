@@ -2,6 +2,7 @@ import React from 'react'
 import "./styles.scss"
 import logoBrinks from "../../image/howItWorks_brinks.png"
 import logoAry from "../../image/howItWorks_AryJan.png"
+import { Link } from 'react-router-dom'
 
 type Props = {}
 
@@ -449,6 +450,9 @@ const HowItWorks = (props: Props) => {
         <div className="howItWorks__text">
         <strong>3- MAKE WHAT YOU WANT !</strong>  <br/>
         Once the fractions received, you can sell fraction by fraction, or simply hold them !
+        </div>
+        <div className="blueBackground">
+            <button className='blueBackground__button'><Link className='link' to='/create'>FRACTIONALIZE YOUR COLLECTIBLE</Link> </button>
         </div>
     </div>
   )
