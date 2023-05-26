@@ -58,7 +58,7 @@
         background-position: center;
         aspect-ratio: 1;
         animation: bkgImageAnimation 18s infinite ease-in-out;
-        // margin-bottom: 10px;
+        margin-bottom: 10px;
 
         @keyframes bkgImageAnimation {
 
@@ -79,42 +79,42 @@
 
             28% {
                 opacity: 0;
-                background-image: url(../../image/patekPhilippe.jpeg);
+                background-image: url(../../image/patekPhilippe2.png);
             }
 
             33% {
                 opacity: 1;
-                background-image: url(../../image/patekPhilippe.jpeg);
+                background-image: url(../../image/patekPhilippe2.png);
             }
 
             55% {
                 opacity: 1;
-                background-image: url(../../image/patekPhilippe.jpeg);
+                background-image: url(../../image/patekPhilippe2.png);
             }
 
             60% {
                 opacity: 0;
-                background-image: url(../../image/patekPhilippe.jpeg);
+                background-image: url(../../image/patekPhilippe2.png);
             }
 
             61% {
                 opacity: 0;
-                background-image: url(../../image/maillotOM.jpeg);
+                background-image: url(../../image/maillot2.jpg);
             }
 
             66% {
                 opacity: 1;
-                background-image: url(../../image/maillotOM.jpeg);
+                background-image: url(../../image/maillot2.jpg);
             }
 
             89% {
                 opacity: 1;
-                background-image: url(../../image/maillotOM.jpeg);
+                background-image: url(../../image/maillot2.jpg);
             }
 
             94% {
                 opacity: 0;
-                background-image: url(../../image/maillotOM.jpeg);
+                background-image: url(../../image/maillot2.jpg);
             }
 
             95% {
@@ -181,14 +181,27 @@
         &__text,
         &__title {
             text-align: center;
+            font-size: 3.5rem;
 
             &--rightAlign {
                 text-align: center;
+                font-size: 3.5rem;
+
             }
 
             &--withIcon {
                 justify-content: center;
             }
+        }
+
+        &__text {
+            font-size: 1.2rem;
+
+            &--rightAlign {
+                text-align: center;
+                font-size: 1.2rem
+            }
+
         }
 
         &__image {

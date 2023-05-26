@@ -3,10 +3,34 @@ import "./styles.scss"
 import logoBrinks from "../../image/howItWorks_brinks.png"
 import logoAry from "../../image/howItWorks_AryJan.png"
 import { Link } from 'react-router-dom'
+import { CopyBlock, nord } from "react-code-blocks";
 
 type Props = {}
 
 const HowItWorks = (props: Props) => {
+    const text=` /// @notice mint the NFT once the proposal accepted
+    /// @notice update the nbr of fraction of the nft
+    /// @notice only for the contract owner
+    /// @dev set msg.sender as royalty receiver though ERC2981 methos '_setToKenRoyalty'
+    /// @param _nftId id of the NFT to update
+    /// @param _nftURI URI of the NFT minted
+    function mintNft(
+        uint256 _nftId,
+        string calldata _nftURI
+    ) external onlyOwner {
+        require(
+            nftList[_nftId].status == Status.accepted,
+            "nft status isn't accepted"
+        );
+        // require(msg.sender == nftList[_nftId].minter, "not the nft proposer");
+        uint256 sharesQty = nftList[_nftId].sharesQty;
+        _mint(nftList[_nftId].minter, _nftId, sharesQty, "");
+        _setURI(_nftId, _nftURI);
+        _setTokenRoyalty(_nftId, nftList[_nftId].minter, _baseFeeNumerator);
+        nftList[_nftId].status = Status.minted;
+        emit mintProposalStatusUpdateEvent(_nftId, 3);
+    }`
+
   return (
     <div className='howItWorks'>
         <div className="howItWorks__title">
@@ -16,7 +40,8 @@ const HowItWorks = (props: Props) => {
             <p>Based on blockchain technology, Collector Chain insert the scarcity and stocking informations of the assets into custom ownership shares NFTs</p>
             <p>The proof of authenticity and proof of secured storage <strong>are directly integrated in each ownership shares</strong></p>
         </div>
-        <div className="howItWorks__image">
+        <div className="howItWorks__text--code"><CopyBlock language="jsx" text={text} theme={nord} codeBlock={false}/></div>
+        {/* <div className="howItWorks__image"> */}
             <div className="howItWorks__image-item"></div>
             <div className="howItWorks__image-item"></div>
             <div className="howItWorks__image-item"></div>
@@ -418,7 +443,7 @@ const HowItWorks = (props: Props) => {
             <div className="howItWorks__image-item"></div>
             <div className="howItWorks__image-item"></div>
         {/* <img src={imgCoin} alt="coin_img" /> */}
-        </div>
+        {/* </div> */}
         <div className="blueBackground">
             <div className="howItWorks__title--rightAlign">
                 <br/>TRUSTED PARTNERS
