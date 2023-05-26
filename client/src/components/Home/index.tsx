@@ -467,7 +467,7 @@ const Home = (props: Props) => {
             <div className="home__text--rightAlign">
                 Get access to uncommon collectibles all over the world, and finely manage your investment. <strong>Buy and put on sell at any time</strong>,part or all of a collectible's shares
             </div>
-            <button><Link className='link' to='/create'>FRACTIONALIZE YOUR COLLECTIBLE</Link> </button>
+            <button className="blueBackground__button"><Link className='link' to='/create'>FRACTIONALIZE YOUR COLLECTIBLE</Link> </button>
         </div>
         <div className="home__title">
             WHY USE COLLECTOR CHAIN ?
@@ -507,12 +507,12 @@ const Home = (props: Props) => {
         </div>
         <div className="blueBackground">
              <div className="home__title--rightAlign">
-                <br/>OUR COLLECTIONS
+                <br/>OUR COLLECTION
             </div>
             <div className="home__text--rightAlign">
             Visit our collection to buy your first ownership shares
             </div>
-            <button onClick={openLink}>VISIT OUR COLLECTION</button>
+            <button className="blueBackground__button" onClick={openLink}>VISIT OUR COLLECTION</button>
         </div>
 
 

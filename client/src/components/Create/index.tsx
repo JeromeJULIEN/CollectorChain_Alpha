@@ -221,7 +221,7 @@ const Create = (props : CreateProps) => {
               <div className='create__button__icon create__button__icon--done' ><CheckIcon fontSize='large'/></div>
               }
             </div>
-            <div className="create__title--center">Proof of ownership</div>
+            <div className="create__title--center">Proof of authenticity</div>
             <div className='horizontalBox'>
               <label className="create__button create__button--darkBlue">
               {authPictureName==="" ? <>Select a file</> : <>{authPictureName}</>}
