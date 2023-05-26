@@ -27,6 +27,10 @@
             text-align: right;
             padding-bottom: 20px;
         }
+
+        &--code {
+            margin: 20px;
+        }
     }
 
     &__image {
@@ -98,6 +102,11 @@
 
             &--rightAlign {
                 text-align: center;
+            }
+
+            &--code {
+                text-align: left;
+
             }
         }
 
