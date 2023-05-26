@@ -477,7 +477,7 @@ const HowItWorks = (props: Props) => {
         Once the fractions received, you can sell fraction by fraction, or simply hold them !
         </div>
         <div className="blueBackground">
-            <button className='blueBackground__button'><Link className='link' to='/create'>FRACTIONALIZE YOUR COLLECTIBLE</Link> </button>
+            <button className='blueBackground__createButton'><Link className='link' to='/create'>FRACTIONALIZE YOUR COLLECTIBLE</Link> </button>
         </div>
     </div>
   )
