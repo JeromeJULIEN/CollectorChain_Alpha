@@ -3,12 +3,17 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    height: 100px;
+    height: 80px;
     width: 100vw;
     background-color: #000000;
     font-size: 24px;
     position: fixed;
     top: 0px;
+
+    @media (min-width:721px) {
+        height: 100px;
+
+    }
 
     &__menu {
         width: 30%;
@@ -52,7 +57,13 @@
 
 
         &-image {
-            height: 80px;
+            height: 60px;
+
+            @media (min-width:721px) {
+                height: 80px;
+
+            }
+
         }
     }
 
