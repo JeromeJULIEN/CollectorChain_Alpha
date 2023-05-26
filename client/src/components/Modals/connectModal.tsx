@@ -33,7 +33,7 @@ const ConnectModal = (props: Props) => {
         >
             <div className='connectModal__content'>
                 <p>Not connected</p>
-                <button className='connectModal__content__button' onClick={()=> connect?.({connector})}>CONNECT YOUR WALLET</button>
+                <button className='connectModal__content__button' onClick={()=> connect?.({connector})}>CONNECT WALLET</button>
             </div>
         </Modal>
     )
