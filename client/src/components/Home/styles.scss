@@ -3,16 +3,21 @@
 
     &__title {
         margin: 20px;
-        font-size: 2rem;
+        font-size: 2.9rem;
         font-weight: bold;
         text-align: left;
 
         &--rightAlign {
-            font-size: 2rem;
+            font-size: 2.9rem;
             font-weight: bold;
             margin: 20px;
             margin-top: 0px;
             text-align: right;
+        }
+
+        &--blue {
+            margin: 0;
+            color: #4AADFF;
         }
     }
 
@@ -20,12 +25,26 @@
         text-align: left;
         margin: 20px;
         font-size: 1.2rem;
+        color: rgb(75, 75, 75);
+        vertical-align: middle;
+
+        &--big {
+            font-size: 1.8rem;
+            color: black;
+        }
 
         &--rightAlign {
             font-size: 1.2rem;
             margin: 0 20px;
             text-align: right;
             padding-bottom: 20px;
+        }
+
+        &--withIcon {
+            display: flex;
+            align-items: center;
+            margin-top: -20px;
+            gap: 1rem;
         }
     }
 
@@ -34,17 +53,95 @@
         grid-template-rows: repeat(20, 1fr);
         grid-template-columns: repeat(20, 1fr);
         gap: 2px;
-        background-image: url(../../image/Once_Krugerrand_Or_Face.jpg);
+        // background-image: url(../../image/Once_Krugerrand_Or_Face.jpg);
         background-size: cover;
         background-position: center;
         aspect-ratio: 1;
+        animation: bkgImageAnimation 18s infinite ease-in-out;
         // margin-bottom: 10px;
+
+        @keyframes bkgImageAnimation {
+
+            0% {
+                opacity: 1;
+                background-image: url(../../image/Once_Krugerrand_Or_Face.jpg);
+            }
+
+            22% {
+                opacity: 1;
+                background-image: url(../../image/Once_Krugerrand_Or_Face.jpg);
+            }
+
+            27% {
+                opacity: 0;
+                background-image: url(../../image/Once_Krugerrand_Or_Face.jpg);
+            }
+
+            28% {
+                opacity: 0;
+                background-image: url(../../image/patekPhilippe.jpeg);
+            }
+
+            33% {
+                opacity: 1;
+                background-image: url(../../image/patekPhilippe.jpeg);
+            }
+
+            55% {
+                opacity: 1;
+                background-image: url(../../image/patekPhilippe.jpeg);
+            }
+
+            60% {
+                opacity: 0;
+                background-image: url(../../image/patekPhilippe.jpeg);
+            }
+
+            61% {
+                opacity: 0;
+                background-image: url(../../image/maillotOM.jpeg);
+            }
+
+            66% {
+                opacity: 1;
+                background-image: url(../../image/maillotOM.jpeg);
+            }
+
+            89% {
+                opacity: 1;
+                background-image: url(../../image/maillotOM.jpeg);
+            }
+
+            94% {
+                opacity: 0;
+                background-image: url(../../image/maillotOM.jpeg);
+            }
+
+            95% {
+                opacity: 0;
+                background-image: url(../../image/Once_Krugerrand_Or_Face.jpg);
+            }
+
+            100% {
+                opacity: 1;
+                background-image: url(../../image/Once_Krugerrand_Or_Face.jpg);
+            }
+
+        }
 
         &-item {
             outline: solid white 2px;
         }
 
     }
+
+
+}
+
+.blueBackground {
+    margin-top: 2px;
+    background-color: #2b385A;
+    color: white;
 
     button {
         border: none;
@@ -63,21 +160,16 @@
         width: calc(100vw - 40px);
         margin: 20px;
         height: 80px;
+        text-shadow: 0px 0px 10px #4AADFF;
+
         transition: all .2s;
 
         &:hover {
             transition: all .2s;
-            text-shadow: 0px 0px 5px rgba(255, 255, 255, 0.7);
+            text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.7);
 
         }
     }
-
-}
-
-.blueBackground {
-    margin-top: 2px;
-    background-color: #2b385A;
-    color: white;
 }
 
 @media (min-width: 721px) {
@@ -92,6 +184,10 @@
 
             &--rightAlign {
                 text-align: center;
+            }
+
+            &--withIcon {
+                justify-content: center;
             }
         }
 

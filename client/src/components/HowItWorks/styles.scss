@@ -3,12 +3,12 @@
 
     &__title {
         margin: 20px;
-        font-size: 2rem;
+        font-size: 3rem;
         font-weight: bold;
         text-align: left;
 
         &--rightAlign {
-            font-size: 2rem;
+            font-size: 3rem;
             font-weight: bold;
             margin: 20px;
             margin-top: 0px;
@@ -45,7 +45,16 @@
 
     }
 
-    button {
+
+
+}
+
+.blueBackground {
+    margin-top: 2px;
+    background-color: #2b385A;
+    color: white;
+
+    &__button {
         border: none;
         // background-color: #4AADFF;
 
@@ -63,14 +72,6 @@
         margin: 20px;
         height: 80px;
     }
-
-
-}
-
-.blueBackground {
-    margin-top: 2px;
-    background-color: #2b385A;
-    color: white;
 }
 
 .logo {

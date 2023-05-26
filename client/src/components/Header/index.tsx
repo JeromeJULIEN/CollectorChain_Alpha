@@ -1,7 +1,7 @@
 import React, { useState,MouseEvent, useEffect, useRef } from 'react'
 import "./styles.scss"
 import logo from "../../image/logo_CC_beta.png"
-import { Menu,Login, Logout } from '@mui/icons-material'
+import { Menu,Login, Logout, AccountCircle } from '@mui/icons-material'
 import MenuApp from '../MenuApp'
 import { Link, useLocation } from 'react-router-dom'
 import MenuLogin from '../MenuLogin'
@@ -96,7 +96,7 @@ const Header = (props : HeaderProps) => {
         
       </div>
       <div className="header__login" onClick={onLoginButtonClick}>
-       {!props.isConnected && <Login className="header__login-button"/> }
+       {!props.isConnected && <AccountCircle className="header__login-button"/> }
        {props.isConnected &&
        <div className='header__logged' onClick={onLoggedButtonClick}>
         <button className='header__logged-button'>
