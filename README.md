@@ -1,5 +1,5 @@
-# CollectorChain_Beta
-## Beta version of Collector Chain project : **tokenize and factionalize your collectible !**
+# CollectorChain_Alpha
+## Alpha version of Collector Chain project : **tokenize and factionalize your collectible !**
 The aim of this dapp is **to allow anybody** to tokenize and fractionalize theirs collectors objects. 
 Collector Chain **ease and make liquid the collectors market**. It provide an **environmental friendly way of collect**, by removing production pressure thanks to a **greater turnover of assets' property.**
 
