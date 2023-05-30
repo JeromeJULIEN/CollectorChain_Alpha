@@ -22,3 +22,6 @@ React, Typescript, [mui](https://mui.com/), [wagmi](https://wagmi.sh/), [react t
 
 ### Smart contract
 Solidity, Hardhat, Open Zeppelin contacts
+
+## Demo video
+[Demonstration video, in french](https://www.youtube.com/watch?v=R3beo0OTsv4)
