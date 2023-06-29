@@ -15,7 +15,7 @@ contract CollectorChain is ERC1155URIStorage, ERC2981, Ownable {
     /// @dev init royalty fees to 5%
     uint96 public _baseFeeNumerator = 500;
 
-    string public contractMetaDataURI = "coucou";
+    string public contractMetaDataURI = "";
 
     /// @dev possible status for each nft
     enum Status {
