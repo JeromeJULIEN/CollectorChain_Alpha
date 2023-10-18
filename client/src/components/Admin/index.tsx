@@ -155,7 +155,7 @@ const Admin = (props: AdminProps) => {
       }
     }
     handleLoading()
-  }, [nfts, infiniteScrollDataLength, nftCounter]);
+  }, [nfts, infiniteScrollDataLength, nftCounter,sortingValue]);
 
   //! :::: SORTING ::::
   useEffect(()=> {

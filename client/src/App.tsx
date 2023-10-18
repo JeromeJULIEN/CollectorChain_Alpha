@@ -64,7 +64,7 @@ function App() {
     console.log("connected address =>", address);
     console.log("contract owner address =>",owner);   
     console.log("network =>",chain);
-    const infuraApiKey = process.env.REACT_APP_INFURA_API_KEY as string
+    const infuraApiKey = process.env.REACT_APP_INFURA_API_KEY as String
     console.log("infura API key =>", infuraApiKey);
     console.log("isGoodNetwork=>",isGoodNetwork, chain?.id, process.env.REACT_APP_CHAIN_ID);
      

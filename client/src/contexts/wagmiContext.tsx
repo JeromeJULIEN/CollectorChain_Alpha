@@ -20,7 +20,7 @@ const infuraApiKey = process.env.REACT_APP_INFURA_API_KEY as string
 
 const { chains, provider } = configureChains(
   [hardhat, goerli,polygonMumbai],
-  [/*infuraProvider({ apiKey: infuraApiKey }),*/ publicProvider()],
+  [infuraProvider({ apiKey: infuraApiKey }), publicProvider()],
 )
 
 // Set up client
